@@ -1,14 +1,14 @@
 
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Sun, Moon, Wine } from "lucide-react";
+import { Menu, X, Wine } from "lucide-react";
 import { useSettings } from "../contexts/SettingsContext";
 import { useIsMobile } from "../hooks/use-mobile";
 import BartenderMode from "./BartenderMode";
 
 const Header = () => {
   const location = useLocation();
-  const { darkMode, toggleDarkMode } = useSettings();
+  const { themeMode } = useSettings();
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -63,6 +63,13 @@ const Header = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-6 items-center">
+            <button
+              onClick={() => setIsBartenderMode(true)}
+              className="text-sm font-medium px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors flex items-center dark:border-gray-600 dark:hover:bg-gray-800 dark:text-gray-300"
+            >
+              <Wine size={16} className="mr-1" />
+              Bartender Mode
+            </button>
             {navLinks.map((link) => (
               <Link
                 key={link.name}
@@ -76,45 +83,16 @@ const Header = () => {
                 {link.name}
               </Link>
             ))}
-            <button
-              onClick={() => setIsBartenderMode(true)}
-              className="text-sm font-medium flex items-center text-gray-700 hover:text-mixology-burgundy transition-colors dark:text-gray-300"
-            >
-              <Wine size={16} className="mr-1" />
-              Bartender Mode
-            </button>
             <Link
               to="/login"
-              className="text-sm font-medium text-gray-700 hover:text-mixology-burgundy transition-colors dark:text-gray-300"
+              className="text-sm font-medium px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors dark:border-gray-600 dark:hover:bg-gray-800 dark:text-gray-300"
             >
               Sign In
             </Link>
-            <button
-              onClick={toggleDarkMode}
-              className="p-2 text-gray-700 hover:text-mixology-purple transition-colors dark:text-gray-300"
-              aria-label="Toggle dark mode"
-            >
-              {darkMode ? (
-                <Sun size={20} />
-              ) : (
-                <Moon size={20} />
-              )}
-            </button>
           </div>
 
           {/* Mobile Navigation */}
           <div className="md:hidden flex items-center">
-            <button
-              onClick={toggleDarkMode}
-              className="p-2 mr-2 text-gray-700 dark:text-gray-300"
-              aria-label="Toggle dark mode"
-            >
-              {darkMode ? (
-                <Sun size={20} />
-              ) : (
-                <Moon size={20} />
-              )}
-            </button>
             <button
               onClick={toggleMobileMenu}
               className="p-2 text-gray-700 dark:text-gray-300"

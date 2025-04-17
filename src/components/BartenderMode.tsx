@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
-import { ArrowLeft, X, ChevronRight } from 'lucide-react';
+
+import { useState, useEffect, useRef } from 'react';
+import { ArrowLeft, X, ChevronRight, Search } from 'lucide-react';
 import { useSettings } from '../contexts/SettingsContext';
 import { cocktails } from '../data/cocktails';
 import { Cocktail } from '../components/CocktailCard';
@@ -86,7 +87,31 @@ const BartenderMode = ({ onExit }: BartenderModeProps) => {
   const [selectedCocktail, setSelectedCocktail] = useState<BartenderCocktail | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
   const [viewMode, setViewMode] = useState<'selection' | 'preparation'>('selection');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredCocktails, setFilteredCocktails] = useState<BartenderCocktail[]>(enhancedCocktails);
   const { measurementUnit } = useSettings();
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // Focus the search input when entering Bartender Mode
+  useEffect(() => {
+    if (searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, []);
+
+  // Filter cocktails based on search query
+  useEffect(() => {
+    const query = searchQuery.trim().toLowerCase();
+    if (query === '') {
+      setFilteredCocktails(enhancedCocktails);
+    } else {
+      const filtered = enhancedCocktails.filter(cocktail => 
+        cocktail.name.toLowerCase().includes(query) || 
+        cocktail.ingredients.some(ingredient => ingredient.toLowerCase().includes(query))
+      );
+      setFilteredCocktails(filtered);
+    }
+  }, [searchQuery]);
 
   // Cache viewed recipes for offline use
   useEffect(() => {
@@ -140,6 +165,14 @@ const BartenderMode = ({ onExit }: BartenderModeProps) => {
     setViewMode('preparation');
   };
 
+  // Clear search query
+  const clearSearch = () => {
+    setSearchQuery('');
+    if (searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  };
+
   const displayIngredient = (ingredient: string) => {
     // In a real app, we would parse the ingredient string to extract the quantity and unit
     // For this demo, we'll just return the ingredient as is
@@ -174,12 +207,52 @@ const BartenderMode = ({ onExit }: BartenderModeProps) => {
         <div className="w-10"></div> {/* Spacer for centering */}
       </header>
 
-      <div className="pt-16 pb-20 px-4">
+      <div className="pt-24 pb-20 px-4">
         {viewMode === 'selection' ? (
           <div>
-            <h2 className="bartender-text-large text-white mb-6 mt-4">Select a Cocktail</h2>
+            {/* Search bar */}
+            <div className="mb-6 relative">
+              <div className="relative flex items-center">
+                <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                  <Search size={20} />
+                </div>
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  className="w-full bg-gray-800 text-white border border-gray-700 rounded-lg py-3 pl-10 pr-10 text-lg focus:outline-none focus:ring-2 focus:ring-white/30"
+                  placeholder="Search cocktails or ingredients..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  autoComplete="off"
+                  spellCheck="false"
+                  autoCapitalize="off"
+                  inputMode="search"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={clearSearch}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                  >
+                    <X size={20} />
+                  </button>
+                )}
+              </div>
+            </div>
             
-            {recentCocktails.length > 0 && (
+            {/* No results message */}
+            {filteredCocktails.length === 0 && (
+              <div className="text-center py-8">
+                <p className="text-white text-xl mb-4">No cocktails found for "{searchQuery}"</p>
+                <button
+                  onClick={clearSearch}
+                  className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-colors"
+                >
+                  Clear Search
+                </button>
+              </div>
+            )}
+            
+            {recentCocktails.length > 0 && !searchQuery && (
               <div className="mb-8">
                 <h3 className="text-xl text-white mb-4">Recently Viewed</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
@@ -204,26 +277,32 @@ const BartenderMode = ({ onExit }: BartenderModeProps) => {
               </div>
             )}
             
-            <h3 className="text-xl text-white mb-4">All Cocktails</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {enhancedCocktails.map(cocktail => (
-                <button
-                  key={cocktail.id}
-                  className="bg-mixology-dark p-4 rounded-lg text-left hover:bg-mixology-navy/40 transition-colors flex items-center"
-                  onClick={() => handleSelectCocktail(cocktail)}
-                >
-                  <img 
-                    src={cocktail.image} 
-                    alt={cocktail.name} 
-                    className="w-16 h-16 object-cover rounded-lg mr-4"
-                  />
-                  <div>
-                    <h4 className="text-white font-bold text-lg">{cocktail.name}</h4>
-                    <p className="text-gray-400 text-sm">{cocktail.difficulty}</p>
-                  </div>
-                </button>
-              ))}
-            </div>
+            {filteredCocktails.length > 0 && (
+              <div>
+                <h3 className="text-xl text-white mb-4">
+                  {searchQuery ? 'Search Results' : 'All Cocktails'}
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                  {filteredCocktails.map(cocktail => (
+                    <button
+                      key={cocktail.id}
+                      className="bg-mixology-dark p-4 rounded-lg text-left hover:bg-mixology-navy/40 transition-colors flex items-center"
+                      onClick={() => handleSelectCocktail(cocktail)}
+                    >
+                      <img 
+                        src={cocktail.image} 
+                        alt={cocktail.name} 
+                        className="w-16 h-16 object-cover rounded-lg mr-4"
+                      />
+                      <div>
+                        <h4 className="text-white font-bold text-lg">{cocktail.name}</h4>
+                        <p className="text-gray-400 text-sm">{cocktail.difficulty}</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         ) : (
           <div>
