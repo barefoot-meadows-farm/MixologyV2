@@ -12,12 +12,7 @@ const Header = () => {
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [isBartenderMode, setIsBartenderMode] = useState(false);
-
-  // If bartender mode is active, render BartenderMode component instead
-  if (isBartenderMode) {
-    return <BartenderMode onExit={() => setIsBartenderMode(false)} />;
-  }
+  // Bartender mode is now a separate route
 
   useEffect(() => {
     const handleScroll = () => {
@@ -62,13 +57,13 @@ const Header = () => {
               </span>
             </Link>
             
-            <button
-              onClick={() => setIsBartenderMode(true)}
+            <Link
+              to="/bartender"
               className="hidden md:flex items-center text-sm font-medium px-4 py-2 border border-mixology-burgundy rounded-md hover:bg-mixology-burgundy hover:text-white transition-colors dark:text-white dark:hover:text-white dark:border-mixology-burgundy dark:hover:bg-mixology-burgundy"
             >
               <Wine size={16} className="mr-1" />
               Bartender Mode
-            </button>
+            </Link>
           </div>
 
           {/* Desktop Navigation */}

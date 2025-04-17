@@ -2,22 +2,18 @@
 import { Compass, Search, GlassWater, BookmarkIcon, Wine } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
-import BartenderMode from "./BartenderMode";
+// BartenderMode is now a standalone page, not a component overlay
 
 const MobileNavbar = () => {
   const location = useLocation();
-  const [isBartenderMode, setIsBartenderMode] = useState(false);
-  
-  if (isBartenderMode) {
-    return <BartenderMode onExit={() => setIsBartenderMode(false)} />;
-  }
+  // Bartender mode is now a separate route
   
   const navItems = [
     { icon: Compass, label: "Discover", path: "/" },
     { icon: Search, label: "Browse", path: "/browse" },
     { icon: GlassWater, label: "My Bar", path: "/bar" },
     { icon: BookmarkIcon, label: "Favorites", path: "/favorites" },
-    { icon: Wine, label: "Bartender", action: () => setIsBartenderMode(true) },
+    { icon: Wine, label: "Bartender", path: "/bartender" },
   ];
 
   return (
@@ -25,18 +21,6 @@ const MobileNavbar = () => {
       {navItems.map((item, index) => {
         const isActive = item.path && location.pathname === item.path;
         
-        if (item.action) {
-          return (
-            <button 
-              key={`${item.label}-${index}`}
-              onClick={item.action}
-              className="mobile-nav-item flex flex-col items-center text-xs text-gray-500 dark:text-gray-300 hover:text-mixology-burgundy dark:hover:text-mixology-burgundy min-h-[44px]"
-            >
-              <item.icon size={24} className="mb-1" />
-              <span>{item.label}</span>
-            </button>
-          );
-        }
         
         return (
           <Link 

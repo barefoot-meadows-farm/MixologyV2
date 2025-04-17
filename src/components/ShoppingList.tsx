@@ -6,6 +6,7 @@ import { cocktails } from "../data/cocktails";
 import { ingredients } from "../data/ingredients";
 import { useShoppingCart } from "../contexts/ShoppingContext";
 import { useSettings } from "../contexts/SettingsContext";
+import { isIngredientInInventory, normalizeIngredientName, validateIngredientName, logIngredientMatchingError } from "../lib/ingredientUtils";
 
 // Simple unit conversion for demonstration
 const convertToMetric = (amount: number): string => {
@@ -70,12 +71,22 @@ const ShoppingList = () => {
         const quantity = shoppingItems.find(item => item.cocktailId === cocktail.id)?.quantity || 0;
         
         cocktail.ingredients.forEach(ingredientName => {
-          // Find the ingredient ID from the name
+          // Find the ingredient ID from the name using improved comparison
+          const normalizedName = normalizeIngredientName(ingredientName);
           const ingredient = ingredients.find(ing => 
-            ing.name.toLowerCase() === ingredientName.toLowerCase()
+            normalizeIngredientName(ing.name) === normalizedName
           );
           
-          if (ingredient) {
+          // Log any matching errors for debugging
+          if (!ingredient) {
+            logIngredientMatchingError(
+              ingredientName,
+              ingredients.map(i => i.name),
+              false
+            );
+            return;
+          }
+          
             const id = ingredient.id;
             const baseQuantity = ingredientQuantities[id] || 1;
             const totalQuantity = baseQuantity * quantity;
@@ -89,19 +100,27 @@ const ShoppingList = () => {
             } else {
               ingredientMap.set(id, { quantity: totalQuantity, cocktailCount: 1 });
             }
-          }
+          
         });
       });
       
-      // Convert map to array and include inventory status
+      // Convert map to array and include inventory status with improved comparison
       const ingredientsArray: ShoppingIngredient[] = Array.from(ingredientMap).map(([id, data]) => {
         const ingredient = ingredients.find(ing => ing.id === id);
+        const name = ingredient?.name || id;
+        
+        // Use the improved comparison function to determine if in inventory
+        const inInventory = ingredient ? 
+          ingredient.isInInventory || 
+          isIngredientInInventory(name, ingredients.filter(i => i.isInInventory)) : 
+          false;
+          
         return {
           id,
-          name: ingredient?.name || id,
+          name,
           quantity: data.quantity,
           cocktailCount: data.cocktailCount,
-          inInventory: ingredient?.isInInventory || false
+          inInventory
         };
       });
       
@@ -118,9 +137,22 @@ const ShoppingList = () => {
     // For this demo, we'll just show a mock success state
     const missingIngredients = shoppingIngredients.filter(ing => !ing.inInventory);
     if (missingIngredients.length > 0) {
+      // Validate each ingredient before adding to inventory
+      const validIngredients = missingIngredients.filter(ing => {
+        const validation = validateIngredientName(ing.name);
+        if (!validation.isValid) {
+          console.error(`Validation error for ${ing.name}: ${validation.errorMessage}`);
+          return false;
+        }
+        return true;
+      });
+      
       // Update local state to reflect changes immediately
       setShoppingIngredients(prev => 
-        prev.map(ing => ({ ...ing, inInventory: true }))
+        prev.map(ing => ({
+          ...ing,
+          inInventory: ing.inInventory || validIngredients.some(valid => valid.id === ing.id)
+        }))
       );
       // In a real app, we would call an API to update the user's inventory
     }
