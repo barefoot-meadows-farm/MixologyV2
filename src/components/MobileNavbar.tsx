@@ -1,4 +1,5 @@
-import { Compass, Search, GlassWater, BookmarkIcon, Settings, Cocktail } from "lucide-react";
+
+import { Compass, Search, GlassWater, BookmarkIcon, Settings, Wine } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import BartenderMode from "./BartenderMode";
@@ -16,7 +17,7 @@ const MobileNavbar = () => {
     { icon: Search, label: "Browse", path: "/browse" },
     { icon: GlassWater, label: "My Bar", path: "/bar" },
     { icon: BookmarkIcon, label: "Favorites", path: "/favorites" },
-    { icon: Cocktail, label: "Bartender", action: () => setIsBartenderMode(true) },
+    { icon: Wine, label: "Bartender", action: () => setIsBartenderMode(true) },
   ];
 
   return (

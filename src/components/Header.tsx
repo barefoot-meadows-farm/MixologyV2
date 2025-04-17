@@ -1,15 +1,15 @@
 
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Sun, Moon, Cocktail } from "lucide-react";
+import { Menu, X, Sun, Moon, Wine } from "lucide-react";
 import { useSettings } from "../contexts/SettingsContext";
-import { useMobile } from "../hooks/use-mobile";
+import { useIsMobile } from "../hooks/use-mobile";
 import BartenderMode from "./BartenderMode";
 
 const Header = () => {
   const location = useLocation();
-  const { theme, toggleTheme } = useSettings();
-  const isMobile = useMobile();
+  const { darkMode, toggleDarkMode } = useSettings();
+  const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [isBartenderMode, setIsBartenderMode] = useState(false);
@@ -80,7 +80,7 @@ const Header = () => {
               onClick={() => setIsBartenderMode(true)}
               className="text-sm font-medium flex items-center text-gray-700 hover:text-mixology-burgundy transition-colors dark:text-gray-300"
             >
-              <Cocktail size={16} className="mr-1" />
+              <Wine size={16} className="mr-1" />
               Bartender Mode
             </button>
             <Link
@@ -90,11 +90,11 @@ const Header = () => {
               Sign In
             </Link>
             <button
-              onClick={toggleTheme}
+              onClick={toggleDarkMode}
               className="p-2 text-gray-700 hover:text-mixology-purple transition-colors dark:text-gray-300"
               aria-label="Toggle dark mode"
             >
-              {theme === "dark" ? (
+              {darkMode ? (
                 <Sun size={20} />
               ) : (
                 <Moon size={20} />
@@ -105,11 +105,11 @@ const Header = () => {
           {/* Mobile Navigation */}
           <div className="md:hidden flex items-center">
             <button
-              onClick={toggleTheme}
+              onClick={toggleDarkMode}
               className="p-2 mr-2 text-gray-700 dark:text-gray-300"
               aria-label="Toggle dark mode"
             >
-              {theme === "dark" ? (
+              {darkMode ? (
                 <Sun size={20} />
               ) : (
                 <Moon size={20} />
@@ -156,7 +156,7 @@ const Header = () => {
               className="block py-2 text-sm font-medium text-gray-700 dark:text-gray-300 w-full text-left"
             >
               <span className="flex items-center">
-                <Cocktail size={16} className="mr-1" />
+                <Wine size={16} className="mr-1" />
                 Bartender Mode
               </span>
             </button>

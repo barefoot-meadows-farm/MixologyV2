@@ -4,7 +4,7 @@ import Carousel from "../components/Carousel";
 import CocktailCard from "../components/CocktailCard";
 import { featuredCocktails, popularCocktails } from "../data/cocktails";
 import { announcements } from "../data/announcements";
-import { Cocktail } from "lucide-react";
+import { Wine } from "lucide-react";
 import { useState } from "react";
 import BartenderMode from "../components/BartenderMode";
 
@@ -47,7 +47,7 @@ const Home = () => {
           onClick={() => setIsBartenderMode(true)}
           className="bg-mixology-burgundy text-white px-6 py-3 rounded-lg flex items-center font-medium hover:bg-mixology-burgundy/90 transition-colors"
         >
-          <Cocktail className="mr-2" size={20} />
+          <Wine className="mr-2" size={20} />
           Enter Bartender Mode
         </button>
       </div>
@@ -58,7 +58,7 @@ const Home = () => {
           onClick={() => setIsBartenderMode(true)}
           className="bg-mixology-burgundy text-white px-4 py-2 rounded-lg flex items-center text-sm font-medium hover:bg-mixology-burgundy/90 transition-colors"
         >
-          <Cocktail className="mr-1" size={16} />
+          <Wine className="mr-1" size={16} />
           Bartender Mode
         </button>
       </div>
