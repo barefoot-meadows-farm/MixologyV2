@@ -1,13 +1,14 @@
-
 import { useState } from "react";
 import { Filter } from "lucide-react";
 
+interface Filters {
+  spirit: string | undefined;
+  difficulty: string | undefined;
+  canMake: boolean | undefined;
+}
+
 interface FilterBarProps {
-  onFilterChange: (filters: {
-    spirit?: string;
-    difficulty?: string;
-    canMake?: boolean;
-  }) => void;
+  onFilterChange: (filters: Filters) => void;
 }
 
 const FilterBar = ({ onFilterChange }: FilterBarProps) => {

@@ -5,19 +5,21 @@ import CocktailCard, { Cocktail } from "../components/CocktailCard";
 import FilterBar from "../components/FilterBar";
 import { cocktails } from "../data/cocktails";
 
+interface Filters {
+  spirit: string | undefined;
+  difficulty: string | undefined;
+  canMake: boolean | undefined;
+}
+
 const Browse = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filters, setFilters] = useState({
-    spirit: undefined as string | undefined,
-    difficulty: undefined as string | undefined,
-    canMake: false as boolean | undefined,
+  const [filters, setFilters] = useState<Filters>({
+    spirit: undefined,
+    difficulty: undefined,
+    canMake: false,
   });
 
-  const handleFilterChange = (newFilters: {
-    spirit?: string;
-    difficulty?: string;
-    canMake?: boolean;
-  }) => {
+  const handleFilterChange = (newFilters: Filters) => {
     setFilters(newFilters);
   };
 
