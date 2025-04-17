@@ -85,7 +85,12 @@ export const SettingsProvider = ({ children }: SettingsProviderProps) => {
          window.matchMedia && 
          window.matchMedia('(prefers-color-scheme: dark)').matches);
 
-      document.documentElement.classList.toggle('dark', isDark);
+      // Apply dark class to documentElement
+      if (isDark) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
     };
 
     applyTheme();
@@ -94,8 +99,16 @@ export const SettingsProvider = ({ children }: SettingsProviderProps) => {
     if (settings.themeMode === 'system') {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
       const handleChange = () => applyTheme();
-      mediaQuery.addEventListener('change', handleChange);
-      return () => mediaQuery.removeEventListener('change', handleChange);
+      
+      // Use the appropriate event listener based on browser support
+      if (mediaQuery.addEventListener) {
+        mediaQuery.addEventListener('change', handleChange);
+        return () => mediaQuery.removeEventListener('change', handleChange);
+      } else {
+        // Fallback for older browsers
+        mediaQuery.addListener(handleChange);
+        return () => mediaQuery.removeListener(handleChange);
+      }
     }
   }, [settings.themeMode, isLoading]);
 

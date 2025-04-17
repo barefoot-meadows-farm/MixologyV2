@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useSettings } from '../contexts/SettingsContext';
 import { 
@@ -10,7 +11,8 @@ import {
   HelpCircle,
   Shield,
   Gift,
-  LogOut
+  LogOut,
+  Link as LinkIcon
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Switch } from '@/components/ui/switch';
@@ -94,23 +96,23 @@ const Settings = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-6 pb-20 md:pb-10 max-w-2xl">
-      <h1 className="text-2xl font-serif font-medium text-mixology-purple mb-6">Settings</h1>
+    <div className="container mx-auto px-4 py-6 pb-20 md:pb-10 max-w-2xl dark:bg-background">
+      <h1 className="text-2xl font-serif font-medium text-mixology-purple dark:text-mixology-cream mb-6">Settings</h1>
 
-      <SettingsSection title="Account Settings" icon={<UserCog size={20} className="text-mixology-purple" />}>
+      <SettingsSection title="Account Settings" icon={<UserCog size={20} className="text-mixology-purple dark:text-mixology-cream" />}>
         <SettingsLink
           to="/settings/profile"
-          icon={<UserCog size={20} className="text-gray-500" />}
+          icon={<UserCog size={20} className="text-gray-500 dark:text-gray-300" />}
           label="Profile Information"
         />
         <SettingsLink
           to="/settings/password"
-          icon={<Shield size={20} className="text-gray-500" />}
+          icon={<Shield size={20} className="text-gray-500 dark:text-gray-300" />}
           label="Password & Security"
         />
         <SettingsLink
           to="/settings/linked-accounts"
-          icon={<Link className="text-gray-500" />}
+          icon={<LinkIcon size={20} className="text-gray-500 dark:text-gray-300" />}
           label="Linked Accounts"
         />
         <SettingsLink
@@ -121,22 +123,22 @@ const Settings = () => {
         />
       </SettingsSection>
 
-      <SettingsSection title="Appearance" icon={<Moon size={20} className="text-mixology-purple" />}>
+      <SettingsSection title="Appearance" icon={<Moon size={20} className="text-mixology-purple dark:text-mixology-cream" />}>
         <div className="space-y-1">
           <SettingsToggle
-            icon={<Sun size={20} className="text-gray-500" />}
+            icon={<Sun size={20} className="text-gray-500 dark:text-gray-300" />}
             label="Light Mode"
             checked={themeMode === 'light'}
             onCheckedChange={() => setThemeMode('light')}
           />
           <SettingsToggle
-            icon={<Moon size={20} className="text-gray-500" />}
+            icon={<Moon size={20} className="text-gray-500 dark:text-gray-300" />}
             label="Dark Mode"
             checked={themeMode === 'dark'}
             onCheckedChange={() => setThemeMode('dark')}
           />
           <SettingsToggle
-            icon={<Moon size={20} className="text-gray-500 opacity-50" />}
+            icon={<Moon size={20} className="text-gray-500 dark:text-gray-300 opacity-50" />}
             label="System Default"
             checked={themeMode === 'system'}
             onCheckedChange={() => setThemeMode('system')}
@@ -144,16 +146,16 @@ const Settings = () => {
         </div>
       </SettingsSection>
       
-      <SettingsSection title="Measurement Units" icon={<Volume size={20} className="text-mixology-purple" />}>
+      <SettingsSection title="Measurement Units" icon={<Volume size={20} className="text-mixology-purple dark:text-mixology-cream" />}>
         <div className="space-y-1">
           <SettingsToggle
-            icon={<Volume size={20} className="text-gray-500" />}
+            icon={<Volume size={20} className="text-gray-500 dark:text-gray-300" />}
             label="US Customary (oz, cups)"
             checked={measurementUnit === 'us'}
             onCheckedChange={() => setMeasurementUnit('us')}
           />
           <SettingsToggle
-            icon={<Volume size={20} className="text-gray-500" />}
+            icon={<Volume size={20} className="text-gray-500 dark:text-gray-300" />}
             label="Metric (ml, cl)"
             checked={measurementUnit === 'metric'}
             onCheckedChange={() => setMeasurementUnit('metric')}
@@ -161,61 +163,61 @@ const Settings = () => {
         </div>
       </SettingsSection>
 
-      <SettingsSection title="Localization" icon={<Languages size={20} className="text-mixology-purple" />}>
+      <SettingsSection title="Localization" icon={<Languages size={20} className="text-mixology-purple dark:text-mixology-cream" />}>
         <SettingsLink
           to="/settings/language"
-          icon={<Languages size={20} className="text-gray-500" />}
+          icon={<Languages size={20} className="text-gray-500 dark:text-gray-300" />}
           label="Language"
-          rightElement={<span className="text-gray-500">{language.toUpperCase()}</span>}
+          rightElement={<span className="text-gray-500 dark:text-gray-300">{language.toUpperCase()}</span>}
         />
         <SettingsLink
           to="/settings/region"
-          icon={<Languages size={20} className="text-gray-500" />}
+          icon={<Languages size={20} className="text-gray-500 dark:text-gray-300" />}
           label="Region"
-          rightElement={<span className="text-gray-500">{region.toUpperCase()}</span>}
+          rightElement={<span className="text-gray-500 dark:text-gray-300">{region.toUpperCase()}</span>}
         />
       </SettingsSection>
 
-      <SettingsSection title="Help & Support" icon={<HelpCircle size={20} className="text-mixology-purple" />}>
+      <SettingsSection title="Help & Support" icon={<HelpCircle size={20} className="text-mixology-purple dark:text-mixology-cream" />}>
         <SettingsLink
           to="/settings/faq"
-          icon={<HelpCircle size={20} className="text-gray-500" />}
+          icon={<HelpCircle size={20} className="text-gray-500 dark:text-gray-300" />}
           label="FAQ"
         />
         <SettingsLink
           to="/settings/contact"
-          icon={<HelpCircle size={20} className="text-gray-500" />}
+          icon={<HelpCircle size={20} className="text-gray-500 dark:text-gray-300" />}
           label="Contact Support"
         />
         <SettingsLink
           to="/settings/feedback"
-          icon={<HelpCircle size={20} className="text-gray-500" />}
+          icon={<HelpCircle size={20} className="text-gray-500 dark:text-gray-300" />}
           label="Submit Feedback"
         />
       </SettingsSection>
 
-      <SettingsSection title="Legal & Policies" icon={<Shield size={20} className="text-mixology-purple" />}>
+      <SettingsSection title="Legal & Policies" icon={<Shield size={20} className="text-mixology-purple dark:text-mixology-cream" />}>
         <SettingsLink
           to="/settings/privacy"
-          icon={<Shield size={20} className="text-gray-500" />}
+          icon={<Shield size={20} className="text-gray-500 dark:text-gray-300" />}
           label="Privacy Policy"
         />
         <SettingsLink
           to="/settings/terms"
-          icon={<Shield size={20} className="text-gray-500" />}
+          icon={<Shield size={20} className="text-gray-500 dark:text-gray-300" />}
           label="Terms of Service"
         />
       </SettingsSection>
 
-      <SettingsSection title="Promotional" icon={<Gift size={20} className="text-mixology-purple" />}>
+      <SettingsSection title="Promotional" icon={<Gift size={20} className="text-mixology-purple dark:text-mixology-cream" />}>
         <SettingsLink
           to="/settings/promo-code"
-          icon={<Gift size={20} className="text-gray-500" />}
+          icon={<Gift size={20} className="text-gray-500 dark:text-gray-300" />}
           label="Enter Promo Code"
         />
         <SettingsLink
           to="/settings/invite"
-          icon={<Gift size={20} className="text-gray-500" />}
+          icon={<Gift size={20} className="text-gray-500 dark:text-gray-300" />}
           label="Invite Friends"
         />
       </SettingsSection>

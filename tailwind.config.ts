@@ -54,13 +54,13 @@ export default {
 					foreground: 'hsl(var(--card-foreground))'
 				},
 				mixology: {
-					purple: '#4A235A',
-					burgundy: '#800020',
-					navy: '#2C3E50',
-					gold: '#D4AF37',
-					cream: '#F5F5F0',
-					light: '#E8E8E8',
-					dark: '#1A1A1A'
+					purple: 'hsl(var(--mixology-purple))',
+					burgundy: 'hsl(var(--mixology-burgundy))',
+					navy: 'hsl(var(--mixology-navy))',
+					gold: 'hsl(var(--mixology-gold))',
+					cream: 'hsl(var(--mixology-cream))',
+					light: 'hsl(var(--mixology-light))',
+					dark: 'hsl(var(--mixology-dark))'
 				}
 			},
 			borderRadius: {

@@ -36,6 +36,54 @@
     --ring: 346 77% 27%;
 
     --radius: 0.75rem;
+    
+    /* Mixology colors - light mode */
+    --mixology-purple: 282 42% 24%;
+    --mixology-burgundy: 346 77% 27%;
+    --mixology-navy: 210 29% 29%;
+    --mixology-gold: 46 75% 51%;
+    --mixology-cream: 0 0% 96%;
+    --mixology-light: 0 0% 91%;
+    --mixology-dark: 0 0% 10%;
+  }
+
+  .dark {
+    --background: 0 0% 10%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 282 42% 15%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 346 77% 27%;
+    
+    /* Mixology colors - dark mode */
+    --mixology-purple: 282 42% 15%;
+    --mixology-burgundy: 346 70% 22%;
+    --mixology-navy: 210 29% 20%;
+    --mixology-gold: 46 65% 45%;
+    --mixology-cream: 0 0% 90%;
+    --mixology-light: 0 0% 20%;
+    --mixology-dark: 0 0% 6%;
   }
 
   * {
@@ -43,7 +91,7 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans transition-colors duration-200;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -53,7 +101,7 @@
 
 @layer components {
   .cocktail-card {
-    @apply bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:shadow-lg hover:-translate-y-1;
+    @apply bg-white rounded-lg shadow-md overflow-hidden transform transition duration-300 hover:shadow-lg hover:-translate-y-1 dark:bg-mixology-navy/20 dark:shadow-none;
   }
 
   .touch-target {
@@ -69,6 +117,6 @@
   }
 
   .section-title {
-    @apply font-serif text-2xl font-medium tracking-tight mb-4 text-mixology-purple;
+    @apply font-serif text-2xl font-medium tracking-tight mb-4 text-mixology-purple dark:text-mixology-cream;
   }
 }
