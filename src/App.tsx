@@ -10,6 +10,7 @@ import Home from "./pages/Home";
 import Browse from "./pages/Browse";
 import VirtualBar from "./pages/VirtualBar";
 import Favorites from "./pages/Favorites";
+import Settings from "./pages/Settings";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
@@ -18,31 +19,37 @@ import NotFound from "./pages/NotFound";
 import Header from "./components/Header";
 import MobileNavbar from "./components/MobileNavbar";
 
+// Context
+import { SettingsProvider } from "./contexts/SettingsContext";
+
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <div className="min-h-screen flex flex-col">
-          <Header />
-          <main className="flex-1">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/browse" element={<Browse />} />
-              <Route path="/bar" element={<VirtualBar />} />
-              <Route path="/favorites" element={<Favorites />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </main>
-          <MobileNavbar />
-        </div>
-      </BrowserRouter>
-    </TooltipProvider>
+    <SettingsProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <div className="min-h-screen flex flex-col">
+            <Header />
+            <main className="flex-1">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/browse" element={<Browse />} />
+                <Route path="/bar" element={<VirtualBar />} />
+                <Route path="/favorites" element={<Favorites />} />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </main>
+            <MobileNavbar />
+          </div>
+        </BrowserRouter>
+      </TooltipProvider>
+    </SettingsProvider>
   </QueryClientProvider>
 );
 

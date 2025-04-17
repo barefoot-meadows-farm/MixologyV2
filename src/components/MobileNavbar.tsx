@@ -1,16 +1,16 @@
 
-import { HomeIcon, Search, GlassWater, BookmarkIcon, UserIcon } from "lucide-react";
+import { Compass, Search, GlassWater, BookmarkIcon, Settings } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
 const MobileNavbar = () => {
   const location = useLocation();
   
   const navItems = [
-    { icon: HomeIcon, label: "Home", path: "/" },
+    { icon: Compass, label: "Discover", path: "/" },
     { icon: Search, label: "Browse", path: "/browse" },
     { icon: GlassWater, label: "My Bar", path: "/bar" },
     { icon: BookmarkIcon, label: "Favorites", path: "/favorites" },
-    { icon: UserIcon, label: "Account", path: "/account" },
+    { icon: Settings, label: "Settings", path: "/settings" },
   ];
 
   return (

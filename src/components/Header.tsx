@@ -33,7 +33,7 @@ const Header = () => {
           </button>
           
           <div className="hidden md:flex space-x-6">
-            <Link to="/" className="font-medium hover:text-mixology-burgundy">Home</Link>
+            <Link to="/" className="font-medium hover:text-mixology-burgundy">Discover</Link>
             <Link to="/browse" className="font-medium hover:text-mixology-burgundy">Browse</Link>
             <Link to="/bar" className="font-medium hover:text-mixology-burgundy">My Bar</Link>
             <Link to="/favorites" className="font-medium hover:text-mixology-burgundy">Favorites</Link>
@@ -51,11 +51,11 @@ const Header = () => {
       {isMenuOpen && (
         <div className="absolute top-16 left-0 right-0 bg-white border-b border-gray-200 shadow-md md:hidden animate-fade-in">
           <nav className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-            <Link to="/" className="py-2 font-medium" onClick={() => setIsMenuOpen(false)}>Home</Link>
+            <Link to="/" className="py-2 font-medium" onClick={() => setIsMenuOpen(false)}>Discover</Link>
             <Link to="/browse" className="py-2 font-medium" onClick={() => setIsMenuOpen(false)}>Browse</Link>
             <Link to="/bar" className="py-2 font-medium" onClick={() => setIsMenuOpen(false)}>My Bar</Link>
             <Link to="/favorites" className="py-2 font-medium" onClick={() => setIsMenuOpen(false)}>Favorites</Link>
-            <Link to="/account" className="py-2 font-medium" onClick={() => setIsMenuOpen(false)}>Account</Link>
+            <Link to="/settings" className="py-2 font-medium" onClick={() => setIsMenuOpen(false)}>Settings</Link>
             <div className="border-t border-gray-200 pt-4 flex justify-between">
               <Link 
                 to="/login" 
