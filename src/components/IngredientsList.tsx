@@ -43,7 +43,7 @@ const IngredientsList = ({
 
   return (
     <div className="space-y-4">
-      {categories.map(category => (
+      {categories.map((category) => (
         <div key={category} className="border border-gray-200 rounded-lg overflow-hidden dark:border-gray-700">
           <button 
             className="w-full p-3 bg-gray-50 flex justify-between items-center text-left dark:bg-gray-800 dark:text-white"
