@@ -1,6 +1,8 @@
 
-import { BookmarkIcon } from "lucide-react";
+import { BookmarkIcon, ShoppingCart, Plus, Minus } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useShoppingCart } from "../contexts/ShoppingContext";
 
 export interface Cocktail {
   id: string;
@@ -19,6 +21,8 @@ interface CocktailCardProps {
 
 const CocktailCard = ({ cocktail, size = "medium" }: CocktailCardProps) => {
   const { id, name, image, description, difficulty, canMake } = cocktail;
+  const { isInCart, addToCart, removeFromCart, updateQuantity, getQuantity } = useShoppingCart();
+  const [showQuantity, setShowQuantity] = useState(false);
   
   const sizeClasses = {
     small: "w-40 h-56",
@@ -32,6 +36,33 @@ const CocktailCard = ({ cocktail, size = "medium" }: CocktailCardProps) => {
     large: "h-60 md:h-48",
   };
 
+  const quantity = getQuantity(id);
+  const inCart = isInCart(id);
+
+  const handleCartClick = () => {
+    if (!inCart) {
+      addToCart(id);
+      setShowQuantity(true);
+    } else {
+      setShowQuantity(!showQuantity);
+    }
+  };
+
+  const handleIncrement = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    updateQuantity(id, quantity + 1);
+  };
+
+  const handleDecrement = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (quantity > 1) {
+      updateQuantity(id, quantity - 1);
+    } else {
+      removeFromCart(id);
+      setShowQuantity(false);
+    }
+  };
+
   return (
     <div className={`cocktail-card ${sizeClasses[size]}`}>
       <div className="relative">
@@ -41,9 +72,39 @@ const CocktailCard = ({ cocktail, size = "medium" }: CocktailCardProps) => {
           className={`w-full ${imageClasses[size]} object-cover`} 
         />
         <div className="gradient-overlay"></div>
-        <button className="absolute top-2 right-2 touch-target bg-white/20 rounded-full p-1.5">
-          <BookmarkIcon size={18} className="text-white" />
-        </button>
+        <div className="absolute top-2 right-2 flex gap-2">
+          <button className="touch-target bg-white/20 rounded-full p-1.5">
+            <BookmarkIcon size={18} className="text-white" />
+          </button>
+          <button 
+            className={`touch-target rounded-full p-1.5 ${inCart ? 'bg-mixology-gold text-mixology-dark' : 'bg-white/20 text-white'}`}
+            onClick={handleCartClick}
+            aria-label={inCart ? "Adjust quantity" : "Add to shopping list"}
+          >
+            <ShoppingCart size={18} />
+          </button>
+        </div>
+        {showQuantity && inCart && (
+          <div className="absolute top-14 right-2 bg-white dark:bg-mixology-navy/90 rounded-lg shadow-md p-1 flex items-center">
+            <button 
+              className="touch-target w-8 h-8 text-mixology-purple dark:text-mixology-cream flex items-center justify-center"
+              onClick={handleDecrement}
+              aria-label="Decrease quantity"
+            >
+              <Minus size={16} />
+            </button>
+            <span className="w-8 text-center text-mixology-purple dark:text-mixology-cream font-medium">
+              {quantity}
+            </span>
+            <button 
+              className="touch-target w-8 h-8 text-mixology-purple dark:text-mixology-cream flex items-center justify-center"
+              onClick={handleIncrement}
+              aria-label="Increase quantity"
+            >
+              <Plus size={16} />
+            </button>
+          </div>
+        )}
         {canMake && (
           <div className="absolute top-2 left-2 bg-green-500 text-white text-xs font-medium px-2 py-1 rounded-full">
             Can Make

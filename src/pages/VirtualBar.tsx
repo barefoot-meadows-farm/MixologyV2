@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Search, PlusCircle } from "lucide-react";
 import IngredientsList from "../components/IngredientsList";
 import CocktailCard from "../components/CocktailCard";
+import ShoppingList from "../components/ShoppingList";
 import { ingredients } from "../data/ingredients";
 import { cocktails } from "../data/cocktails";
 
@@ -11,7 +12,7 @@ const VirtualBar = () => {
   const [barIngredients, setBarIngredients] = useState(
     ingredients.filter((ing) => ing.isInInventory)
   );
-  const [activeTab, setActiveTab] = useState<"inventory" | "make">("inventory");
+  const [activeTab, setActiveTab] = useState<"inventory" | "make" | "shopping">("inventory");
 
   const handleToggleIngredient = (id: string) => {
     setBarIngredients((prev) => {
@@ -44,13 +45,13 @@ const VirtualBar = () => {
 
   return (
     <div className="container mx-auto px-4 pb-20 md:pb-10">
-      <h1 className="text-3xl font-serif font-medium text-mixology-purple mb-6">
+      <h1 className="text-3xl font-serif font-medium text-mixology-purple dark:text-mixology-cream mb-6">
         My Virtual Bar
       </h1>
       
-      <div className="flex border-b border-gray-200 mb-6">
+      <div className="flex border-b border-gray-200 mb-6 overflow-x-auto">
         <button
-          className={`px-4 py-2 font-medium text-sm ${
+          className={`px-4 py-2 font-medium text-sm whitespace-nowrap ${
             activeTab === "inventory"
               ? "border-b-2 border-mixology-burgundy text-mixology-burgundy"
               : "text-gray-500"
@@ -60,7 +61,7 @@ const VirtualBar = () => {
           Inventory
         </button>
         <button
-          className={`px-4 py-2 font-medium text-sm ${
+          className={`px-4 py-2 font-medium text-sm whitespace-nowrap ${
             activeTab === "make"
               ? "border-b-2 border-mixology-burgundy text-mixology-burgundy"
               : "text-gray-500"
@@ -68,6 +69,16 @@ const VirtualBar = () => {
           onClick={() => setActiveTab("make")}
         >
           What Can I Make?
+        </button>
+        <button
+          className={`px-4 py-2 font-medium text-sm whitespace-nowrap ${
+            activeTab === "shopping"
+              ? "border-b-2 border-mixology-burgundy text-mixology-burgundy"
+              : "text-gray-500"
+          }`}
+          onClick={() => setActiveTab("shopping")}
+        >
+          Shopping
         </button>
       </div>
 
@@ -86,7 +97,7 @@ const VirtualBar = () => {
             />
           </div>
 
-          <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
+          <div className="bg-white rounded-lg shadow-sm p-4 mb-6 dark:bg-mixology-navy/20">
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-medium">My Bar Ingredients</h2>
               <span className="text-sm text-gray-500">
@@ -99,7 +110,7 @@ const VirtualBar = () => {
                 {barIngredients.map((ingredient) => (
                   <div 
                     key={ingredient.id} 
-                    className="bg-mixology-purple/10 text-mixology-purple px-3 py-1.5 rounded-full text-sm flex items-center"
+                    className="bg-mixology-purple/10 text-mixology-purple px-3 py-1.5 rounded-full text-sm flex items-center dark:bg-mixology-purple/30"
                   >
                     {ingredient.name}
                     <button 
@@ -124,15 +135,15 @@ const VirtualBar = () => {
             onIngredientToggle={handleToggleIngredient}
           />
         </>
-      ) : (
+      ) : activeTab === "make" ? (
         <>
           <div className="mb-6">
-            <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <div className="bg-white rounded-lg shadow-sm p-6 mb-6 dark:bg-mixology-navy/20">
               <div className="flex items-center mb-4">
-                <PlusCircle size={24} className="mr-3 text-mixology-purple" />
+                <PlusCircle size={24} className="mr-3 text-mixology-purple dark:text-mixology-cream" />
                 <h2 className="font-medium">Cocktails You Can Make Now</h2>
               </div>
-              <p className="text-sm text-gray-600 mb-2">
+              <p className="text-sm text-gray-600 mb-2 dark:text-gray-300">
                 Based on your {barIngredients.length} bar ingredients, you can make the following cocktails:
               </p>
             </div>
@@ -158,6 +169,8 @@ const VirtualBar = () => {
             )}
           </div>
         </>
+      ) : (
+        <ShoppingList />
       )}
     </div>
   );

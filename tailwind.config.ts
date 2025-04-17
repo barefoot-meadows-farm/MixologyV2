@@ -61,7 +61,9 @@ export default {
 					cream: 'hsl(var(--mixology-cream))',
 					light: 'hsl(var(--mixology-light))',
 					dark: 'hsl(var(--mixology-dark))'
-				}
+				},
+				'inventory-green': '#2ECC71',
+				'missing-red': '#E74C3C'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

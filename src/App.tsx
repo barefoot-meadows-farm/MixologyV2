@@ -21,34 +21,37 @@ import MobileNavbar from "./components/MobileNavbar";
 
 // Context
 import { SettingsProvider } from "./contexts/SettingsContext";
+import { ShoppingProvider } from "./contexts/ShoppingContext";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <SettingsProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <div className="min-h-screen flex flex-col">
-            <Header />
-            <main className="flex-1">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/browse" element={<Browse />} />
-                <Route path="/bar" element={<VirtualBar />} />
-                <Route path="/favorites" element={<Favorites />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </main>
-            <MobileNavbar />
-          </div>
-        </BrowserRouter>
-      </TooltipProvider>
+      <ShoppingProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <div className="min-h-screen flex flex-col">
+              <Header />
+              <main className="flex-1">
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/browse" element={<Browse />} />
+                  <Route path="/bar" element={<VirtualBar />} />
+                  <Route path="/favorites" element={<Favorites />} />
+                  <Route path="/settings" element={<Settings />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </main>
+              <MobileNavbar />
+            </div>
+          </BrowserRouter>
+        </TooltipProvider>
+      </ShoppingProvider>
     </SettingsProvider>
   </QueryClientProvider>
 );
