@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, PlusCircle } from "lucide-react";
 import IngredientsList from "../components/IngredientsList";
 import CocktailCard from "../components/CocktailCard";
@@ -14,28 +14,51 @@ const VirtualBar = () => {
   );
   const [activeTab, setActiveTab] = useState<"inventory" | "make" | "shopping">("inventory");
 
+  useEffect(() => {
+    // Sort ingredients alphabetically when component mounts
+    const sortedBarIngredients = [...barIngredients].sort((a, b) => 
+      a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
+    );
+    
+    if (JSON.stringify(sortedBarIngredients) !== JSON.stringify(barIngredients)) {
+      setBarIngredients(sortedBarIngredients);
+    }
+  }, []);
+
   const handleToggleIngredient = (id: string) => {
     setBarIngredients((prev) => {
       const isInBar = prev.some((ing) => ing.id === id);
       
       if (isInBar) {
-        return prev.filter((ing) => ing.id !== id);
+        return prev.filter((ing) => ing.id !== id).sort((a, b) => 
+          a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
+        );
       } else {
         const ingredientToAdd = ingredients.find((ing) => ing.id === id);
         if (ingredientToAdd) {
-          return [...prev, ingredientToAdd];
+          return [...prev, ingredientToAdd].sort((a, b) => 
+            a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
+          );
         }
         return prev;
       }
     });
   };
 
-  const filteredIngredients = ingredients.filter((ingredient) => {
-    if (searchTerm) {
-      return ingredient.name.toLowerCase().includes(searchTerm.toLowerCase());
-    }
-    return true;
-  }).map((ingredient) => ({
+  const sortAlphabetically = (items: typeof ingredients) => {
+    return [...items].sort((a, b) => 
+      a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
+    );
+  };
+
+  const filteredIngredients = sortAlphabetically(
+    ingredients.filter((ingredient) => {
+      if (searchTerm) {
+        return ingredient.name.toLowerCase().includes(searchTerm.toLowerCase());
+      }
+      return true;
+    })
+  ).map((ingredient) => ({
     ...ingredient,
     isInInventory: barIngredients.some((ing) => ing.id === ingredient.id),
   }));
@@ -91,7 +114,7 @@ const VirtualBar = () => {
             <input
               type="text"
               placeholder="Search ingredients..."
-              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-mixology-purple/50"
+              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-mixology-burgundy/50 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />

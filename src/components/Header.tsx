@@ -50,26 +50,29 @@ const Header = () => {
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link
-            to="/"
-            className="flex items-center space-x-2 text-mixology-purple dark:text-mixology-cream"
-          >
-            <span className="text-2xl font-serif font-medium">Mixology</span>
-            <span className="text-2xl font-serif text-mixology-burgundy dark:text-mixology-burgundy">
-              Master
-            </span>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-6 items-center">
+          {/* Logo and Bartender Mode Button */}
+          <div className="flex items-center space-x-4">
+            <Link
+              to="/"
+              className="flex items-center space-x-2 text-mixology-purple dark:text-mixology-cream"
+            >
+              <span className="text-2xl font-serif font-medium">Mixology</span>
+              <span className="text-2xl font-serif text-mixology-burgundy dark:text-mixology-burgundy">
+                Master
+              </span>
+            </Link>
+            
             <button
               onClick={() => setIsBartenderMode(true)}
-              className="text-sm font-medium px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors flex items-center dark:border-gray-600 dark:hover:bg-gray-800 dark:text-gray-300"
+              className="hidden md:flex items-center text-sm font-medium px-4 py-2 border border-mixology-burgundy rounded-md hover:bg-mixology-burgundy hover:text-white transition-colors dark:text-white dark:hover:text-white dark:border-mixology-burgundy dark:hover:bg-mixology-burgundy"
             >
               <Wine size={16} className="mr-1" />
               Bartender Mode
             </button>
+          </div>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex space-x-6 items-center">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
@@ -85,7 +88,7 @@ const Header = () => {
             ))}
             <Link
               to="/login"
-              className="text-sm font-medium px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors dark:border-gray-600 dark:hover:bg-gray-800 dark:text-gray-300"
+              className="text-sm font-medium px-4 py-2 border border-mixology-burgundy rounded-md hover:bg-mixology-burgundy hover:text-white transition-colors dark:text-white dark:hover:text-white dark:border-mixology-burgundy dark:hover:bg-mixology-burgundy"
             >
               Sign In
             </Link>

@@ -89,6 +89,7 @@ const BartenderMode = ({ onExit }: BartenderModeProps) => {
   const [viewMode, setViewMode] = useState<'selection' | 'preparation'>('selection');
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredCocktails, setFilteredCocktails] = useState<BartenderCocktail[]>(enhancedCocktails);
+  const [noResults, setNoResults] = useState(false);
   const { measurementUnit } = useSettings();
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -104,12 +105,14 @@ const BartenderMode = ({ onExit }: BartenderModeProps) => {
     const query = searchQuery.trim().toLowerCase();
     if (query === '') {
       setFilteredCocktails(enhancedCocktails);
+      setNoResults(false);
     } else {
       const filtered = enhancedCocktails.filter(cocktail => 
         cocktail.name.toLowerCase().includes(query) || 
         cocktail.ingredients.some(ingredient => ingredient.toLowerCase().includes(query))
       );
       setFilteredCocktails(filtered);
+      setNoResults(filtered.length === 0);
     }
   }, [searchQuery]);
 
@@ -193,7 +196,7 @@ const BartenderMode = ({ onExit }: BartenderModeProps) => {
   const recentCocktails = getRecentCocktails();
 
   return (
-    <div className="bartender-mode min-h-screen">
+    <div className="bartender-mode min-h-screen bg-black text-white">
       {/* Header with exit button */}
       <header className="fixed top-0 left-0 right-0 bg-black p-4 z-10 flex items-center justify-between">
         <button 
@@ -240,7 +243,7 @@ const BartenderMode = ({ onExit }: BartenderModeProps) => {
             </div>
             
             {/* No results message */}
-            {filteredCocktails.length === 0 && (
+            {noResults && (
               <div className="text-center py-8">
                 <p className="text-white text-xl mb-4">No cocktails found for "{searchQuery}"</p>
                 <button
@@ -277,7 +280,7 @@ const BartenderMode = ({ onExit }: BartenderModeProps) => {
               </div>
             )}
             
-            {filteredCocktails.length > 0 && (
+            {filteredCocktails.length > 0 && !noResults && (
               <div>
                 <h3 className="text-xl text-white mb-4">
                   {searchQuery ? 'Search Results' : 'All Cocktails'}
@@ -362,7 +365,7 @@ const BartenderMode = ({ onExit }: BartenderModeProps) => {
                 {/* Next Button */}
                 <button 
                   onClick={handleNextStep}
-                  className="bartender-btn mt-6 flex items-center justify-center"
+                  className="bartender-btn mt-6 flex items-center justify-center bg-mixology-burgundy hover:bg-mixology-burgundy/80 text-white py-3 px-6 rounded-lg w-full"
                 >
                   {selectedCocktail.steps && currentStep < selectedCocktail.steps.length - 1 
                     ? 'Next Step' 
@@ -382,7 +385,7 @@ const BartenderMode = ({ onExit }: BartenderModeProps) => {
           <div className="flex justify-between items-center">
             <button 
               onClick={handlePrevStep}
-              className="text-white px-4 py-2"
+              className="text-white px-4 py-2 min-h-[44px]"
               disabled={currentStep === 0}
             >
               Previous
@@ -392,7 +395,7 @@ const BartenderMode = ({ onExit }: BartenderModeProps) => {
             </div>
             <button 
               onClick={handleNextStep}
-              className="text-white px-4 py-2"
+              className="text-white px-4 py-2 min-h-[44px]"
             >
               {currentStep < selectedCocktail.steps.length - 1 ? 'Next' : 'Finish'}
             </button>

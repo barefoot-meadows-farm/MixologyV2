@@ -1,5 +1,5 @@
 
-import { Compass, Search, GlassWater, BookmarkIcon, Settings, Wine } from "lucide-react";
+import { Compass, Search, GlassWater, BookmarkIcon, Wine } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 import BartenderMode from "./BartenderMode";
@@ -30,7 +30,7 @@ const MobileNavbar = () => {
             <button 
               key={item.label} 
               onClick={item.action}
-              className="mobile-nav-item text-gray-500 dark:text-gray-300"
+              className="mobile-nav-item text-gray-500 dark:text-gray-300 hover:text-mixology-burgundy dark:hover:text-mixology-burgundy min-h-[44px]"
             >
               <item.icon size={24} className="mb-1" />
               <span>{item.label}</span>
@@ -42,7 +42,7 @@ const MobileNavbar = () => {
           <Link 
             key={item.label} 
             to={item.path || '/'} 
-            className={`mobile-nav-item ${isActive ? 'text-mixology-burgundy dark:text-mixology-burgundy' : 'text-gray-500 dark:text-gray-300'}`}
+            className={`mobile-nav-item ${isActive ? 'text-mixology-burgundy dark:text-mixology-burgundy' : 'text-gray-500 dark:text-gray-300 hover:text-mixology-burgundy dark:hover:text-mixology-burgundy'} min-h-[44px]`}
           >
             <item.icon size={24} className="mb-1" />
             <span>{item.label}</span>
