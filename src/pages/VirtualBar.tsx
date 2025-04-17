@@ -4,6 +4,7 @@ import { Search, PlusCircle } from "lucide-react";
 import IngredientsList from "../components/IngredientsList";
 import CocktailCard from "../components/CocktailCard";
 import ShoppingList from "../components/ShoppingList";
+import BarcodeScannerButton from "../components/BarcodeScannerButton";
 import { ingredients } from "../data/ingredients";
 import { cocktails } from "../data/cocktails";
 
@@ -152,7 +153,10 @@ const VirtualBar = () => {
             )}
           </div>
 
-          <h2 className="font-medium mb-4">Add Ingredients to Your Bar</h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-medium">Add Ingredients to Your Bar</h2>
+            <BarcodeScannerButton onIngredientToggle={handleToggleIngredient} />
+          </div>
           <IngredientsList 
             ingredients={filteredIngredients} 
             onIngredientToggle={handleToggleIngredient}
