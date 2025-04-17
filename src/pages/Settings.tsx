@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useSettings } from '../contexts/SettingsContext';
 import { 
@@ -6,7 +5,7 @@ import {
   UserCog,
   Moon,
   Sun,
-  Language,
+  Languages,
   Volume,
   HelpCircle,
   Shield,
@@ -111,7 +110,7 @@ const Settings = () => {
         />
         <SettingsLink
           to="/settings/linked-accounts"
-          icon={<Link size={20} className="text-gray-500" />}
+          icon={<Link className="text-gray-500" />}
           label="Linked Accounts"
         />
         <SettingsLink
@@ -162,16 +161,16 @@ const Settings = () => {
         </div>
       </SettingsSection>
 
-      <SettingsSection title="Localization" icon={<Language size={20} className="text-mixology-purple" />}>
+      <SettingsSection title="Localization" icon={<Languages size={20} className="text-mixology-purple" />}>
         <SettingsLink
           to="/settings/language"
-          icon={<Language size={20} className="text-gray-500" />}
+          icon={<Languages size={20} className="text-gray-500" />}
           label="Language"
           rightElement={<span className="text-gray-500">{language.toUpperCase()}</span>}
         />
         <SettingsLink
           to="/settings/region"
-          icon={<Language size={20} className="text-gray-500" />}
+          icon={<Languages size={20} className="text-gray-500" />}
           label="Region"
           rightElement={<span className="text-gray-500">{region.toUpperCase()}</span>}
         />
