@@ -63,7 +63,11 @@ export default {
 					dark: 'hsl(var(--mixology-dark))'
 				},
 				'inventory-green': '#2ECC71',
-				'missing-red': '#E74C3C'
+				'missing-red': '#E74C3C',
+				// New colors for Bartender Mode
+				'bartender-black': '#000000e6',
+				'bartender-white': '#FFFFFF',
+				'bartender-accent': '#ea384c'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

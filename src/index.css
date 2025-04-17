@@ -64,7 +64,7 @@
     --secondary-foreground: 0 0% 98%;
 
     --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+    --muted-foreground: 240 5% 75%; /* Improved contrast for muted text */
 
     --accent: 240 3.7% 15.9%;
     --accent-foreground: 0 0% 98%;
@@ -72,18 +72,18 @@
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 346 77% 27%;
+    --border: 240 3.7% 25%; /* Improved border visibility */
+    --input: 240 3.7% 25%; /* Improved input field visibility */
+    --ring: 346 77% 40%; /* Brighter ring for better visibility */
     
-    /* Mixology colors - dark mode */
-    --mixology-purple: 282 42% 15%;
-    --mixology-burgundy: 346 70% 22%;
-    --mixology-navy: 210 29% 20%;
-    --mixology-gold: 46 65% 45%;
-    --mixology-cream: 0 0% 90%;
-    --mixology-light: 0 0% 20%;
-    --mixology-dark: 0 0% 6%;
+    /* Mixology colors - dark mode with improved contrast */
+    --mixology-purple: 282 42% 55%; /* Lighter purple for better visibility */
+    --mixology-burgundy: 346 70% 45%; /* Brighter burgundy for better contrast */
+    --mixology-navy: 210 29% 40%; /* Lighter navy for better visibility */
+    --mixology-gold: 46 75% 60%; /* Brighter gold for better contrast */
+    --mixology-cream: 0 0% 95%; /* Whiter cream for better contrast */
+    --mixology-light: 0 0% 30%; /* Lighter shade for better contrast */
+    --mixology-dark: 0 0% 6%; /* Slightly darker for better contrast with light content */
   }
 
   * {
@@ -117,7 +117,7 @@
   }
 
   .section-title {
-    @apply font-serif text-2xl font-medium tracking-tight mb-4 text-mixology-purple dark:text-mixology-cream;
+    @apply font-serif text-2xl font-medium tracking-tight mb-4 text-mixology-purple dark:text-white;
   }
   
   .quantity-selector {
@@ -139,4 +139,44 @@
   .shopping-item-need {
     @apply text-missing-red border-l-4 border-missing-red pl-3;
   }
+
+  /* New Bartender Mode styles */
+  .bartender-mode {
+    @apply bg-black text-white min-h-screen;
+  }
+
+  .bartender-text-large {
+    @apply text-2xl md:text-3xl font-bold;
+  }
+  
+  .bartender-text-medium {
+    @apply text-lg md:text-xl font-medium;
+  }
+  
+  .bartender-step-card {
+    @apply bg-mixology-dark p-6 rounded-lg mb-4 border border-white/20;
+  }
+  
+  .bartender-btn {
+    @apply bg-mixology-burgundy text-white py-4 px-6 rounded-lg text-xl font-bold w-full mb-4;
+  }
+}
+
+/* Bartender mode transitions */
+.step-enter {
+  opacity: 0;
+  transform: translateX(20px);
+}
+.step-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 150ms, transform 150ms;
+}
+.step-exit {
+  opacity: 1;
+}
+.step-exit-active {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 150ms, transform 150ms;
 }

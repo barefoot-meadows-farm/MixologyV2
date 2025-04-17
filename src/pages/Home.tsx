@@ -4,8 +4,18 @@ import Carousel from "../components/Carousel";
 import CocktailCard from "../components/CocktailCard";
 import { featuredCocktails, popularCocktails } from "../data/cocktails";
 import { announcements } from "../data/announcements";
+import { Cocktail } from "lucide-react";
+import { useState } from "react";
+import BartenderMode from "../components/BartenderMode";
 
 const Home = () => {
+  const [isBartenderMode, setIsBartenderMode] = useState(false);
+
+  // If bartender mode is active, show the bartender interface
+  if (isBartenderMode) {
+    return <BartenderMode onExit={() => setIsBartenderMode(false)} />;
+  }
+
   const announcementSlides = announcements.map((announcement) => (
     <div key={announcement.id} className="relative h-48 sm:h-64 md:h-80">
       <img
@@ -31,6 +41,28 @@ const Home = () => {
 
   return (
     <div className="pb-20 md:pb-10">
+      {/* Bartender Mode Button - Desktop */}
+      <div className="hidden md:flex justify-center mb-4">
+        <button
+          onClick={() => setIsBartenderMode(true)}
+          className="bg-mixology-burgundy text-white px-6 py-3 rounded-lg flex items-center font-medium hover:bg-mixology-burgundy/90 transition-colors"
+        >
+          <Cocktail className="mr-2" size={20} />
+          Enter Bartender Mode
+        </button>
+      </div>
+
+      {/* Bartender Mode Button - Mobile */}
+      <div className="md:hidden flex justify-center mb-4">
+        <button
+          onClick={() => setIsBartenderMode(true)}
+          className="bg-mixology-burgundy text-white px-4 py-2 rounded-lg flex items-center text-sm font-medium hover:bg-mixology-burgundy/90 transition-colors"
+        >
+          <Cocktail className="mr-1" size={16} />
+          Bartender Mode
+        </button>
+      </div>
+
       <section className="mb-8">
         <Carousel items={announcementSlides} />
       </section>
@@ -40,7 +72,7 @@ const Home = () => {
           <h2 className="section-title">Featured Cocktails</h2>
           <Link
             to="/browse"
-            className="text-sm font-medium text-mixology-burgundy hover:underline"
+            className="text-sm font-medium text-mixology-burgundy hover:underline dark:text-mixology-burgundy"
           >
             View All
           </Link>
@@ -57,7 +89,7 @@ const Home = () => {
           <h2 className="section-title">Popular Cocktails</h2>
           <Link
             to="/browse"
-            className="text-sm font-medium text-mixology-burgundy hover:underline"
+            className="text-sm font-medium text-mixology-burgundy hover:underline dark:text-mixology-burgundy"
           >
             View All
           </Link>
@@ -70,17 +102,17 @@ const Home = () => {
       </section>
 
       <section className="container mx-auto px-4">
-        <div className="bg-mixology-navy/5 rounded-lg p-6">
+        <div className="bg-mixology-navy/5 rounded-lg p-6 dark:bg-mixology-navy/20">
           <h2 className="section-title mb-6 text-center">Quick Access</h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <Link
               to="/browse"
-              className="flex flex-col items-center bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+              className="flex flex-col items-center bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow dark:bg-mixology-navy/40 dark:text-white"
             >
-              <div className="w-12 h-12 bg-mixology-purple/10 rounded-full flex items-center justify-center mb-2">
+              <div className="w-12 h-12 bg-mixology-purple/10 rounded-full flex items-center justify-center mb-2 dark:bg-mixology-purple/30">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-mixology-purple"
+                  className="h-6 w-6 text-mixology-purple dark:text-mixology-cream"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -97,12 +129,12 @@ const Home = () => {
             </Link>
             <Link
               to="/bar"
-              className="flex flex-col items-center bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+              className="flex flex-col items-center bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow dark:bg-mixology-navy/40 dark:text-white"
             >
-              <div className="w-12 h-12 bg-mixology-burgundy/10 rounded-full flex items-center justify-center mb-2">
+              <div className="w-12 h-12 bg-mixology-burgundy/10 rounded-full flex items-center justify-center mb-2 dark:bg-mixology-burgundy/30">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-mixology-burgundy"
+                  className="h-6 w-6 text-mixology-burgundy dark:text-mixology-burgundy"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -119,12 +151,12 @@ const Home = () => {
             </Link>
             <Link
               to="/browse?filter=canMake"
-              className="flex flex-col items-center bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+              className="flex flex-col items-center bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow dark:bg-mixology-navy/40 dark:text-white"
             >
-              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-2">
+              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-2 dark:bg-green-950">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-green-600"
+                  className="h-6 w-6 text-green-600 dark:text-green-400"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -141,12 +173,12 @@ const Home = () => {
             </Link>
             <Link
               to="/favorites"
-              className="flex flex-col items-center bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+              className="flex flex-col items-center bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow dark:bg-mixology-navy/40 dark:text-white"
             >
-              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-2">
+              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-2 dark:bg-red-950">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-red-500"
+                  className="h-6 w-6 text-red-500 dark:text-red-400"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
