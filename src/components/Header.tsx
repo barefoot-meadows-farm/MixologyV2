@@ -33,6 +33,7 @@ const Header = () => {
     { name: "My Bar", path: "/bar" },
     { name: "Favorites", path: "/favorites" },
     { name: "Settings", path: "/settings" },
+    { name: "Bartender Mode", path: "/bartender", icon: Wine }, // Add Bartender Mode link
   ];
 
   return (
@@ -56,10 +57,11 @@ const Header = () => {
                 Master
               </span>
             </Link>
-            
+
+            {/* Bartender Mode Button - Conditionally displayed based on route */}
             <Link
               to="/bartender"
-              className="hidden md:flex items-center text-sm font-medium px-4 py-2 border border-mixology-burgundy rounded-md hover:bg-mixology-burgundy hover:text-white transition-colors dark:text-white dark:hover:text-white dark:border-mixology-burgundy dark:hover:bg-mixology-burgundy"
+              className={`${location.pathname === '/bartender' ? 'flex' : 'hidden md:flex'} items-center text-sm font-medium px-4 py-2 border border-mixology-burgundy rounded-md hover:bg-mixology-burgundy hover:text-white transition-colors dark:text-white dark:hover:text-white dark:border-mixology-burgundy dark:hover:bg-mixology-burgundy`}
             >
               <Wine size={16} className="mr-1" />
               Bartender Mode
@@ -89,20 +91,22 @@ const Header = () => {
             </Link>
           </div>
 
-          {/* Mobile Navigation */}
-          <div className="md:hidden flex items-center">
-            <button
-              onClick={toggleMobileMenu}
-              className="p-2 text-gray-700 dark:text-gray-300"
-              aria-label="Open mobile menu"
-            >
-              {mobileMenuOpen ? (
-                <X size={24} />
-              ) : (
-                <Menu size={24} />
-              )}
-            </button>
-          </div>
+          {/* Mobile Navigation - Hide hamburger on /bartender */}
+          {location.pathname !== '/bartender' && (
+            <div className="md:hidden flex items-center">
+              <button
+                onClick={toggleMobileMenu}
+                className="p-2 text-gray-700 dark:text-gray-300"
+                aria-label="Open mobile menu"
+              >
+                {mobileMenuOpen ? (
+                  <X size={24} />
+                ) : (
+                  <Menu size={24} />
+                )}
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -114,28 +118,18 @@ const Header = () => {
               <Link
                 key={link.name}
                 to={link.path}
-                className={`block py-2 text-sm font-medium ${
+                className={`flex items-center py-2 text-sm font-medium ${
                   location.pathname === link.path
                     ? "text-mixology-burgundy"
                     : "text-gray-700 dark:text-gray-300"
                 }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
+                {link.icon && <link.icon size={16} className="mr-2" />} 
                 {link.name}
               </Link>
             ))}
-            <button
-              onClick={() => {
-                setIsBartenderMode(true);
-                setMobileMenuOpen(false);
-              }}
-              className="block py-2 text-sm font-medium text-gray-700 dark:text-gray-300 w-full text-left"
-            >
-              <span className="flex items-center">
-                <Wine size={16} className="mr-1" />
-                Bartender Mode
-              </span>
-            </button>
+            {/* Removed redundant Bartender Mode button, handled by navLinks */}
             <Link
               to="/login"
               className="block py-2 text-sm font-medium text-gray-700 dark:text-gray-300"

@@ -4,7 +4,6 @@ import BartenderMode from "../components/BartenderMode";
 import AnnouncementsCarousel from "../components/home/AnnouncementsCarousel";
 import FeaturedCocktails from "../components/home/FeaturedCocktails";
 import PopularCocktails from "../components/home/PopularCocktails";
-import QuickAccess from "../components/home/QuickAccess";
 
 const Home = () => {
   const [isBartenderMode, setIsBartenderMode] = useState(false);
@@ -19,7 +18,6 @@ const Home = () => {
       <AnnouncementsCarousel />
       <FeaturedCocktails />
       <PopularCocktails />
-      <QuickAccess />
     </div>
   );
 };

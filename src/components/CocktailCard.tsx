@@ -64,12 +64,13 @@ const CocktailCard = ({ cocktail, size = "medium" }: CocktailCardProps) => {
   };
 
   return (
-    <div className={`cocktail-card ${sizeClasses[size]}`}>
+    // Use flex column layout for consistent height and add rounded corners/shadow
+    <div className={`cocktail-card ${sizeClasses[size]} flex flex-col overflow-hidden rounded-lg shadow-md dark:bg-mixology-dark-gray border border-transparent dark:border-gray-700`}>
       <div className="relative">
         <img 
           src={image} 
           alt={name} 
-          className={`w-full ${imageClasses[size]} object-cover`} 
+          className={`w-full ${imageClasses[size]} object-cover flex-shrink-0`} 
         />
         <div className="gradient-overlay"></div>
         <div className="absolute top-2 right-2 flex gap-2">
@@ -84,6 +85,7 @@ const CocktailCard = ({ cocktail, size = "medium" }: CocktailCardProps) => {
             <ShoppingCart size={18} />
           </button>
         </div>
+        {/* Ensure quantity overlay doesn't affect layout */}
         {showQuantity && inCart && (
           <div className="absolute top-14 right-2 bg-white dark:bg-mixology-navy/90 rounded-lg shadow-md p-1 flex items-center">
             <button 
@@ -115,11 +117,15 @@ const CocktailCard = ({ cocktail, size = "medium" }: CocktailCardProps) => {
         </div>
       </div>
       
-      <div className="p-3 dark:text-white">
+      {/* Content Area - Allow this to grow and push description down */}
+      <div className="p-3 dark:text-white flex-grow flex flex-col">
         <Link to={`/cocktail/${id}`}>
           <h3 className="font-serif font-medium text-lg text-mixology-purple dark:text-mixology-cream mb-1 line-clamp-1">{name}</h3>
         </Link>
-        <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">{description}</p>
+        {/* Push description to the bottom */}
+        <div className="mt-auto pt-2">
+          <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">{description}</p>
+        </div>
       </div>
     </div>
   );
