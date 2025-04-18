@@ -35,21 +35,37 @@ export const DeviceProvider = ({ children }: DeviceProviderProps) => {
   // Initialize device detection on mount
   useEffect(() => {
     const initializeDeviceDetection = () => {
-      // First try to load saved preference
-      const savedPreference = loadDevicePreference();
-      
-      if (savedPreference?.isOverridden) {
-        // Use saved override if available
-        setDeviceInfo(savedPreference);
-        setIsOverridden(true);
-      } else {
-        // Otherwise detect device
-        const detected = detectDevice();
-        setDeviceInfo(detected);
-        saveDevicePreference({ ...detected, isOverridden: false });
+      try {
+        // First try to load saved preference
+        const savedPreference = loadDevicePreference();
+        
+        if (savedPreference?.isOverridden) {
+          // Use saved override if available
+          setDeviceInfo(savedPreference);
+          setIsOverridden(true);
+        } else {
+          // Otherwise detect device
+          const detected = detectDevice();
+          setDeviceInfo(detected);
+          // Save only if not overridden initially
+          saveDevicePreference({ ...detected, isOverridden: false }); 
+        }
+      } catch (error) {
+        console.error("Error during device detection initialization:", error);
+        // Fallback to default desktop settings if initialization fails
+        const defaultInfo = { isDesktopBrowser: true, isMobileDevice: false, isTablet: false, deviceType: 'desktop' as const };
+        setDeviceInfo(defaultInfo);
+        setIsOverridden(false);
+        // Attempt to save default state
+        try {
+          saveDevicePreference({ ...defaultInfo, isOverridden: false });
+        } catch (saveError) {
+          console.error("Failed to save default device preference:", saveError);
+        }
+      } finally {
+        // Ensure initialization state is always set
+        setIsInitialized(true);
       }
-      
-      setIsInitialized(true);
     };
 
     initializeDeviceDetection();
@@ -77,11 +93,8 @@ export const DeviceProvider = ({ children }: DeviceProviderProps) => {
     saveDevicePreference({ ...detected, isOverridden: false });
   };
 
-  // Only render children after initialization to avoid flicker
-  if (!isInitialized) {
-    return null;
-  }
-
+  // Render children immediately with initial/default state
+  // The state will update once initialization completes
   return (
     <DeviceContext.Provider
       value={{

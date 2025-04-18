@@ -7,7 +7,6 @@ import CocktailCard from "../components/CocktailCard";
 import ShoppingList from "../components/ShoppingList";
 import BarcodeScannerButton from "../components/BarcodeScannerButton";
 import { ingredients } from "../data/ingredients";
-import { ingredients } from "../data/ingredients";
 import { cocktails, Cocktail } from "../data/cocktails"; // Import Cocktail type
 
 const VirtualBar = () => {
