@@ -1,6 +1,7 @@
 
 import { useState } from "react";
-import { Search } from "lucide-react";
+import { Search, Shuffle } from "lucide-react"; // Import Shuffle icon
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import CocktailCard, { Cocktail } from "../components/CocktailCard";
 import FilterBar from "../components/FilterBar";
 import { cocktails } from "../data/cocktails";
@@ -13,6 +14,7 @@ interface Filters {
 
 const Browse = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate(); // Initialize useNavigate
   const [filters, setFilters] = useState<Filters>({
     spirit: undefined,
     difficulty: undefined,
@@ -21,6 +23,15 @@ const Browse = () => {
 
   const handleFilterChange = (newFilters: Filters) => {
     setFilters(newFilters);
+  };
+
+  const handleSurpriseMe = () => {
+    if (cocktails.length > 0) {
+      const randomIndex = Math.floor(Math.random() * cocktails.length);
+      const randomCocktail = cocktails[randomIndex];
+      // Assuming a route like /cocktail/:id exists
+      navigate(`/cocktail/${randomCocktail.id}`); 
+    }
   };
 
   const filteredCocktails = cocktails.filter((cocktail) => {
@@ -64,6 +75,15 @@ const Browse = () => {
       <h1 className="text-3xl font-serif font-medium text-mixology-purple mb-6">
         Browse Cocktails
       </h1>
+
+      {/* Add Surprise Me button */}
+      <button 
+        onClick={handleSurpriseMe}
+        className="mb-6 flex items-center justify-center w-full px-4 py-3 bg-mixology-burgundy text-white rounded-lg hover:bg-mixology-burgundy/90 transition-colors text-sm font-medium"
+      >
+        <Shuffle size={16} className="mr-2" />
+        Surprise Me!
+      </button>
 
       <div className="mb-6 relative">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">

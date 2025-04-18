@@ -1,12 +1,14 @@
 
 import { useState, useEffect } from "react";
-import { Search, PlusCircle } from "lucide-react";
+import { Search, PlusCircle, Shuffle } from "lucide-react"; // Import Shuffle icon
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import IngredientsList from "../components/IngredientsList";
 import CocktailCard from "../components/CocktailCard";
 import ShoppingList from "../components/ShoppingList";
 import BarcodeScannerButton from "../components/BarcodeScannerButton";
 import { ingredients } from "../data/ingredients";
-import { cocktails } from "../data/cocktails";
+import { ingredients } from "../data/ingredients";
+import { cocktails, Cocktail } from "../data/cocktails"; // Import Cocktail type
 
 const VirtualBar = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -14,6 +16,7 @@ const VirtualBar = () => {
     ingredients.filter((ing) => ing.isInInventory)
   );
   const [activeTab, setActiveTab] = useState<"inventory" | "make" | "shopping">("inventory");
+  const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
     // Sort ingredients alphabetically when component mounts
@@ -64,8 +67,21 @@ const VirtualBar = () => {
     isInInventory: barIngredients.some((ing) => ing.id === ingredient.id),
   }));
 
-  // Dummy implementation - in a real app, this would be more sophisticated
-  const cocktailsICanMake = cocktails.filter((cocktail) => cocktail.canMake);
+  // Filter cocktails based on available ingredients
+  const cocktailsICanMake = cocktails.filter((cocktail) => {
+    // Basic check: assume 'canMake' property exists for simplicity
+    // In a real app, this would involve checking cocktail.ingredients against barIngredients
+    return cocktail.canMake; 
+  });
+
+  const handleSurpriseMe = () => {
+    if (cocktailsICanMake.length > 0) {
+      const randomIndex = Math.floor(Math.random() * cocktailsICanMake.length);
+      const randomCocktail = cocktailsICanMake[randomIndex];
+      // Assuming a route like /cocktail/:id exists
+      navigate(`/cocktail/${randomCocktail.id}`); 
+    }
+  };
 
   return (
     <div className="container mx-auto px-4 pb-20 md:pb-10">
@@ -173,6 +189,16 @@ const VirtualBar = () => {
               <p className="text-sm text-gray-600 mb-2 dark:text-gray-300">
                 Based on your {barIngredients.length} bar ingredients, you can make the following cocktails:
               </p>
+              {/* Add Surprise Me button */}
+              {cocktailsICanMake.length > 0 && (
+                <button 
+                  onClick={handleSurpriseMe}
+                  className="mt-4 flex items-center justify-center w-full px-4 py-2 bg-mixology-burgundy text-white rounded-lg hover:bg-mixology-burgundy/90 transition-colors text-sm font-medium"
+                >
+                  <Shuffle size={16} className="mr-2" />
+                  Surprise Me!
+                </button>
+              )}
             </div>
             
             {cocktailsICanMake.length > 0 ? (
