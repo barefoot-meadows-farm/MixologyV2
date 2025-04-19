@@ -15,6 +15,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 import BartenderMode from "./pages/BartenderMode";
+import CocktailDetail from "./pages/CocktailDetail"; // Import the new CocktailDetail page
 
 // Components
 import Header from "./components/Header";
@@ -48,6 +49,7 @@ const App = () => (
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/bartender" element={<BartenderMode />} />
+                    <Route path="/cocktail/:id" element={<CocktailDetail />} /> {/* Add the new route */}
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                 </main>

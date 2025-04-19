@@ -1,5 +1,14 @@
+
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { detectDevice, DeviceInfo, loadDevicePreference, saveDevicePreference } from '../lib/deviceDetection';
+import { detectDevice, loadDevicePreference, saveDevicePreference } from '../lib/deviceDetection';
+
+export interface DeviceInfo {
+  isDesktopBrowser: boolean;
+  isMobileDevice: boolean;
+  isTablet: boolean;
+  deviceType: 'desktop' | 'mobile' | 'tablet';
+  isOverridden?: boolean; // Added isOverridden as an optional property
+}
 
 interface DeviceContextType extends DeviceInfo {
   setPreferredDeviceType: (type: 'desktop' | 'mobile' | 'tablet') => void;

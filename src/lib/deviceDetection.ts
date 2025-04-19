@@ -1,3 +1,4 @@
+
 /**
  * Device detection utility to determine if the user is on a desktop browser or mobile device
  * Uses navigator.userAgent, navigator.platform, and navigator.maxTouchPoints
@@ -8,6 +9,7 @@ export interface DeviceInfo {
   isMobileDevice: boolean;
   isTablet: boolean;
   deviceType: 'desktop' | 'mobile' | 'tablet';
+  isOverridden?: boolean; // Added isOverridden as an optional property
 }
 
 /**
