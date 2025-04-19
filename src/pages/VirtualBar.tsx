@@ -1,13 +1,15 @@
-
 import { useState, useEffect } from "react";
-import { Search, PlusCircle, Shuffle } from "lucide-react"; // Import Shuffle icon
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { Search, PlusCircle, Shuffle } from "lucide-react"; 
+import { useNavigate } from "react-router-dom"; 
 import IngredientsList from "../components/IngredientsList";
 import CocktailCard from "../components/CocktailCard";
 import ShoppingList from "../components/ShoppingList";
 import BarcodeScannerButton from "../components/BarcodeScannerButton";
 import { ingredients } from "../data/ingredients";
-import { cocktails, Cocktail } from "../data/cocktails"; // Import Cocktail type
+import { cocktails } from "../data/cocktails"; 
+
+// Import Cocktail from CocktailCard instead of cocktails
+import type { Cocktail } from "../components/CocktailCard";
 
 const VirtualBar = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -15,7 +17,7 @@ const VirtualBar = () => {
     ingredients.filter((ing) => ing.isInInventory)
   );
   const [activeTab, setActiveTab] = useState<"inventory" | "make" | "shopping">("inventory");
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Sort ingredients alphabetically when component mounts
@@ -69,7 +71,6 @@ const VirtualBar = () => {
   // Filter cocktails based on available ingredients
   const cocktailsICanMake = cocktails.filter((cocktail) => {
     // Basic check: assume 'canMake' property exists for simplicity
-    // In a real app, this would involve checking cocktail.ingredients against barIngredients
     return cocktail.canMake; 
   });
 
@@ -77,7 +78,6 @@ const VirtualBar = () => {
     if (cocktailsICanMake.length > 0) {
       const randomIndex = Math.floor(Math.random() * cocktailsICanMake.length);
       const randomCocktail = cocktailsICanMake[randomIndex];
-      // Assuming a route like /cocktail/:id exists
       navigate(`/cocktail/${randomCocktail.id}`); 
     }
   };

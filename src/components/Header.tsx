@@ -1,14 +1,11 @@
-
 import { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom"; // Import useNavigate
-import { Menu, X, Wine, Shuffle } from "lucide-react"; // Import Shuffle
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Menu, X, Wine, Shuffle } from "lucide-react";
 import { useSettings } from "../contexts/SettingsContext";
 import { useIsMobile } from "../hooks/use-mobile";
-// import BartenderMode from "./BartenderMode"; // No longer needed here
-import { cocktails } from "../data/cocktails"; // Import cocktails data
-import { ingredients } from "../data/ingredients"; // Import ingredients data for 'available' check
+import { cocktails } from "../data/cocktails";
+import { ingredients } from "../data/ingredients";
 
-// Basic Modal Component (can be moved to a separate file later)
 const SurpriseMeModal = ({ isOpen, onClose, onSelectAll, onSelectAvailable }) => {
   if (!isOpen) return null;
 
@@ -44,24 +41,20 @@ const SurpriseMeModal = ({ isOpen, onClose, onSelectAll, onSelectAvailable }) =>
 
 const Header = () => {
   const location = useLocation();
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
   const { themeMode } = useSettings();
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [isSurpriseModalOpen, setIsSurpriseModalOpen] = useState(false); // State for modal
+  const [isSurpriseModalOpen, setIsSurpriseModalOpen] = useState(false);
   const isBartenderModeActive = location.pathname === '/bartender';
 
-  // --- Logic for Surprise Me --- 
-  // In a real app, get this from context or state management
   const barIngredients = ingredients.filter((ing) => ing.isInInventory);
   const cocktailsICanMake = cocktails.filter((cocktail) => {
-    // Basic check: assume 'canMake' property exists for simplicity
-    // In a real app, this would involve checking cocktail.ingredients against barIngredients
-    // This logic needs refinement based on actual data structure
-    return cocktail.ingredients.every(ingInfo => 
-        barIngredients.some(barIng => barIng.name === ingInfo.name)
-    );
+    return cocktail.ingredients.every(ingInfo => {
+      const ingredientName = typeof ingInfo === 'string' ? ingInfo : ingInfo.toString();
+      return barIngredients.some(barIng => barIng.name === ingredientName);
+    });
   });
 
   const handleSurpriseAll = () => {
@@ -69,7 +62,7 @@ const Header = () => {
       const randomIndex = Math.floor(Math.random() * cocktails.length);
       navigate(`/cocktail/${cocktails[randomIndex].id}`);
       setIsSurpriseModalOpen(false);
-      setMobileMenuOpen(false); // Close mobile menu if open
+      setMobileMenuOpen(false);
     }
   };
 
@@ -78,15 +71,13 @@ const Header = () => {
       const randomIndex = Math.floor(Math.random() * cocktailsICanMake.length);
       navigate(`/cocktail/${cocktailsICanMake[randomIndex].id}`);
       setIsSurpriseModalOpen(false);
-      setMobileMenuOpen(false); // Close mobile menu if open
+      setMobileMenuOpen(false);
     } else {
-      // Handle case where no cocktails can be made (optional: show toast)
       console.log("No makeable cocktails available for surprise.");
-      alert("You don't have the ingredients for any cocktails!"); // Simple alert
+      alert("You don't have the ingredients for any cocktails!");
       setIsSurpriseModalOpen(false); 
     }
   };
-  // --- End Surprise Me Logic ---
 
   useEffect(() => {
     const handleScroll = () => {
@@ -107,7 +98,7 @@ const Header = () => {
     { name: "My Bar", path: "/bar" },
     { name: "Favorites", path: "/favorites" },
     { name: "Settings", path: "/settings" },
-    { name: "Bartender Mode", path: "/bartender", icon: Wine }, // Add Bartender Mode link
+    { name: "Bartender Mode", path: "/bartender", icon: Wine },
   ];
 
   return (
@@ -120,7 +111,6 @@ const Header = () => {
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Logo and Bartender Mode Button */}
           <div className="flex items-center space-x-4">
             <Link
               to="/"
@@ -132,9 +122,8 @@ const Header = () => {
               </span>
             </Link>
 
-            {/* Bartender Mode Toggle Button - Always visible */}
             <Link
-              to={isBartenderModeActive ? "/" : "/bartender"} // Toggle between bartender and home
+              to={isBartenderModeActive ? "/" : "/bartender"}
               className={`flex items-center text-sm font-medium px-4 py-2 border rounded-md transition-colors ${isBartenderModeActive 
                 ? 'bg-mixology-burgundy text-white border-mixology-burgundy'
                 : 'border-mixology-burgundy hover:bg-mixology-burgundy hover:text-white dark:text-white dark:hover:text-white dark:border-mixology-burgundy dark:hover:bg-mixology-burgundy'}`}
@@ -144,12 +133,10 @@ const Header = () => {
             </Link>
           </div>
 
-          {/* Right side: Navigation or Surprise Me Button */}
           <div className="flex items-center space-x-4">
-            {/* Desktop Navigation - Hidden in Bartender Mode */}
             {!isBartenderModeActive && (
               <div className="hidden md:flex space-x-6 items-center">
-                {navLinks.filter(link => link.path !== '/bartender').map((link) => ( // Exclude Bartender link itself
+                {navLinks.filter(link => link.path !== '/bartender').map((link) => (
                   <Link
                     key={link.name}
                     to={link.path}
@@ -170,7 +157,6 @@ const Header = () => {
               </div>
             )}
 
-            {/* Surprise Me Button - Visible only in Bartender Mode */}
             {isBartenderModeActive && (
               <button
                 onClick={() => setIsSurpriseModalOpen(true)}
@@ -182,7 +168,6 @@ const Header = () => {
               </button>
             )}
 
-            {/* Mobile Navigation - Hamburger hidden in Bartender Mode */}
             {!isBartenderModeActive && (
               <div className="md:hidden flex items-center">
                 <button
@@ -198,11 +183,10 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown - Hidden in Bartender Mode */}
       {!isBartenderModeActive && mobileMenuOpen && (
         <div className="md:hidden bg-white dark:bg-mixology-dark border-t border-gray-100 dark:border-gray-800">
           <div className="container mx-auto px-4 py-2 space-y-1">
-            {navLinks.filter(link => link.path !== '/bartender').map((link) => ( // Exclude Bartender link
+            {navLinks.filter(link => link.path !== '/bartender').map((link) => (
               <Link
                 key={link.name}
                 to={link.path}
@@ -227,7 +211,6 @@ const Header = () => {
         </div>
       )}
 
-      {/* Surprise Me Modal */}
       <SurpriseMeModal 
         isOpen={isSurpriseModalOpen}
         onClose={() => setIsSurpriseModalOpen(false)}
