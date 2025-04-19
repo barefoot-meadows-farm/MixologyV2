@@ -17,29 +17,10 @@ const convertToUS = (amount: number): string => {
   return `${amount} oz`;
 };
 
-// Sample quantity mapping - in a real app, this would come from a database
-const ingredientQuantities: Record<string, number> = {
-  "gin": 2,
-  "sweet-vermouth": 1,
-  "campari": 1,
-  "tequila": 1.5,
-  "triple-sec": 1,
-  "lime-juice": 1,
-  "white-rum": 2,
-  "mint-leaves": 0.5,
-  "sugar": 0.5,
-  "soda-water": 3,
-  "vodka": 1.5,
-  "coffee-liqueur": 1,
-  "espresso": 1,
-  "simple-syrup": 0.5,
-  "lemon-juice": 0.75,
-  "angostura-bitters": 0.25,
-  "orange-peel": 0.1,
-  "dark-rum": 1.5,
-  "bourbon": 2,
-  "rye-whiskey": 2
-};
+// Ingredient quantities will be fetched from Supabase database
+// This is a temporary empty object until data is loaded from the database
+const ingredientQuantities: Record<string, number> = {};
+
 
 interface ShoppingIngredient {
   id: string;
