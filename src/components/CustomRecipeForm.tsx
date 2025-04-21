@@ -91,6 +91,9 @@ const CustomRecipeForm = () => {
         return;
       }
       
+      // Convert recipeIngredients to a format that matches Json type
+      const ingredientsJson = JSON.parse(JSON.stringify(recipeIngredients));
+      
       const { data: recipe, error } = await supabase
         .from('user_custom_recipes')
         .insert({
@@ -98,7 +101,7 @@ const CustomRecipeForm = () => {
           name: data.name,
           description: data.description || null,
           instructions: data.instructions,
-          ingredients: recipeIngredients
+          ingredients: ingredientsJson
         })
         .select()
         .single();

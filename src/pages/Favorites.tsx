@@ -23,6 +23,7 @@ const Favorites = () => {
       summer: [],
       classics: [],
       party: [],
+      custom: [] // Initialize the custom property to fix the type error
     },
   });
   const { toast } = useToast();
