@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { Search, X, ArrowLeft, ChevronRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { useSettings } from "../contexts/SettingsContext";
-import { useDevice } from "../contexts/DeviceContext";
+import CocktailCard from "../components/CocktailCard";
+import { FilterBar } from "../components/FilterBar";
+import { BartenderModeInfoDialog, shouldShowBartenderInfo } from "../components/BartenderModeInfoDialog";
 import { getIngredientName, formatIngredientForDisplay, ingredientNameIncludes } from "../lib/ingredientUtils";
 
 // Enhanced cocktail type for bartender mode
@@ -41,7 +42,10 @@ const enhancedCocktails: BartenderCocktail[] = cocktails.map(cocktail => ({
   glass: cocktail.name.includes("Martini") ? "Martini Glass" : "Rocks Glass"
 }));
 
-const BartenderModePage = () => {
+const BartenderMode = ({
+  onExit,
+  exitLabel = "Bartender Mode", // default label
+}: { onExit: () => void, exitLabel?: string }) => {
   const [selectedCocktail, setSelectedCocktail] = useState<BartenderCocktail | null>(null);
   const [viewMode, setViewMode] = useState<'selection' | 'preparation'>('selection');
   const [searchQuery, setSearchQuery] = useState('');
@@ -139,21 +143,21 @@ const BartenderModePage = () => {
 
   // Exit bartender mode and return to home
   const handleExit = () => {
-    navigate('/');
+    onExit();
   };
 
   return (
-    <div className="bartender-mode min-h-screen bg-black text-white pt-4 pb-20 px-4">
-      {viewMode === 'preparation' && (
-         <button 
-           onClick={handleExit}
-           className="absolute top-4 right-4 touch-target p-2 text-white z-20 bg-black/50 rounded-full"
-           aria-label="Exit Bartender Mode"
-         >
-           <X size={24} />
-         </button>
-      )}
-      
+    <div className="relative bg-mixology-burgundy min-h-screen flex flex-col pb-10">
+      {/* Exit button */}
+      <button
+        onClick={onExit}
+        className="absolute top-3 left-3 z-30 text-white flex items-center px-4 py-2 rounded-full bg-mixology-purple hover:bg-mixology-purple/80 transition-colors font-medium"
+        aria-label={exitLabel}
+      >
+        <ArrowLeft className="w-5 h-5 mr-1" />
+        <span>{exitLabel}</span>
+      </button>
+
       <div className="mt-10 md:mt-4">
         <h1 className="text-2xl font-serif text-white font-bold text-center mb-6">Bartender Mode</h1>
         {viewMode === 'selection' ? (
@@ -310,4 +314,4 @@ const BartenderModePage = () => {
   );
 };
 
-export default BartenderModePage;
+export default BartenderMode;

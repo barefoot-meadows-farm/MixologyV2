@@ -12,6 +12,7 @@ const Home = () => {
   const [showBartenderInfo, setShowBartenderInfo] = useState(false);
   const navigate = useNavigate();
 
+  // New: Always use info dialog trigger path
   const handleBartenderButtonClick = () => {
     if (shouldShowBartenderInfo()) {
       setShowBartenderInfo(true);
@@ -25,9 +26,9 @@ const Home = () => {
     setIsBartenderMode(true);
   };
 
-  // If bartender mode is active, show the bartender interface
+  // When bartender mode is active, show bartender interface
   if (isBartenderMode) {
-    return <BartenderMode onExit={() => setIsBartenderMode(false)} />;
+    return <BartenderMode onExit={() => setIsBartenderMode(false)} exitLabel="Bartender Mode" />;
   }
 
   return (
@@ -35,7 +36,7 @@ const Home = () => {
       <AnnouncementsCarousel />
       <FeaturedCocktails />
       <PopularCocktails />
-      
+
       <div className="fixed bottom-24 right-4 md:bottom-8 z-10">
         <button
           onClick={handleBartenderButtonClick}

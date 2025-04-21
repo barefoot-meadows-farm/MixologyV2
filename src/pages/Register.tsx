@@ -1,15 +1,36 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/components/ui/use-toast";
+
+const MIN_PASSWORD_LEN = 8;
+const passwordStrengthRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/; // At least 8 chars, upper, lower, number
 
 const Register = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
+
+  const [loading, setLoading] = useState(false);
+
+  const validate = () => {
+    if (!formData.email.match(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)) {
+      return "Please enter a valid email address.";
+    }
+    if (!passwordStrengthRegex.test(formData.password)) {
+      return "Password requires at least 8 characters (one uppercase, one lowercase, one number).";
+    }
+    if (formData.password !== formData.confirmPassword) {
+      return "Passwords do not match.";
+    }
+    return null;
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -19,10 +40,39 @@ const Register = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // This would be connected to authentication in a real app
-    console.log("Registration attempt:", formData);
+    const errorMsg = validate();
+    if (errorMsg) {
+      toast({ title: "Registration Error", description: errorMsg, variant: "destructive" });
+      return;
+    }
+    setLoading(true);
+
+    const { email, password } = formData;
+    // Register user with supabase
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${window.location.origin}/login`,
+        data: { email },
+      },
+    });
+
+    setLoading(false);
+
+    if (error) {
+      toast({ title: "Registration Failed", description: error.message, variant: "destructive" });
+      return;
+    }
+    toast({
+      title: "Registration Successful",
+      description:
+        "A confirmation email has been sent. Please check your inbox and verify your email before logging in.",
+      variant: "default",
+    });
+    setTimeout(() => navigate("/login"), 2000);
   };
 
   return (
@@ -35,26 +85,7 @@ const Register = () => {
           Join MixologyMaster to save your favorite cocktails and build your virtual bar
         </p>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Name
-            </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-mixology-purple/50"
-              placeholder="Your name"
-              value={formData.name}
-              onChange={handleChange}
-            />
-          </div>
-
+        <form onSubmit={handleSubmit} className="space-y-6" autoComplete="off">
           <div>
             <label
               htmlFor="email"
@@ -67,10 +98,12 @@ const Register = () => {
               id="email"
               name="email"
               required
+              autoComplete="email"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-mixology-purple/50"
               placeholder="your@email.com"
               value={formData.email}
               onChange={handleChange}
+              disabled={loading}
             />
           </div>
 
@@ -87,34 +120,56 @@ const Register = () => {
                 id="password"
                 name="password"
                 required
+                autoComplete="new-password"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-mixology-purple/50"
                 placeholder="Create a password"
                 value={formData.password}
                 onChange={handleChange}
-                minLength={8}
+                minLength={MIN_PASSWORD_LEN}
+                disabled={loading}
               />
               <button
                 type="button"
+                tabIndex={-1}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
                 onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
               >
-                {showPassword ? (
-                  <EyeOff size={20} />
-                ) : (
-                  <Eye size={20} />
-                )}
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
             <p className="text-xs text-gray-500 mt-1">
-              Password must be at least 8 characters
+              Password must be at least 8 characters and contain uppercase, lowercase, and a number.
             </p>
+          </div>
+
+          <div>
+            <label
+              htmlFor="confirmPassword"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              required
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-mixology-purple/50"
+              placeholder="Re-enter your password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              minLength={MIN_PASSWORD_LEN}
+              disabled={loading}
+            />
           </div>
 
           <button
             type="submit"
             className="w-full bg-mixology-burgundy text-white py-3 rounded-lg font-medium hover:bg-mixology-burgundy/90 transition-colors"
+            disabled={loading}
           >
-            Create Account
+            {loading ? "Registering..." : "Create Account"}
           </button>
 
           <div className="text-center">
