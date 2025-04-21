@@ -83,10 +83,10 @@ const Favorites = () => {
             { id: "party", name: "Party Drinks" },
           ],
           items: {
-            all: [cocktails[0], cocktails[1], cocktails[2], cocktails[5]],
-            summer: [cocktails[2], cocktails[3]],
-            classics: [cocktails[0], cocktails[4]],
-            party: [cocktails[5]],
+            all: cocktails.length > 0 ? [cocktails[0], cocktails[1], cocktails[2], cocktails[5]] : [],
+            summer: cocktails.length > 0 ? [cocktails[2], cocktails[3]] : [],
+            classics: cocktails.length > 0 ? [cocktails[0], cocktails[4]] : [],
+            party: cocktails.length > 0 ? [cocktails[5]] : [],
             custom: [], // Add empty custom array here for type consistency
           },
         });
@@ -99,15 +99,32 @@ const Favorites = () => {
         
         if (error) {
           console.error("Error fetching custom recipes:", error);
+          // Even if there's an error, initialize with empty arrays
+          setFavoritesData({
+            collections: [
+              { id: "all", name: "All Favorites" },
+              { id: "summer", name: "Summer Favorites" },
+              { id: "classics", name: "Classic Cocktails" },
+              { id: "party", name: "Party Drinks" },
+              { id: "custom", name: "My Recipes" },
+            ],
+            items: {
+              all: cocktails.length > 0 ? [cocktails[0], cocktails[1]] : [],
+              summer: cocktails.length > 0 ? [cocktails[2], cocktails[3]] : [],
+              classics: cocktails.length > 0 ? [cocktails[0], cocktails[4]] : [],
+              party: cocktails.length > 0 ? [cocktails[5]] : [],
+              custom: [],
+            },
+          });
         } else {
           // Transform custom recipes to match the cocktail interface
-          const customCocktails = customRecipes.map(recipe => ({
+          const customCocktails = Array.isArray(customRecipes) ? customRecipes.map(recipe => ({
             id: recipe.id,
             name: recipe.name,
             description: recipe.description || '',
             image: '/placeholder.svg', // Use placeholder for now
-            ingredients: recipe.ingredients,
-            preparation: recipe.instructions,
+            ingredients: recipe.ingredients || [],
+            preparation: recipe.instructions || '',
             difficulty: 'Custom',
             prepTime: 'Custom',
             rating: '5.0',
@@ -115,7 +132,7 @@ const Favorites = () => {
             isPopular: false,
             isFeatured: false,
             canMake: true
-          }));
+          })) : [];
           
           // For now, adding custom recipes to all collections
           setFavoritesData({
@@ -127,10 +144,10 @@ const Favorites = () => {
               { id: "custom", name: "My Recipes" },
             ],
             items: {
-              all: [...customCocktails, cocktails[0], cocktails[1]],
-              summer: [cocktails[2], cocktails[3]],
-              classics: [cocktails[0], cocktails[4]],
-              party: [cocktails[5]],
+              all: [...customCocktails, ...(cocktails.length > 0 ? [cocktails[0], cocktails[1]] : [])],
+              summer: cocktails.length > 0 ? [cocktails[2], cocktails[3]] : [],
+              classics: cocktails.length > 0 ? [cocktails[0], cocktails[4]] : [],
+              party: cocktails.length > 0 ? [cocktails[5]] : [],
               custom: customCocktails,
             },
           });
@@ -142,6 +159,22 @@ const Favorites = () => {
         title: "Failed to load favorites",
         description: "Please try again later.",
         variant: "destructive",
+      });
+      // Initialize with empty data to prevent undefined errors
+      setFavoritesData({
+        collections: [
+          { id: "all", name: "All Favorites" },
+          { id: "summer", name: "Summer Favorites" },
+          { id: "classics", name: "Classic Cocktails" },
+          { id: "party", name: "Party Drinks" },
+        ],
+        items: {
+          all: [],
+          summer: [],
+          classics: [],
+          party: [],
+          custom: [],
+        },
       });
     } finally {
       setIsLoading(false);
@@ -209,7 +242,7 @@ const Favorites = () => {
         <>
           {favoritesData.items[activeCollection as keyof typeof favoritesData.items]?.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {favoritesData.items[activeCollection as keyof typeof favoritesData.items].map((cocktail) => (
+              {(favoritesData.items[activeCollection as keyof typeof favoritesData.items] || []).map((cocktail) => (
                 <CocktailCard key={cocktail.id} cocktail={cocktail} />
               ))}
             </div>
