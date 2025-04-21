@@ -1,12 +1,14 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, Shuffle } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useSettings } from "../contexts/SettingsContext";
 import { useIsMobile } from "../hooks/use-mobile";
 import { cocktails } from "../data/cocktails";
 import { ingredients } from "../data/ingredients";
 import SurpriseMeModal from './modals/SurpriseMeModal';
+import NavLinks from './NavLinks';
+import SurpriseMeButton from './SurpriseMeButton';
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Header = () => {
   const location = useLocation();
@@ -48,25 +50,13 @@ const Header = () => {
   };
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
-
+    const handleScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
-
-  const navLinks = [
-    { name: "Home", path: "/" },
-    { name: "Browse", path: "/browse" },
-    { name: "My Bar", path: "/bar" },
-    { name: "Favorites", path: "/favorites" },
-    { name: "Settings", path: "/settings" },
-  ];
+  const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
+  const closeMobileMenu = () => setMobileMenuOpen(false);
 
   return (
     <header
@@ -79,48 +69,21 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-4">
-            <Link
-              to="/"
+            <a
+              href="/"
               className="flex items-center space-x-2 text-mixology-purple dark:text-mixology-cream"
             >
               <span className="text-2xl font-serif font-medium">Mixology</span>
               <span className="text-2xl font-serif text-mixology-burgundy dark:text-mixology-burgundy">
                 Master
               </span>
-            </Link>
+            </a>
           </div>
-
           <div className="flex items-center space-x-4">
             <div className="hidden md:flex space-x-6 items-center">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.name}
-                  to={link.path}
-                  className={`text-sm font-medium transition-colors hover:text-mixology-burgundy ${location.pathname === link.path
-                    ? "text-mixology-burgundy"
-                    : "text-gray-700 dark:text-gray-300"
-                  }`}
-                >
-                  {link.name}
-                </Link>
-              ))}
-              <Link
-                to="/login"
-                className="text-sm font-medium px-4 py-2 border border-mixology-burgundy rounded-md hover:bg-mixology-burgundy hover:text-white transition-colors dark:text-white dark:hover:text-white dark:border-mixology-burgundy dark:hover:bg-mixology-burgundy"
-              >
-                Sign In
-              </Link>
+              <NavLinks />
             </div>
-
-            <button
-              onClick={() => setIsSurpriseModalOpen(true)}
-              className="flex items-center text-sm font-medium px-4 py-2 border border-mixology-purple rounded-md bg-mixology-purple text-white hover:bg-mixology-purple/90 transition-colors dark:border-mixology-purple dark:bg-mixology-purple dark:hover:bg-mixology-purple/90"
-              aria-label="Surprise Me"
-            >
-              <Shuffle size={16} className="mr-1" />
-              Surprise Me
-            </button>
-
+            <SurpriseMeButton onClick={() => setIsSurpriseModalOpen(true)} />
             <div className="md:hidden flex items-center">
               <button
                 onClick={toggleMobileMenu}
@@ -137,26 +100,7 @@ const Header = () => {
       {mobileMenuOpen && (
         <div className="md:hidden bg-white dark:bg-mixology-dark border-t border-gray-100 dark:border-gray-800">
           <div className="container mx-auto px-4 py-2 space-y-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.path}
-                className={`flex items-center py-2 text-sm font-medium ${location.pathname === link.path
-                  ? "text-mixology-burgundy"
-                  : "text-gray-700 dark:text-gray-300"
-                }`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                {link.name}
-              </Link>
-            ))}
-            <Link
-              to="/login"
-              className="block py-2 text-sm font-medium text-gray-700 dark:text-gray-300"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Sign In
-            </Link>
+            <NavLinks isMobile onMobileNav={closeMobileMenu} />
           </div>
         </div>
       )}
