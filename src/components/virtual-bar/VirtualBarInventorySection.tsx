@@ -1,3 +1,4 @@
+
 import React from "react";
 import IngredientsList from "@/components/IngredientsList";
 import BarcodeScannerButton from "@/components/BarcodeScannerButton";
@@ -49,20 +50,22 @@ const VirtualBarInventorySection: React.FC<Props> = ({
     isInInventory: barIngredients.some((ing) => ing.id === ingredient.id),
   }));
 
+  const handleAddPreExistingIngredients = () => {
+    // Create a new array with existing bar ingredients plus the demo ones that aren't already in the bar
+    const filtered = demoIngredients.filter(ing =>
+      !(barIngredients.some(prevIng => prevIng.id === ing.id))
+    );
+    const newBarIngredients = [...barIngredients, ...filtered];
+    setBarIngredients(newBarIngredients);
+  };
+
   return (
     <>
       <div className="flex mb-4 gap-2">
         <div className="flex-1" />
         <button
           className="px-3 py-2 rounded-lg bg-mixology-purple text-white text-sm font-medium shadow hover:bg-mixology-purple/90 transition-colors"
-          onClick={() => {
-            setBarIngredients((prev: Ingredient[]) => {
-              const filtered = demoIngredients.filter(ing =>
-                !(prev.some(prevIng => prevIng.id === ing.id))
-              );
-              return [...prev, ...filtered];
-            });
-          }}
+          onClick={handleAddPreExistingIngredients}
         >
           Add Pre-existing Ingredients
         </button>
