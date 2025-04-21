@@ -1,18 +1,13 @@
 
 import React from "react";
-import CocktailCard from "@/components/CocktailCard";
+import CocktailCard, { Cocktail } from "@/components/CocktailCard";
 import { Shuffle, PlusCircle } from "lucide-react";
 
 type Ingredient = {
   id: string;
   name: string;
-};
-
-type Cocktail = {
-  id: string;
-  name: string;
-  canMake?: boolean;
-  [key: string]: any;
+  category: string;
+  isInInventory?: boolean;
 };
 
 type Props = {

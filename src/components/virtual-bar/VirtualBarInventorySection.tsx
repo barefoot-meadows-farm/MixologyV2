@@ -4,16 +4,7 @@ import IngredientsList from "@/components/IngredientsList";
 import BarcodeScannerButton from "@/components/BarcodeScannerButton";
 import { Button } from "@/components/ui/button";
 import AddCustomIngredientModal from "@/components/AddCustomIngredientModal";
-
-interface Ingredient {
-  id: string;
-  name: string;
-  isInInventory?: boolean;
-  category?: string;
-  type?: string;
-  abv?: number;
-  is_common?: boolean;
-}
+import { Ingredient } from "@/components/IngredientsList";
 
 type Props = {
   searchTerm: string;
