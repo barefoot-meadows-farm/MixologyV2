@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Wine, Shuffle } from "lucide-react";
 import { useSettings } from "../contexts/SettingsContext";
@@ -53,7 +52,7 @@ const Header = () => {
   const barIngredients = ingredients.filter((ing) => ing.isInInventory);
   const cocktailsICanMake = cocktails.filter((cocktail) => {
     return cocktail.ingredients.every(ingInfo => {
-      const ingredientName = typeof ingInfo === 'string' ? ingInfo : ingInfo.toString();
+      const ingredientName = typeof ingInfo === 'string' ? ingInfo : ingInfo.name;
       return barIngredients.some(barIng => barIng.name === ingredientName);
     });
   });
@@ -223,4 +222,3 @@ const Header = () => {
 };
 
 export default Header;
-
