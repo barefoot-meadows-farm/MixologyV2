@@ -1,11 +1,10 @@
-
 import { useState } from "react";
 import { Search, Shuffle } from "lucide-react"; 
 import { useNavigate } from "react-router-dom"; 
 import CocktailCard, { Cocktail } from "../components/CocktailCard";
 import FilterBar from "../components/FilterBar";
 import { cocktails } from "../data/cocktails";
-import { ingredientNameIncludes } from "../utils/ingredientUtils";
+import { ingredientNameIncludes } from "../lib/ingredientUtils";
 
 interface Filters {
   spirit: string | undefined;

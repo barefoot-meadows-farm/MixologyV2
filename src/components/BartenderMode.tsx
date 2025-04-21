@@ -3,7 +3,7 @@ import { ArrowLeft, X, ChevronRight, Search } from 'lucide-react';
 import { useSettings } from '../contexts/SettingsContext';
 import { cocktails } from '../data/cocktails';
 import { Cocktail } from '../components/CocktailCard';
-import { getIngredientName, formatIngredientForDisplay, ingredientNameIncludes } from '../utils/ingredientUtils';
+import { getIngredientName, formatIngredientForDisplay, ingredientNameIncludes } from '../lib/ingredientUtils';
 
 interface BartenderModeProps {
   onExit: () => void;

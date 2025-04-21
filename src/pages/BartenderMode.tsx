@@ -1,9 +1,10 @@
+
 import { useState, useEffect, useRef } from "react";
 import { Search, X, ArrowLeft, ChevronRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSettings } from "../contexts/SettingsContext";
 import { useDevice } from "../contexts/DeviceContext";
-import { getIngredientName, formatIngredientForDisplay, ingredientNameIncludes } from "../utils/ingredientUtils";
+import { getIngredientName, formatIngredientForDisplay, ingredientNameIncludes } from "../lib/ingredientUtils";
 
 // Enhanced cocktail type for bartender mode
 interface BartenderCocktail {
@@ -13,7 +14,15 @@ interface BartenderCocktail {
   ingredients: Array<string | { name: string, amount: string }>;
   steps?: string[];
   glass?: string;
-  difficulty: string;
+  difficulty: string; // Making this required
+  description: string; // Adding other required fields from Cocktail
+  preparation?: string | string[];
+  prepTime?: string;
+  rating?: string | number;
+  category?: string;
+  isPopular?: boolean;
+  isFeatured?: boolean;
+  canMake?: boolean;
 }
 
 // Import from data file but enhance with steps for demonstration
