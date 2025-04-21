@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Shuffle } from "lucide-react";
 import { useSettings } from "../contexts/SettingsContext";
 import { useIsMobile } from "../hooks/use-mobile";
@@ -42,6 +41,7 @@ const SurpriseMeModal = ({ isOpen, onClose, onSelectAll, onSelectAvailable }) =>
 
 const Header = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { themeMode } = useSettings();
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
