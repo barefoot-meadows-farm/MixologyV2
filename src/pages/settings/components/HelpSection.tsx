@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { HelpCircle } from 'lucide-react';
+import { HelpCircle, Mail } from 'lucide-react';
 import { SettingsSection, SettingsLink } from './SettingsUtils';
 
 const HelpSection = () => (
@@ -12,8 +12,8 @@ const HelpSection = () => (
     />
     <SettingsLink
       to="/settings/contact"
-      icon={<HelpCircle size={20} className="text-gray-500 dark:text-gray-300" />}
-      label="Contact Support"
+      icon={<Mail size={20} className="text-gray-500 dark:text-gray-300" />}
+      label="Contact Us"
     />
     <SettingsLink
       to="/settings/feedback"

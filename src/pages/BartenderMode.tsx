@@ -31,6 +31,7 @@ import { cocktails } from "../data/cocktails";
 // Enhance cocktails with steps for the bartender mode
 const enhancedCocktails: BartenderCocktail[] = cocktails.map(cocktail => ({
   ...cocktail,
+  difficulty: cocktail.difficulty || 'easy', // Ensure difficulty is always present
   steps: [
     `Gather all ingredients: ${cocktail.ingredients.map(ing => getIngredientName(ing)).join(", ")}.`,
     `Prepare your glass: ${cocktail.name.includes("Martini") ? "Chill a martini glass" : "Fill with ice"}.`,

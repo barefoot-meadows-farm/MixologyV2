@@ -21,6 +21,7 @@ import CocktailDetail from "./pages/CocktailDetail";
 import ProfileSettings from "./pages/settings/ProfileSettings";
 import SecuritySettings from "./pages/settings/SecuritySettings";
 import DeleteAccount from "./pages/settings/DeleteAccount";
+import ContactUs from "./pages/settings/ContactUs";
 
 // Components
 import Header from "./components/Header";
@@ -54,6 +55,7 @@ const App = () => (
                     <Route path="/settings/profile" element={<ProfileSettings />} />
                     <Route path="/settings/security" element={<SecuritySettings />} />
                     <Route path="/settings/delete-account" element={<DeleteAccount />} />
+                    <Route path="/settings/contact" element={<ContactUs />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/bartender" element={<BartenderMode />} />
