@@ -1,4 +1,3 @@
-
 import React from "react";
 import IngredientsList from "@/components/IngredientsList";
 import BarcodeScannerButton from "@/components/BarcodeScannerButton";
@@ -18,11 +17,7 @@ type Props = {
   setBarIngredients: (ings: Ingredient[]) => void;
 };
 
-const demoIngredients: Ingredient[] = [
-  { id: "gin", name: "Gin", category: "Spirits", isInInventory: true },
-  { id: "vodka", name: "Vodka", category: "Spirits", isInInventory: true },
-  { id: "lemon", name: "Lemon", category: "Citrus", isInInventory: true },
-];
+const demoIngredients: Ingredient[] = [];
 
 const VirtualBarInventorySection: React.FC<Props> = ({
   searchTerm,
@@ -51,25 +46,11 @@ const VirtualBarInventorySection: React.FC<Props> = ({
   }));
 
   const handleAddPreExistingIngredients = () => {
-    // Create a new array with existing bar ingredients plus the demo ones that aren't already in the bar
-    const filtered = demoIngredients.filter(ing =>
-      !(barIngredients.some(prevIng => prevIng.id === ing.id))
-    );
-    const newBarIngredients = [...barIngredients, ...filtered];
-    setBarIngredients(newBarIngredients);
+    setBarIngredients((prev) => [...prev]);
   };
 
   return (
     <>
-      <div className="flex mb-4 gap-2">
-        <div className="flex-1" />
-        <button
-          className="px-3 py-2 rounded-lg bg-mixology-purple text-white text-sm font-medium shadow hover:bg-mixology-purple/90 transition-colors"
-          onClick={handleAddPreExistingIngredients}
-        >
-          Add Pre-existing Ingredients
-        </button>
-      </div>
       <div className="mb-6 relative">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           <svg className="text-gray-400" width={20} height={20} fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -81,6 +62,16 @@ const VirtualBarInventorySection: React.FC<Props> = ({
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
+      </div>
+      <div className="mb-4">
+        <button
+          className="px-3 py-2 rounded-lg bg-mixology-purple text-white text-sm font-medium shadow hover:bg-mixology-purple/90 transition-colors"
+          style={{ float: "left" }}
+          onClick={handleAddPreExistingIngredients}
+        >
+          Add Ingredients
+        </button>
+        <div style={{ clear: "both" }}/>
       </div>
       <div className="bg-white rounded-lg shadow-sm p-4 mb-6 dark:bg-mixology-navy/20">
         <div className="flex items-center justify-between mb-4">
