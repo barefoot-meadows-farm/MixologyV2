@@ -45,8 +45,6 @@ const VirtualBarInventorySection: React.FC<Props> = ({
   }));
 
   const handleAddPreExistingIngredients = () => {
-    // Here was the error: setBarIngredients expects Ingredient[] directly, not a function
-    // Instead of using the setter function pattern, we directly set the same array
     setBarIngredients(barIngredients);
   };
 
@@ -64,16 +62,27 @@ const VirtualBarInventorySection: React.FC<Props> = ({
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
-      <div className="mb-4">
-        <button
-          className="px-3 py-2 rounded-lg bg-mixology-purple text-white text-sm font-medium shadow hover:bg-mixology-purple/90 transition-colors"
-          style={{ float: "left" }}
+      {/* Begin new vertical block for headings/buttons */}
+      <div className="flex flex-col gap-3 mb-6">
+        <div className="flex items-center justify-between">
+          <h2 className="font-medium">Add Ingredients to Your Bar</h2>
+          <BarcodeScannerButton onIngredientToggle={handleToggleIngredient} />
+        </div>
+        <Button
+          className="w-fit"
           onClick={handleAddPreExistingIngredients}
         >
           Add Ingredients
-        </button>
-        <div style={{ clear: "both" }}/>
+        </Button>
+        <Button
+          variant="outline"
+          onClick={() => setShowAddCustomModal(true)}
+          className="w-fit"
+        >
+          Add Custom Ingredient
+        </Button>
       </div>
+      {/* End new vertical block */}
       <div className="bg-white rounded-lg shadow-sm p-4 mb-6 dark:bg-mixology-navy/20">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-medium">My Bar Ingredients</h2>
@@ -98,23 +107,10 @@ const VirtualBarInventorySection: React.FC<Props> = ({
           </p>
         )}
       </div>
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="font-medium">Add Ingredients to Your Bar</h2>
-        <BarcodeScannerButton onIngredientToggle={handleToggleIngredient} />
-      </div>
       <IngredientsList
         ingredients={filteredIngredients}
         onIngredientToggle={handleToggleIngredient}
       />
-      <div className="mt-2">
-        <Button
-          variant="outline"
-          onClick={() => setShowAddCustomModal(true)}
-          className="px-3"
-        >
-          Add Custom Ingredient
-        </Button>
-      </div>
       <AddCustomIngredientModal
         isOpen={showAddCustomModal}
         onClose={() => setShowAddCustomModal(false)}
