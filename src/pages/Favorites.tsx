@@ -7,11 +7,27 @@ import { supabase } from "../integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { cocktails } from "../data/cocktails";
 
+interface Collection {
+  id: string;
+  name: string;
+}
+
+interface FavoritesData {
+  collections: Collection[];
+  items: {
+    all: any[];
+    summer: any[];
+    classics: any[];
+    party: any[];
+    custom: any[];
+  };
+}
+
 const Favorites = () => {
   const [activeCollection, setActiveCollection] = useState("all");
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
-  const [favoritesData, setFavoritesData] = useState({
+  const [favoritesData, setFavoritesData] = useState<FavoritesData>({
     collections: [
       { id: "all", name: "All Favorites" },
       { id: "summer", name: "Summer Favorites" },
@@ -23,7 +39,7 @@ const Favorites = () => {
       summer: [],
       classics: [],
       party: [],
-      custom: [] // Initialize the custom property to fix the type error
+      custom: [], // Ensure custom is always initialized
     },
   });
   const { toast } = useToast();
@@ -71,6 +87,7 @@ const Favorites = () => {
             summer: [cocktails[2], cocktails[3]],
             classics: [cocktails[0], cocktails[4]],
             party: [cocktails[5]],
+            custom: [], // Add empty custom array here for type consistency
           },
         });
       } else {
