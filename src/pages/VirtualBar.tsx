@@ -1,10 +1,16 @@
+
 import { useState, useEffect } from "react";
-import { Search, PlusCircle, Shuffle } from "lucide-react"; 
+import { Search, PlusCircle, Shuffle, History, Plus } from "lucide-react"; 
 import { useNavigate } from "react-router-dom"; 
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import IngredientsList from "../components/IngredientsList";
 import CocktailCard from "../components/CocktailCard";
 import ShoppingList from "../components/ShoppingList";
 import BarcodeScannerButton from "../components/BarcodeScannerButton";
+import CustomRecipeForm from "../components/CustomRecipeForm";
+import DrinkHistory from "../components/DrinkHistory";
 import { ingredients } from "../data/ingredients";
 import { cocktails } from "../data/cocktails"; 
 
@@ -16,10 +22,24 @@ const VirtualBar = () => {
   const [barIngredients, setBarIngredients] = useState(
     ingredients.filter((ing) => ing.isInInventory)
   );
-  const [activeTab, setActiveTab] = useState<"inventory" | "make" | "shopping">("inventory");
+  const [activeTab, setActiveTab] = useState<"inventory" | "make" | "shopping" | "create" | "history">("inventory");
+  const [user, setUser] = useState<any>(null);
+  const { toast } = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Check for authentication
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setUser(session?.user || null);
+      }
+    );
+
+    // Get current session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user || null);
+    });
+
     // Sort ingredients alphabetically when component mounts
     const sortedBarIngredients = [...barIngredients].sort((a, b) => 
       a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
@@ -28,6 +48,8 @@ const VirtualBar = () => {
     if (JSON.stringify(sortedBarIngredients) !== JSON.stringify(barIngredients)) {
       setBarIngredients(sortedBarIngredients);
     }
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const handleToggleIngredient = (id: string) => {
@@ -70,7 +92,6 @@ const VirtualBar = () => {
 
   // Filter cocktails based on available ingredients
   const cocktailsICanMake = cocktails.filter((cocktail) => {
-    // Basic check: assume 'canMake' property exists for simplicity
     return cocktail.canMake; 
   });
 
@@ -82,47 +103,69 @@ const VirtualBar = () => {
     }
   };
 
+  // Auth check helper
+  const requireAuth = (targetTab: string) => {
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in to access this feature",
+        variant: "destructive",
+      });
+      navigate("/login");
+      return false;
+    }
+    return true;
+  };
+
+  // Handle tab changes with auth check
+  const handleTabChange = (value: string) => {
+    if ((value === "create" || value === "history") && !requireAuth(value)) {
+      return;
+    }
+    setActiveTab(value as any);
+  };
+
   return (
     <div className="container mx-auto px-4 pb-20 md:pb-10">
       <h1 className="text-3xl font-serif font-medium text-mixology-purple dark:text-mixology-cream mb-6">
         My Virtual Bar
       </h1>
       
-      <div className="flex border-b border-gray-200 mb-6 overflow-x-auto">
-        <button
-          className={`px-4 py-2 font-medium text-sm whitespace-nowrap ${
-            activeTab === "inventory"
-              ? "border-b-2 border-mixology-burgundy text-mixology-burgundy"
-              : "text-gray-500"
-          }`}
-          onClick={() => setActiveTab("inventory")}
-        >
-          Inventory
-        </button>
-        <button
-          className={`px-4 py-2 font-medium text-sm whitespace-nowrap ${
-            activeTab === "make"
-              ? "border-b-2 border-mixology-burgundy text-mixology-burgundy"
-              : "text-gray-500"
-          }`}
-          onClick={() => setActiveTab("make")}
-        >
-          What Can I Make?
-        </button>
-        <button
-          className={`px-4 py-2 font-medium text-sm whitespace-nowrap ${
-            activeTab === "shopping"
-              ? "border-b-2 border-mixology-burgundy text-mixology-burgundy"
-              : "text-gray-500"
-          }`}
-          onClick={() => setActiveTab("shopping")}
-        >
-          Shopping
-        </button>
-      </div>
+      <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
+        <TabsList className="w-full flex overflow-x-auto bg-transparent space-x-1 mb-6 border-b border-gray-200 pb-0">
+          <TabsTrigger
+            value="inventory"
+            className="px-4 py-2 data-[state=active]:border-b-2 data-[state=active]:border-mixology-burgundy data-[state=active]:text-mixology-burgundy rounded-none bg-transparent"
+          >
+            Inventory
+          </TabsTrigger>
+          <TabsTrigger
+            value="make"
+            className="px-4 py-2 data-[state=active]:border-b-2 data-[state=active]:border-mixology-burgundy data-[state=active]:text-mixology-burgundy rounded-none bg-transparent"
+          >
+            What Can I Make?
+          </TabsTrigger>
+          <TabsTrigger
+            value="shopping"
+            className="px-4 py-2 data-[state=active]:border-b-2 data-[state=active]:border-mixology-burgundy data-[state=active]:text-mixology-burgundy rounded-none bg-transparent"
+          >
+            Shopping
+          </TabsTrigger>
+          <TabsTrigger
+            value="create"
+            className="px-4 py-2 data-[state=active]:border-b-2 data-[state=active]:border-mixology-burgundy data-[state=active]:text-mixology-burgundy rounded-none bg-transparent"
+          >
+            Create Recipe
+          </TabsTrigger>
+          <TabsTrigger
+            value="history"
+            className="px-4 py-2 data-[state=active]:border-b-2 data-[state=active]:border-mixology-burgundy data-[state=active]:text-mixology-burgundy rounded-none bg-transparent"
+          >
+            Drink History
+          </TabsTrigger>
+        </TabsList>
 
-      {activeTab === "inventory" ? (
-        <>
+        <TabsContent value="inventory">
           <div className="mb-6 relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <Search size={20} className="text-gray-400" />
@@ -176,9 +219,9 @@ const VirtualBar = () => {
             ingredients={filteredIngredients} 
             onIngredientToggle={handleToggleIngredient}
           />
-        </>
-      ) : activeTab === "make" ? (
-        <>
+        </TabsContent>
+
+        <TabsContent value="make">
           <div className="mb-6">
             <div className="bg-white rounded-lg shadow-sm p-6 mb-6 dark:bg-mixology-navy/20">
               <div className="flex items-center mb-4">
@@ -220,10 +263,48 @@ const VirtualBar = () => {
               </div>
             )}
           </div>
-        </>
-      ) : (
-        <ShoppingList />
-      )}
+        </TabsContent>
+
+        <TabsContent value="shopping">
+          <ShoppingList />
+        </TabsContent>
+
+        <TabsContent value="create">
+          {user ? (
+            <CustomRecipeForm />
+          ) : (
+            <div className="text-center py-10">
+              <p className="text-gray-500 mb-2">
+                Please sign in to create custom recipes
+              </p>
+              <button
+                className="text-mixology-burgundy font-medium"
+                onClick={() => navigate("/login")}
+              >
+                Sign In
+              </button>
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="history">
+          {user ? (
+            <DrinkHistory />
+          ) : (
+            <div className="text-center py-10">
+              <p className="text-gray-500 mb-2">
+                Please sign in to view your drink history
+              </p>
+              <button
+                className="text-mixology-burgundy font-medium"
+                onClick={() => navigate("/login")}
+              >
+                Sign In
+              </button>
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
