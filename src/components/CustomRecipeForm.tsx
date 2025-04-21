@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { PlusCircle, Trash, Save } from "lucide-react";
@@ -27,7 +28,7 @@ const CustomRecipeForm = () => {
   const [recipeIngredients, setRecipeIngredients] = useState<IngredientItem[]>([]);
   const [availableIngredients, setAvailableIngredients] = useState<any[]>(ingredients);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [currentIngredient, setCurrentIngredient] = useState({ id: "", amount: "", unit: "oz" });
+  const [currentIngredient, setCurrentIngredient] = useState({ id: "", name: "", amount: "", unit: "oz" });
   const [showOther, setShowOther] = useState(false);
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<FormValues>();

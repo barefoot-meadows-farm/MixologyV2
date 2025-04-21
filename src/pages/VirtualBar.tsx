@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
 import IngredientsList from "../components/IngredientsList";
 import CocktailCard from "../components/CocktailCard";
 import ShoppingList from "../components/ShoppingList";
