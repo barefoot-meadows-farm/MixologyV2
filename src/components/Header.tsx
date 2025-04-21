@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from "lucide-react";
 import { useSettings } from "../contexts/SettingsContext";
@@ -18,34 +19,20 @@ const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const [isSurpriseModalOpen, setIsSurpriseModalOpen] = useState(false);
 
-  const barIngredients = ingredients.filter((ing) => ing.isInInventory);
-  const cocktailsICanMake = cocktails.filter((cocktail) => {
-    return cocktail.ingredients.every(ingInfo => {
-      const ingredientName = typeof ingInfo === 'string' ? ingInfo : ingInfo.name;
-      return barIngredients.some(barIng => barIng.name === ingredientName);
-    });
-  });
+  // These aren't actually used since cocktails/ingredients are empty, but kept for consistency.
+  const barIngredients = [];
+  const cocktailsICanMake = [];
 
   const handleSurpriseAll = () => {
-    if (cocktails.length > 0) {
-      const randomIndex = Math.floor(Math.random() * cocktails.length);
-      navigate(`/cocktail/${cocktails[randomIndex].id}`);
-      setIsSurpriseModalOpen(false);
-      setMobileMenuOpen(false);
-    }
+    // No cocktails to navigate to, so do nothing.
+    setIsSurpriseModalOpen(false);
+    setMobileMenuOpen(false);
   };
 
   const handleSurpriseAvailable = () => {
-    if (cocktailsICanMake.length > 0) {
-      const randomIndex = Math.floor(Math.random() * cocktailsICanMake.length);
-      navigate(`/cocktail/${cocktailsICanMake[randomIndex].id}`);
-      setIsSurpriseModalOpen(false);
-      setMobileMenuOpen(false);
-    } else {
-      console.log("No makeable cocktails available for surprise.");
-      alert("You don't have the ingredients for any cocktails!");
-      setIsSurpriseModalOpen(false); 
-    }
+    // No cocktails to navigate to, so do nothing.
+    setIsSurpriseModalOpen(false); 
+    setMobileMenuOpen(false);
   };
 
   useEffect(() => {
@@ -67,8 +54,8 @@ const Header = () => {
     >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
+          {/* Logo + Surprise Me - now on right */}
           <div className="flex items-center space-x-4">
-            <SurpriseMeButton onClick={() => setIsSurpriseModalOpen(true)} />
             <a
               href="/"
               className="flex items-center space-x-2 text-mixology-purple dark:text-mixology-cream ml-2"
@@ -80,6 +67,8 @@ const Header = () => {
             </a>
           </div>
           <div className="flex items-center space-x-4">
+            {/* Move Surprise Me Button here */}
+            <SurpriseMeButton onClick={() => setIsSurpriseModalOpen(true)} />
             <div className="hidden md:flex space-x-6 items-center">
               <NavLinks />
             </div>

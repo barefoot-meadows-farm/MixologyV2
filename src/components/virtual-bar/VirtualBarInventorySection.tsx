@@ -1,4 +1,3 @@
-
 import React from "react";
 import IngredientsList from "@/components/IngredientsList";
 import BarcodeScannerButton from "@/components/BarcodeScannerButton";
@@ -15,7 +14,14 @@ type Props = {
   setShowAddCustomModal: (show: boolean) => void;
   handleAddCustomIngredient: (arg: { name: string }) => void;
   ingredients: Ingredient[];
+  setBarIngredients: (ings: Ingredient[]) => void;
 };
+
+const demoIngredients: Ingredient[] = [
+  { id: "gin", name: "Gin", category: "Spirits", isInInventory: true },
+  { id: "vodka", name: "Vodka", category: "Spirits", isInInventory: true },
+  { id: "lemon", name: "Lemon", category: "Citrus", isInInventory: true },
+];
 
 const VirtualBarInventorySection: React.FC<Props> = ({
   searchTerm,
@@ -26,6 +32,7 @@ const VirtualBarInventorySection: React.FC<Props> = ({
   setShowAddCustomModal,
   handleAddCustomIngredient,
   ingredients,
+  setBarIngredients,
 }) => {
   const sortAlphabetically = (items: Ingredient[]) =>
     [...items].sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
@@ -44,6 +51,22 @@ const VirtualBarInventorySection: React.FC<Props> = ({
 
   return (
     <>
+      <div className="flex mb-4 gap-2">
+        <div className="flex-1" />
+        <button
+          className="px-3 py-2 rounded-lg bg-mixology-purple text-white text-sm font-medium shadow hover:bg-mixology-purple/90 transition-colors"
+          onClick={() => {
+            setBarIngredients((prev: Ingredient[]) => {
+              const filtered = demoIngredients.filter(ing =>
+                !(prev.some(prevIng => prevIng.id === ing.id))
+              );
+              return [...prev, ...filtered];
+            });
+          }}
+        >
+          Add Pre-existing Ingredients
+        </button>
+      </div>
       <div className="mb-6 relative">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           <svg className="text-gray-400" width={20} height={20} fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>

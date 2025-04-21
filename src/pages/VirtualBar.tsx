@@ -1,10 +1,7 @@
-
 import { useState, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { ingredients } from "../data/ingredients";
-import { cocktails } from "../data/cocktails";
 import AddCustomIngredientModal from "../components/AddCustomIngredientModal";
 import VirtualBarInventorySection from "../components/virtual-bar/VirtualBarInventorySection";
 import VirtualBarMakeSection from "../components/virtual-bar/VirtualBarMakeSection";
@@ -12,11 +9,13 @@ import VirtualBarShoppingSection from "../components/virtual-bar/VirtualBarShopp
 import VirtualBarCreateSection from "../components/virtual-bar/VirtualBarCreateSection";
 import VirtualBarHistorySection from "../components/virtual-bar/VirtualBarHistorySection";
 
+// Remove ingredient and cocktail imports.
+// import { ingredients } from "../data/ingredients";
+// import { cocktails } from "../data/cocktails";
+
 const VirtualBar = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [barIngredients, setBarIngredients] = useState(
-    ingredients.filter((ing) => ing.isInInventory)
-  );
+  const [barIngredients, setBarIngredients] = useState([]);
   const [activeTab, setActiveTab] = useState<"inventory" | "make" | "shopping" | "create" | "history">("inventory");
   const [user, setUser] = useState<any>(null);
   const [showAddCustomModal, setShowAddCustomModal] = useState(false);
@@ -33,33 +32,18 @@ const VirtualBar = () => {
       setUser(session?.user || null);
     });
 
-    const sortedBarIngredients = [...barIngredients].sort((a, b) => 
-      a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
-    );
-    
-    if (JSON.stringify(sortedBarIngredients) !== JSON.stringify(barIngredients)) {
-      setBarIngredients(sortedBarIngredients);
-    }
-
     return () => subscription.unsubscribe();
   }, []);
 
-  // Shared: ingredient toggle & custom ingredient handling
+  // Ingredient functions unchanged for custom ingredients
   const handleToggleIngredient = (id: string) => {
     setBarIngredients((prev) => {
       const isInBar = prev.some((ing) => ing.id === id);
 
       if (isInBar) {
-        return prev.filter((ing) => ing.id !== id).sort((a, b) => 
-          a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
-        );
+        return prev.filter((ing) => ing.id !== id);
       } else {
-        const ingredientToAdd = ingredients.find((ing) => ing.id === id);
-        if (ingredientToAdd) {
-          return [...prev, ingredientToAdd].sort((a, b) => 
-            a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
-          );
-        }
+        // No base ingredients data - impossible to add, so do nothing.
         return prev;
       }
     });
@@ -94,8 +78,12 @@ const VirtualBar = () => {
     setShowAddCustomModal(false);
   };
 
-  // Tab control
+  // Tab control unchanged
   const handleTabChange = (value: string) => setActiveTab(value as any);
+
+  // For demonstration, ingredients and cocktails arrays are empty
+  const allIngredients = [];
+  const allCocktails = [];
 
   return (
     <div className="container mx-auto px-4 pb-20 md:pb-10">
@@ -119,13 +107,14 @@ const VirtualBar = () => {
             showAddCustomModal={showAddCustomModal}
             setShowAddCustomModal={setShowAddCustomModal}
             handleAddCustomIngredient={handleAddCustomIngredient}
-            ingredients={ingredients}
+            ingredients={allIngredients}
+            setBarIngredients={setBarIngredients} /* pass setter for demonstration */
           />
         </TabsContent>
         <TabsContent value="make">
           <VirtualBarMakeSection
             barIngredients={barIngredients}
-            cocktails={cocktails}
+            cocktails={allCocktails}
           />
         </TabsContent>
         <TabsContent value="shopping">
