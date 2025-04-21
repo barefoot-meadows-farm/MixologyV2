@@ -1,10 +1,11 @@
 
 import { useState } from "react";
-import { Search, Shuffle } from "lucide-react"; // Import Shuffle icon
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { Search, Shuffle } from "lucide-react"; 
+import { useNavigate } from "react-router-dom"; 
 import CocktailCard, { Cocktail } from "../components/CocktailCard";
 import FilterBar from "../components/FilterBar";
 import { cocktails } from "../data/cocktails";
+import { ingredientNameIncludes } from "../utils/ingredientUtils";
 
 interface Filters {
   spirit: string | undefined;
@@ -14,7 +15,7 @@ interface Filters {
 
 const Browse = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
   const [filters, setFilters] = useState<Filters>({
     spirit: undefined,
     difficulty: undefined,
@@ -29,7 +30,6 @@ const Browse = () => {
     if (cocktails.length > 0) {
       const randomIndex = Math.floor(Math.random() * cocktails.length);
       const randomCocktail = cocktails[randomIndex];
-      // Assuming a route like /cocktail/:id exists
       navigate(`/cocktail/${randomCocktail.id}`); 
     }
   };
@@ -48,7 +48,7 @@ const Browse = () => {
     if (
       filters.spirit &&
       !cocktail.ingredients.some((ing) =>
-        ing.toLowerCase().includes(filters.spirit!.toLowerCase())
+        ingredientNameIncludes(ing, filters.spirit!)
       )
     ) {
       return false;

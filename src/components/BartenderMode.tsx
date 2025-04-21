@@ -1,9 +1,9 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, X, ChevronRight, Search } from 'lucide-react';
 import { useSettings } from '../contexts/SettingsContext';
 import { cocktails } from '../data/cocktails';
 import { Cocktail } from '../components/CocktailCard';
+import { getIngredientName, formatIngredientForDisplay, ingredientNameIncludes } from '../utils/ingredientUtils';
 
 interface BartenderModeProps {
   onExit: () => void;
@@ -109,7 +109,7 @@ const BartenderMode = ({ onExit }: BartenderModeProps) => {
     } else {
       const filtered = enhancedCocktails.filter(cocktail => 
         cocktail.name.toLowerCase().includes(query) || 
-        cocktail.ingredients.some(ingredient => ingredient.toLowerCase().includes(query))
+        cocktail.ingredients.some(ingredient => ingredientNameIncludes(ingredient, query))
       );
       setFilteredCocktails(filtered);
       setNoResults(filtered.length === 0);
@@ -343,7 +343,7 @@ const BartenderMode = ({ onExit }: BartenderModeProps) => {
                     <ul className="space-y-2">
                       {selectedCocktail.ingredients.map((ingredient, idx) => (
                         <li key={idx} className="text-white text-xl">
-                          • {displayIngredient(ingredient)}
+                          • {formatIngredientForDisplay(ingredient)}
                         </li>
                       ))}
                     </ul>

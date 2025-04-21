@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { ShoppingCart, Check, Trash2, Plus } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -6,9 +5,14 @@ import { cocktails } from "../data/cocktails";
 import { ingredients } from "../data/ingredients";
 import { useShoppingCart } from "../contexts/ShoppingContext";
 import { useSettings } from "../contexts/SettingsContext";
-import { isIngredientInInventory, normalizeIngredientName, validateIngredientName, logIngredientMatchingError } from "../lib/ingredientUtils";
+import { 
+  isIngredientInInventory, 
+  normalizeIngredientName, 
+  validateIngredientName, 
+  logIngredientMatchingError,
+  getIngredientName
+} from "../lib/ingredientUtils";
 
-// Simple unit conversion for demonstration
 const convertToMetric = (amount: number): string => {
   return `${(amount * 29.5735).toFixed(1)} ml`;
 };
@@ -17,10 +21,7 @@ const convertToUS = (amount: number): string => {
   return `${amount} oz`;
 };
 
-// Ingredient quantities will be fetched from Supabase database
-// This is a temporary empty object until data is loaded from the database
 const ingredientQuantities: Record<string, number> = {};
-
 
 interface ShoppingIngredient {
   id: string;
@@ -47,50 +48,44 @@ const ShoppingList = () => {
       
       const ingredientMap = new Map<string, { quantity: number, cocktailCount: number }>();
       
-      // Calculate total quantities for each ingredient
       selectedCocktails.forEach(cocktail => {
         const quantity = shoppingItems.find(item => item.cocktailId === cocktail.id)?.quantity || 0;
         
-        cocktail.ingredients.forEach(ingredientName => {
-          // Find the ingredient ID from the name using improved comparison
-          const normalizedName = normalizeIngredientName(ingredientName);
+        cocktail.ingredients.forEach(ingredientItem => {
+          const normalizedName = normalizeIngredientName(getIngredientName(ingredientItem));
           const ingredient = ingredients.find(ing => 
             normalizeIngredientName(ing.name) === normalizedName
           );
           
-          // Log any matching errors for debugging
           if (!ingredient) {
             logIngredientMatchingError(
-              ingredientName,
+              getIngredientName(ingredientItem),
               ingredients.map(i => i.name),
               false
             );
             return;
           }
           
-            const id = ingredient.id;
-            const baseQuantity = ingredientQuantities[id] || 1;
-            const totalQuantity = baseQuantity * quantity;
-            
-            if (ingredientMap.has(id)) {
-              const current = ingredientMap.get(id)!;
-              ingredientMap.set(id, {
-                quantity: current.quantity + totalQuantity,
-                cocktailCount: current.cocktailCount + 1
-              });
-            } else {
-              ingredientMap.set(id, { quantity: totalQuantity, cocktailCount: 1 });
-            }
+          const id = ingredient.id;
+          const baseQuantity = ingredientQuantities[id] || 1;
+          const totalQuantity = baseQuantity * quantity;
           
+          if (ingredientMap.has(id)) {
+            const current = ingredientMap.get(id)!;
+            ingredientMap.set(id, {
+              quantity: current.quantity + totalQuantity,
+              cocktailCount: current.cocktailCount + 1
+            });
+          } else {
+            ingredientMap.set(id, { quantity: totalQuantity, cocktailCount: 1 });
+          }
         });
       });
       
-      // Convert map to array and include inventory status with improved comparison
       const ingredientsArray: ShoppingIngredient[] = Array.from(ingredientMap).map(([id, data]) => {
         const ingredient = ingredients.find(ing => ing.id === id);
         const name = ingredient?.name || id;
         
-        // Use the improved comparison function to determine if in inventory
         const inInventory = ingredient ? 
           ingredient.isInInventory || 
           isIngredientInInventory(name, ingredients.filter(i => i.isInInventory)) : 
@@ -112,13 +107,9 @@ const ShoppingList = () => {
     calculateIngredients();
   }, [shoppingItems]);
 
-  // Add all missing ingredients to inventory
   const handleAddAllMissing = () => {
-    // In a real app, this would update the user's inventory in the database
-    // For this demo, we'll just show a mock success state
     const missingIngredients = shoppingIngredients.filter(ing => !ing.inInventory);
     if (missingIngredients.length > 0) {
-      // Validate each ingredient before adding to inventory
       const validIngredients = missingIngredients.filter(ing => {
         const validation = validateIngredientName(ing.name);
         if (!validation.isValid) {
@@ -128,20 +119,16 @@ const ShoppingList = () => {
         return true;
       });
       
-      // Update local state to reflect changes immediately
       setShoppingIngredients(prev => 
         prev.map(ing => ({
           ...ing,
           inInventory: ing.inInventory || validIngredients.some(valid => valid.id === ing.id)
         }))
       );
-      // In a real app, we would call an API to update the user's inventory
     }
   };
 
   const handleRemoveIngredient = (id: string) => {
-    // In a real app, we would need to determine which cocktails use this ingredient
-    // and remove them from the cart. For this demo, we'll just update the ingredients list.
     setShoppingIngredients(prev => prev.filter(ing => ing.id !== id));
   };
 
@@ -149,7 +136,6 @@ const ShoppingList = () => {
     return measurementUnit === 'metric' ? convertToMetric(amount) : convertToUS(amount);
   };
 
-  // Fix: Added correct filtering logic
   const filteredIngredients = shoppingIngredients.filter(ingredient => {
     if (filter === "need") return !ingredient.inInventory;
     if (filter === "have") return ingredient.inInventory;

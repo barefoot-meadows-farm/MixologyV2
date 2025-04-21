@@ -3,13 +3,14 @@ import { Search, X, ArrowLeft, ChevronRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSettings } from "../contexts/SettingsContext";
 import { useDevice } from "../contexts/DeviceContext";
+import { getIngredientName, formatIngredientForDisplay, ingredientNameIncludes } from "../utils/ingredientUtils";
 
 // Enhanced cocktail type for bartender mode
 interface BartenderCocktail {
   id: string;
   name: string;
   image: string;
-  ingredients: string[];
+  ingredients: Array<string | { name: string, amount: string }>;
   steps?: string[];
   glass?: string;
   difficulty: string;
@@ -22,7 +23,7 @@ import { cocktails } from "../data/cocktails";
 const enhancedCocktails: BartenderCocktail[] = cocktails.map(cocktail => ({
   ...cocktail,
   steps: [
-    `Gather all ingredients: ${cocktail.ingredients.join(", ")}.`,
+    `Gather all ingredients: ${cocktail.ingredients.map(ing => getIngredientName(ing)).join(", ")}.`,
     `Prepare your glass: ${cocktail.name.includes("Martini") ? "Chill a martini glass" : "Fill with ice"}.`,
     `Mix ingredients in a shaker with ice.`,
     `Strain into glass and garnish.`,
@@ -58,7 +59,7 @@ const BartenderModePage = () => {
     } else {
       const filtered = enhancedCocktails.filter(cocktail => 
         cocktail.name.toLowerCase().includes(query) || 
-        cocktail.ingredients.some(ingredient => ingredient.toLowerCase().includes(query))
+        cocktail.ingredients.some(ingredient => ingredientNameIncludes(ingredient, query))
       );
       setFilteredCocktails(filtered);
       setNoResults(filtered.length === 0);
@@ -110,10 +111,8 @@ const BartenderModePage = () => {
     }
   };
 
-  const displayIngredient = (ingredient: string) => {
-    // In a real app, we would parse the ingredient string to extract the quantity and unit
-    // For this demo, we'll just return the ingredient as is
-    return ingredient;
+  const displayIngredient = (ingredient: string | { name: string, amount: string }) => {
+    return formatIngredientForDisplay(ingredient);
   };
 
   // Get cached recently viewed cocktails
@@ -135,9 +134,7 @@ const BartenderModePage = () => {
   };
 
   return (
-    // Removed custom header, assuming main header is now always visible
     <div className="bartender-mode min-h-screen bg-black text-white pt-4 pb-20 px-4">
-      {/* Exit button moved into content */}
       {viewMode === 'preparation' && (
          <button 
            onClick={handleExit}
@@ -151,7 +148,6 @@ const BartenderModePage = () => {
       <div>
         {viewMode === 'selection' ? (
           <div>
-            {/* Search bar */}
             <div className="mb-6 relative">
               <div className="relative flex items-center">
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
@@ -180,7 +176,6 @@ const BartenderModePage = () => {
               </div>
             </div>
             
-            {/* No results message */}
             {noResults && (
               <div className="text-center py-8">
                 <p className="text-white text-xl mb-4">No cocktails found for "{searchQuery}"</p>
@@ -249,16 +244,14 @@ const BartenderModePage = () => {
           <div>
             {selectedCocktail && (
               <div>
-                {/* Back button */}
                 <button 
-                  onClick={handleBackToSelection} // Use updated handler
+                  onClick={handleBackToSelection}
                   className="touch-target flex items-center text-white mb-4"
                 >
                   <ArrowLeft size={20} className="mr-2" />
                   Back to Selection
                 </button>
                 
-                {/* Cocktail Info */}
                 <div className="mb-6 flex items-center">
                   <img 
                     src={selectedCocktail.image} 
@@ -274,7 +267,6 @@ const BartenderModePage = () => {
                   </div>
                 </div>
                 
-                {/* Ingredients */}
                 <div className="bartender-step-card mb-6">
                   <h3 className="bartender-text-medium text-white mb-4">Ingredients</h3>
                   <ul className="space-y-2">
@@ -286,7 +278,6 @@ const BartenderModePage = () => {
                   </ul>
                 </div>
                 
-                {/* All Steps */}
                 {selectedCocktail.steps && selectedCocktail.steps.length > 0 && (
                   <div className="space-y-6">
                     <h3 className="bartender-text-medium text-white mb-4">Preparation Steps</h3>
@@ -300,15 +291,11 @@ const BartenderModePage = () => {
                     ))}
                   </div>
                 )}
-                
-                {/* Removed Next/Finish Button */}
               </div>
             )}
           </div>
         )}
       </div>
-
-      {/* Removed Mobile fixed bottom nav */}
     </div>
   );
 };
