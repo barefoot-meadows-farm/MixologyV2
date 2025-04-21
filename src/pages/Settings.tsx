@@ -12,7 +12,7 @@ import {
   Shield,
   Gift,
   LogOut,
-  Link as LinkIcon
+  Trash2
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Switch } from '@/components/ui/switch';
@@ -50,7 +50,7 @@ const SettingsLink = ({
   label: string; 
   rightElement?: React.ReactNode 
 }) => (
-  <Link to={to} className="flex items-center justify-between py-3 px-2 min-h-[44px] hover:bg-gray-50 rounded-md">
+  <Link to={to} className="flex items-center justify-between py-3 px-2 min-h-[44px] hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md">
     <div className="flex items-center gap-3">
       {icon}
       <span>{label}</span>
@@ -106,18 +106,13 @@ const Settings = () => {
           label="Profile Information"
         />
         <SettingsLink
-          to="/settings/password"
+          to="/settings/security"
           icon={<Shield size={20} className="text-gray-500 dark:text-gray-300" />}
           label="Password & Security"
         />
         <SettingsLink
-          to="/settings/linked-accounts"
-          icon={<LinkIcon size={20} className="text-gray-500 dark:text-gray-300" />}
-          label="Linked Accounts"
-        />
-        <SettingsLink
           to="/settings/delete-account"
-          icon={<LogOut size={20} className="text-red-500" />}
+          icon={<Trash2 size={20} className="text-red-500" />}
           label="Delete Account"
           rightElement={<ChevronRight size={18} className="text-red-400" />}
         />

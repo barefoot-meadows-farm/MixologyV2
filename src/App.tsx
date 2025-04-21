@@ -15,7 +15,12 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 import BartenderMode from "./pages/BartenderMode";
-import CocktailDetail from "./pages/CocktailDetail"; // Import the new CocktailDetail page
+import CocktailDetail from "./pages/CocktailDetail";
+
+// Settings Pages
+import ProfileSettings from "./pages/settings/ProfileSettings";
+import SecuritySettings from "./pages/settings/SecuritySettings";
+import DeleteAccount from "./pages/settings/DeleteAccount";
 
 // Components
 import Header from "./components/Header";
@@ -46,10 +51,15 @@ const App = () => (
                     <Route path="/bar" element={<VirtualBar />} />
                     <Route path="/favorites" element={<Favorites />} />
                     <Route path="/settings" element={<Settings />} />
+                    <Route path="/settings/profile" element={<ProfileSettings />} />
+                    <Route path="/settings/security" element={<SecuritySettings />} />
+                    <Route path="/settings/delete-account" element={<DeleteAccount />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/bartender" element={<BartenderMode />} />
-                    <Route path="/cocktail/:id" element={<CocktailDetail />} /> {/* Add the new route */}
+                    <Route path="/cocktail/:id" element={<CocktailDetail />} />
+                    {/* Linked Accounts route is removed */}
+                    <Route path="/settings/linked-accounts" element={<Navigate to="/settings" replace />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                 </main>
