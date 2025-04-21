@@ -36,6 +36,15 @@ const Home = () => {
       <FeaturedCocktails />
       <PopularCocktails />
       
+      <div className="fixed bottom-24 right-4 md:bottom-8 z-10">
+        <button
+          onClick={handleBartenderButtonClick}
+          className="bg-mixology-burgundy hover:bg-mixology-burgundy/90 text-white py-3 px-6 rounded-full shadow-lg transition-colors"
+        >
+          Bartender Mode
+        </button>
+      </div>
+      
       <BartenderModeInfoDialog 
         isOpen={showBartenderInfo} 
         onClose={() => setShowBartenderInfo(false)}

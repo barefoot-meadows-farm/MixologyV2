@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { Search, X, ArrowLeft, ChevronRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
@@ -155,7 +154,8 @@ const BartenderModePage = () => {
          </button>
       )}
       
-      <div>
+      <div className="mt-10 md:mt-4">
+        <h1 className="text-2xl font-serif text-white font-bold text-center mb-6">Bartender Mode</h1>
         {viewMode === 'selection' ? (
           <div>
             <div className="mb-6 relative">
