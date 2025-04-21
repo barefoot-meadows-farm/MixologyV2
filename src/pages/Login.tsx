@@ -1,14 +1,19 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -18,10 +23,42 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // This would be connected to authentication in a real app
-    console.log("Login attempt:", formData);
+    setIsLoading(true);
+    
+    try {
+      console.log("Attempting login with:", formData.email);
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      if (error) {
+        console.error("Login error:", error.message);
+        toast({
+          title: "Login failed",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else if (data.session) {
+        console.log("Login successful, redirecting...");
+        toast({
+          title: "Welcome back!",
+          description: "You have successfully logged in.",
+        });
+        navigate("/");
+      }
+    } catch (err) {
+      console.error("Unexpected error during login:", err);
+      toast({
+        title: "Login failed",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -51,6 +88,7 @@ const Login = () => {
               placeholder="your@email.com"
               value={formData.email}
               onChange={handleChange}
+              disabled={isLoading}
             />
           </div>
 
@@ -71,6 +109,7 @@ const Login = () => {
                 placeholder="Your password"
                 value={formData.password}
                 onChange={handleChange}
+                disabled={isLoading}
               />
               <button
                 type="button"
@@ -96,9 +135,10 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full bg-mixology-burgundy text-white py-3 rounded-lg font-medium hover:bg-mixology-burgundy/90 transition-colors focus:ring-2 focus:ring-mixology-burgundy/50 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+            className="w-full bg-mixology-burgundy text-white py-3 rounded-lg font-medium hover:bg-mixology-burgundy/90 transition-colors focus:ring-2 focus:ring-mixology-burgundy/50 focus:ring-offset-2 dark:focus:ring-offset-gray-900 disabled:opacity-70"
+            disabled={isLoading}
           >
-            Log In
+            {isLoading ? "Logging in..." : "Log In"}
           </button>
 
           <div className="text-center">

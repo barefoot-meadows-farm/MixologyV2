@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Shuffle } from "lucide-react";
@@ -5,39 +6,7 @@ import { useSettings } from "../contexts/SettingsContext";
 import { useIsMobile } from "../hooks/use-mobile";
 import { cocktails } from "../data/cocktails";
 import { ingredients } from "../data/ingredients";
-
-const SurpriseMeModal = ({ isOpen, onClose, onSelectAll, onSelectAvailable }) => {
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-      <div className="bg-white dark:bg-mixology-dark rounded-lg p-6 shadow-xl max-w-sm w-full">
-        <h3 className="text-lg font-medium mb-4 text-mixology-purple dark:text-mixology-cream">Surprise Me!</h3>
-        <p className="text-sm text-gray-600 dark:text-gray-300 mb-6">Choose how you want to be surprised:</p>
-        <div className="space-y-3">
-          <button
-            onClick={onSelectAll}
-            className="w-full px-4 py-2 bg-mixology-burgundy text-white rounded-md hover:bg-mixology-burgundy/90 transition-colors"
-          >
-            Pick From All Drinks
-          </button>
-          <button
-            onClick={onSelectAvailable}
-            className="w-full px-4 py-2 bg-mixology-purple text-white rounded-md hover:bg-mixology-purple/90 transition-colors"
-          >
-            Pick From Available Drinks
-          </button>
-        </div>
-        <button
-          onClick={onClose}
-          className="mt-6 w-full text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
-        >
-          Cancel
-        </button>
-      </div>
-    </div>
-  );
-};
+import SurpriseMeModal from './modals/SurpriseMeModal';
 
 const Header = () => {
   const location = useLocation();
