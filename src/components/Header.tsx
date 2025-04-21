@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+
+import React, { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, Wine, Shuffle } from "lucide-react";
 import { useSettings } from "../contexts/SettingsContext";
 import { useIsMobile } from "../hooks/use-mobile";
@@ -222,3 +223,4 @@ const Header = () => {
 };
 
 export default Header;
+
