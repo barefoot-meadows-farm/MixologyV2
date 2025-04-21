@@ -1,3 +1,4 @@
+
 import React from "react";
 import IngredientsList from "@/components/IngredientsList";
 import BarcodeScannerButton from "@/components/BarcodeScannerButton";
@@ -14,10 +15,8 @@ type Props = {
   setShowAddCustomModal: (show: boolean) => void;
   handleAddCustomIngredient: (arg: { name: string }) => void;
   ingredients: Ingredient[];
-  setBarIngredients: (ings: Ingredient[]) => void;
+  setBarIngredients: React.Dispatch<React.SetStateAction<Ingredient[]>>;
 };
-
-const demoIngredients: Ingredient[] = [];
 
 const VirtualBarInventorySection: React.FC<Props> = ({
   searchTerm,
@@ -46,7 +45,9 @@ const VirtualBarInventorySection: React.FC<Props> = ({
   }));
 
   const handleAddPreExistingIngredients = () => {
-    setBarIngredients((prev) => [...prev]);
+    // Here was the error: setBarIngredients expects Ingredient[] directly, not a function
+    // Instead of using the setter function pattern, we directly set the same array
+    setBarIngredients(barIngredients);
   };
 
   return (
