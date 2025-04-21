@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from "lucide-react";
 import { useSettings } from "../contexts/SettingsContext";
@@ -69,9 +68,10 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-4">
+            <SurpriseMeButton onClick={() => setIsSurpriseModalOpen(true)} />
             <a
               href="/"
-              className="flex items-center space-x-2 text-mixology-purple dark:text-mixology-cream"
+              className="flex items-center space-x-2 text-mixology-purple dark:text-mixology-cream ml-2"
             >
               <span className="text-2xl font-serif font-medium">Mixology</span>
               <span className="text-2xl font-serif text-mixology-burgundy dark:text-mixology-burgundy">
@@ -83,7 +83,6 @@ const Header = () => {
             <div className="hidden md:flex space-x-6 items-center">
               <NavLinks />
             </div>
-            <SurpriseMeButton onClick={() => setIsSurpriseModalOpen(true)} />
             <div className="md:hidden flex items-center">
               <button
                 onClick={toggleMobileMenu}

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Search, PlusCircle, Shuffle, History, Plus } from "lucide-react"; 
 import { useNavigate } from "react-router-dom"; 
@@ -13,9 +12,7 @@ import CustomRecipeForm from "../components/CustomRecipeForm";
 import DrinkHistory from "../components/DrinkHistory";
 import { ingredients } from "../data/ingredients";
 import { cocktails } from "../data/cocktails"; 
-
-// Import Cocktail from CocktailCard instead of cocktails
-import type { Cocktail } from "../components/CocktailCard";
+import AddCustomIngredientModal from "../components/AddCustomIngredientModal";
 
 const VirtualBar = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -24,23 +21,21 @@ const VirtualBar = () => {
   );
   const [activeTab, setActiveTab] = useState<"inventory" | "make" | "shopping" | "create" | "history">("inventory");
   const [user, setUser] = useState<any>(null);
+  const [showAddCustomModal, setShowAddCustomModal] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check for authentication
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setUser(session?.user || null);
       }
     );
 
-    // Get current session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user || null);
     });
 
-    // Sort ingredients alphabetically when component mounts
     const sortedBarIngredients = [...barIngredients].sort((a, b) => 
       a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
     );
@@ -90,7 +85,6 @@ const VirtualBar = () => {
     isInInventory: barIngredients.some((ing) => ing.id === ingredient.id),
   }));
 
-  // Filter cocktails based on available ingredients
   const cocktailsICanMake = cocktails.filter((cocktail) => {
     return cocktail.canMake; 
   });
@@ -103,7 +97,6 @@ const VirtualBar = () => {
     }
   };
 
-  // Auth check helper
   const requireAuth = (targetTab: string) => {
     if (!user) {
       toast({
@@ -117,12 +110,41 @@ const VirtualBar = () => {
     return true;
   };
 
-  // Handle tab changes with auth check
   const handleTabChange = (value: string) => {
     if ((value === "create" || value === "history") && !requireAuth(value)) {
       return;
     }
     setActiveTab(value as any);
+  };
+
+  const handleAddCustomIngredient = ({ name }: { name: string }) => {
+    if (
+      barIngredients.some(
+        (ing) => ing.name.toLowerCase() === name.toLowerCase()
+      )
+    ) {
+      toast({
+        title: "Already exists",
+        description: "This ingredient is already in your inventory.",
+        variant: "destructive",
+      });
+      return;
+    }
+    const newIngredient = {
+      id: "custom_" + Math.random().toString(36).substr(2, 9),
+      name,
+      isInInventory: true,
+      category: "Custom",
+      type: undefined,
+      abv: undefined,
+      is_common: false,
+    };
+    setBarIngredients([...barIngredients, newIngredient]);
+    toast({
+      title: "Custom ingredient added",
+      description: `${name} added to your bar`,
+    });
+    setShowAddCustomModal(false);
   };
 
   return (
@@ -219,6 +241,22 @@ const VirtualBar = () => {
             ingredients={filteredIngredients} 
             onIngredientToggle={handleToggleIngredient}
           />
+
+          <div className="mt-2">
+            <Button
+              variant="outline"
+              onClick={() => setShowAddCustomModal(true)}
+              className="px-3"
+            >
+              Add Custom Ingredient
+            </Button>
+          </div>
+
+          <AddCustomIngredientModal
+            isOpen={showAddCustomModal}
+            onClose={() => setShowAddCustomModal(false)}
+            onAdd={handleAddCustomIngredient}
+          />
         </TabsContent>
 
         <TabsContent value="make">
@@ -231,7 +269,6 @@ const VirtualBar = () => {
               <p className="text-sm text-gray-600 mb-2 dark:text-gray-300">
                 Based on your {barIngredients.length} bar ingredients, you can make the following cocktails:
               </p>
-              {/* Add Surprise Me button */}
               {cocktailsICanMake.length > 0 && (
                 <button 
                   onClick={handleSurpriseMe}

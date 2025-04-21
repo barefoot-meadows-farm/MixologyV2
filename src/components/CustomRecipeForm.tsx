@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { PlusCircle, Trash, Save } from "lucide-react";
@@ -29,6 +28,7 @@ const CustomRecipeForm = () => {
   const [availableIngredients, setAvailableIngredients] = useState<any[]>(ingredients);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentIngredient, setCurrentIngredient] = useState({ id: "", amount: "", unit: "oz" });
+  const [showOther, setShowOther] = useState(false);
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<FormValues>();
 
@@ -37,30 +37,36 @@ const CustomRecipeForm = () => {
   }, []);
 
   const addIngredient = () => {
-    if (!currentIngredient.id || !currentIngredient.amount) {
-      toast({
-        title: "Missing information",
-        description: "Please select an ingredient and specify an amount",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const selectedIngredient = availableIngredients.find(ing => ing.id === currentIngredient.id);
-    if (!selectedIngredient) return;
-
-    setRecipeIngredients(prev => [
-      ...prev,
-      {
+    let ingredientToAdd;
+    if (currentIngredient.id === "__other__") {
+      if (!currentIngredient.amount || !currentIngredient.name) {
+        toast({
+          title: "Missing information",
+          description: "Please enter the name and amount for your custom ingredient",
+          variant: "destructive",
+        });
+        return;
+      }
+      ingredientToAdd = {
+        id: "__other__" + Math.random().toString(36).substr(2, 8),
+        name: currentIngredient.name,
+        amount: currentIngredient.amount,
+        unit: currentIngredient.unit
+      };
+    } else {
+      const selectedIngredient = availableIngredients.find(ing => ing.id === currentIngredient.id);
+      if (!selectedIngredient) return;
+      ingredientToAdd = {
         id: selectedIngredient.id,
         name: selectedIngredient.name,
         amount: currentIngredient.amount,
         unit: currentIngredient.unit
-      }
-    ]);
+      };
+    }
 
-    // Reset the selection
-    setCurrentIngredient({ id: "", amount: "", unit: "oz" });
+    setRecipeIngredients(prev => [...prev, ingredientToAdd]);
+    setCurrentIngredient({ id: "", name: "", amount: "", unit: "oz" });
+    setShowOther(false);
   };
 
   const removeIngredient = (index: number) => {
@@ -175,14 +181,32 @@ const CustomRecipeForm = () => {
           <div className="flex flex-wrap gap-2">
             <select
               value={currentIngredient.id}
-              onChange={(e) => setCurrentIngredient(prev => ({ ...prev, id: e.target.value }))}
+              onChange={(e) => {
+                setCurrentIngredient(prev => ({
+                  ...prev,
+                  id: e.target.value,
+                  name: e.target.value === "__other__" ? "" : prev.name
+                }));
+                setShowOther(e.target.value === "__other__");
+              }}
               className="flex-grow p-2 border border-gray-300 rounded dark:bg-gray-800 dark:border-gray-700 dark:text-white"
             >
               <option value="">Select an ingredient</option>
               {availableIngredients.map(ing => (
                 <option key={ing.id} value={ing.id}>{ing.name}</option>
               ))}
+              <option value="__other__">Other...</option>
             </select>
+            
+            {showOther && (
+              <Input
+                type="text"
+                placeholder="Custom ingredient name"
+                value={currentIngredient.name || ""}
+                onChange={(e) => setCurrentIngredient(prev => ({ ...prev, name: e.target.value }))}
+                className="w-40"
+              />
+            )}
             
             <Input
               type="text"

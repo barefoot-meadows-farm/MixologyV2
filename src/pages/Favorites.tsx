@@ -1,7 +1,6 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FolderPlus, Folder, Bookmark } from "lucide-react";
+import { Trash2 } from "lucide-react";  // Use only the 'trash-2' icon per Lucide icon policy
 import CocktailCard from "../components/CocktailCard";
 import { supabase } from "../integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -15,33 +14,25 @@ interface Collection {
 interface FavoritesData {
   collections: Collection[];
   items: {
-    all: any[];
-    summer: any[];
-    classics: any[];
-    party: any[];
     custom: any[];
   };
 }
 
 const Favorites = () => {
-  const [activeCollection, setActiveCollection] = useState("all");
+  const [activeCollection, setActiveCollection] = useState("custom");
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
+
+  // Only show user-created collections; by default, always have "My Recipes" (custom)
   const [favoritesData, setFavoritesData] = useState<FavoritesData>({
     collections: [
-      { id: "all", name: "All Favorites" },
-      { id: "summer", name: "Summer Favorites" },
-      { id: "classics", name: "Classic Cocktails" },
-      { id: "party", name: "Party Drinks" },
+      { id: "custom", name: "My Recipes" }
     ],
     items: {
-      all: [],
-      summer: [],
-      classics: [],
-      party: [],
-      custom: [], // Ensure custom is always initialized
+      custom: [],
     },
   });
+
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -74,82 +65,46 @@ const Favorites = () => {
     setIsLoading(true);
     try {
       if (!userId) {
-        // Use mock data for non-authenticated users
+        // Only show custom for guests
         setFavoritesData({
           collections: [
-            { id: "all", name: "All Favorites" },
-            { id: "summer", name: "Summer Favorites" },
-            { id: "classics", name: "Classic Cocktails" },
-            { id: "party", name: "Party Drinks" },
+            { id: "custom", name: "My Recipes" },
           ],
-          items: {
-            all: cocktails.length > 0 ? [cocktails[0], cocktails[1], cocktails[2], cocktails[5]] : [],
-            summer: cocktails.length > 0 ? [cocktails[2], cocktails[3]] : [],
-            classics: cocktails.length > 0 ? [cocktails[0], cocktails[4]] : [],
-            party: cocktails.length > 0 ? [cocktails[5]] : [],
-            custom: [], // Add empty custom array here for type consistency
-          },
+          items: { custom: [] },
         });
       } else {
-        // In a real app, we would fetch actual favorites from the database
-        // For custom recipes, we can fetch user_custom_recipes from Supabase
+        // For logged-in user, fetch their collections (not implemented yet, only show custom)
         const { data: customRecipes, error } = await supabase
           .from('user_custom_recipes')
           .select('*');
-        
+
         if (error) {
-          console.error("Error fetching custom recipes:", error);
-          // Even if there's an error, initialize with empty arrays
           setFavoritesData({
-            collections: [
-              { id: "all", name: "All Favorites" },
-              { id: "summer", name: "Summer Favorites" },
-              { id: "classics", name: "Classic Cocktails" },
-              { id: "party", name: "Party Drinks" },
-              { id: "custom", name: "My Recipes" },
-            ],
-            items: {
-              all: cocktails.length > 0 ? [cocktails[0], cocktails[1]] : [],
-              summer: cocktails.length > 0 ? [cocktails[2], cocktails[3]] : [],
-              classics: cocktails.length > 0 ? [cocktails[0], cocktails[4]] : [],
-              party: cocktails.length > 0 ? [cocktails[5]] : [],
-              custom: [],
-            },
+            collections: [{ id: "custom", name: "My Recipes" }],
+            items: { custom: [] },
           });
         } else {
-          // Transform custom recipes to match the cocktail interface
-          const customCocktails = Array.isArray(customRecipes) ? customRecipes.map(recipe => ({
-            id: recipe.id,
-            name: recipe.name,
-            description: recipe.description || '',
-            image: '/placeholder.svg', // Use placeholder for now
-            ingredients: recipe.ingredients || [],
-            preparation: recipe.instructions || '',
-            difficulty: 'Custom',
-            prepTime: 'Custom',
-            rating: '5.0',
-            category: 'Custom',
-            isPopular: false,
-            isFeatured: false,
-            canMake: true
-          })) : [];
-          
-          // For now, adding custom recipes to all collections
+          const customCocktails = Array.isArray(customRecipes)
+            ? customRecipes.map(recipe => ({
+                id: recipe.id,
+                name: recipe.name,
+                description: recipe.description || '',
+                image: '/placeholder.svg',
+                ingredients: recipe.ingredients || [],
+                preparation: recipe.instructions || '',
+                difficulty: 'Custom',
+                prepTime: 'Custom',
+                rating: '5.0',
+                category: 'Custom',
+                isPopular: false,
+                isFeatured: false,
+                canMake: true
+              }))
+            : [];
+
           setFavoritesData({
-            collections: [
-              { id: "all", name: "All Favorites" },
-              { id: "summer", name: "Summer Favorites" },
-              { id: "classics", name: "Classic Cocktails" },
-              { id: "party", name: "Party Drinks" },
-              { id: "custom", name: "My Recipes" },
-            ],
-            items: {
-              all: [...customCocktails, ...(cocktails.length > 0 ? [cocktails[0], cocktails[1]] : [])],
-              summer: cocktails.length > 0 ? [cocktails[2], cocktails[3]] : [],
-              classics: cocktails.length > 0 ? [cocktails[0], cocktails[4]] : [],
-              party: cocktails.length > 0 ? [cocktails[5]] : [],
-              custom: customCocktails,
-            },
+            collections: [{ id: "custom", name: "My Recipes" }],
+            items: { custom: customCocktails },
           });
         }
       }
@@ -162,24 +117,47 @@ const Favorites = () => {
       });
       // Initialize with empty data to prevent undefined errors
       setFavoritesData({
-        collections: [
-          { id: "all", name: "All Favorites" },
-          { id: "summer", name: "Summer Favorites" },
-          { id: "classics", name: "Classic Cocktails" },
-          { id: "party", name: "Party Drinks" },
-        ],
-        items: {
-          all: [],
-          summer: [],
-          classics: [],
-          party: [],
-          custom: [],
-        },
+        collections: [{ id: "custom", name: "My Recipes" }],
+        items: { custom: [] }
       });
     } finally {
       setIsLoading(false);
     }
   }
+
+  // Delete collection (currently only "My Recipes" exists, but supports future expansion)
+  const handleDeleteCollection = async (collectionId: string) => {
+    if (collectionId === "custom") {
+      // Delete all custom recipes for the user
+      if (!user) {
+        toast({
+          title: "Sign in required",
+          description: "Please sign in to delete your recipes",
+          variant: "destructive",
+        });
+        navigate('/login');
+        return;
+      }
+      const confirmDelete = window.confirm("Delete all your custom recipes? This cannot be undone.");
+      if (!confirmDelete) return;
+
+      const { error } = await supabase
+        .from('user_custom_recipes')
+        .delete()
+        .eq('user_id', user.id);
+      if (error) {
+        toast({
+          title: "Error deleting recipes",
+          description: error.message || "Something went wrong",
+          variant: "destructive"
+        });
+        return;
+      }
+      toast({ title: "Deleted!", description: "All your custom recipes have been deleted." });
+      // Reload after delete
+      loadFavorites(user.id);
+    }
+  };
 
   const handleCreateCollection = () => {
     if (!user) {
@@ -204,35 +182,36 @@ const Favorites = () => {
       <h1 className="text-3xl font-serif font-medium text-mixology-purple mb-6">
         My Favorites
       </h1>
-
+      {/* Show user collections (only custom for now, but can expand) */}
       <div className="flex flex-wrap gap-2 mb-6">
         {favoritesData.collections.map((collection) => (
-          <button
-            key={collection.id}
-            className={`px-4 py-2 rounded-full text-sm font-medium flex items-center ${
-              activeCollection === collection.id
-                ? "bg-mixology-burgundy text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-            }`}
-            onClick={() => setActiveCollection(collection.id)}
-          >
-            {collection.id === "all" ? (
-              <Bookmark size={16} className="mr-1.5" />
-            ) : (
-              <Folder size={16} className="mr-1.5" />
+          <div key={collection.id} className="flex items-center">
+            <button
+              className={`px-4 py-2 rounded-full text-sm font-medium flex items-center ${
+                activeCollection === collection.id
+                  ? "bg-mixology-burgundy text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+              }`}
+              onClick={() => setActiveCollection(collection.id)}
+            >
+              <span className="mr-1.5">🍸</span>
+              {collection.name}
+            </button>
+            {/* Delete icon for custom collections */}
+            {collection.id === "custom" && user && (
+              <button
+                onClick={() => handleDeleteCollection(collection.id)}
+                className="ml-1 p-1 text-gray-500 hover:text-red-600"
+                title="Delete all custom recipes"
+              >
+                <Trash2 size={16} />
+              </button>
             )}
-            {collection.name}
-          </button>
+          </div>
         ))}
-
-        <button
-          className="px-4 py-2 rounded-full text-sm font-medium bg-mixology-purple/10 text-mixology-purple flex items-center hover:bg-mixology-purple/20 dark:bg-mixology-purple/20 dark:hover:bg-mixology-purple/30"
-          onClick={handleCreateCollection}
-        >
-          <FolderPlus size={16} className="mr-1.5" />
-          New Collection
-        </button>
       </div>
+
+      {/* Removed "New Collection" button */}
 
       {isLoading ? (
         <div className="flex justify-center items-center py-20">
