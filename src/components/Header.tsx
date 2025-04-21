@@ -1,6 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, Wine, Shuffle } from "lucide-react";
+import { Link, useLocation } from 'react-router-dom';
+import { Menu, X, Shuffle } from "lucide-react";
 import { useSettings } from "../contexts/SettingsContext";
 import { useIsMobile } from "../hooks/use-mobile";
 import { cocktails } from "../data/cocktails";
@@ -41,13 +42,11 @@ const SurpriseMeModal = ({ isOpen, onClose, onSelectAll, onSelectAvailable }) =>
 
 const Header = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const { themeMode } = useSettings();
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [isSurpriseModalOpen, setIsSurpriseModalOpen] = useState(false);
-  const isBartenderModeActive = location.pathname === '/bartender';
 
   const barIngredients = ingredients.filter((ing) => ing.isInInventory);
   const cocktailsICanMake = cocktails.filter((cocktail) => {
@@ -98,7 +97,6 @@ const Header = () => {
     { name: "My Bar", path: "/bar" },
     { name: "Favorites", path: "/favorites" },
     { name: "Settings", path: "/settings" },
-    { name: "Bartender Mode", path: "/bartender", icon: Wine },
   ];
 
   return (
@@ -121,72 +119,56 @@ const Header = () => {
                 Master
               </span>
             </Link>
-
-            <Link
-              to={isBartenderModeActive ? "/" : "/bartender"}
-              className={`flex items-center text-sm font-medium px-4 py-2 border rounded-md transition-colors ${isBartenderModeActive 
-                ? 'bg-mixology-burgundy text-white border-mixology-burgundy'
-                : 'border-mixology-burgundy hover:bg-mixology-burgundy hover:text-white dark:text-white dark:hover:text-white dark:border-mixology-burgundy dark:hover:bg-mixology-burgundy'}`}
-            >
-              <Wine size={16} className="mr-1" />
-              {isBartenderModeActive ? 'Exit Bartender' : 'Bartender Mode'}
-            </Link>
           </div>
 
           <div className="flex items-center space-x-4">
-            {!isBartenderModeActive && (
-              <div className="hidden md:flex space-x-6 items-center">
-                {navLinks.filter(link => link.path !== '/bartender').map((link) => (
-                  <Link
-                    key={link.name}
-                    to={link.path}
-                    className={`text-sm font-medium transition-colors hover:text-mixology-burgundy ${location.pathname === link.path
-                      ? "text-mixology-burgundy"
-                      : "text-gray-700 dark:text-gray-300"
-                    }`}
-                  >
-                    {link.name}
-                  </Link>
-                ))}
+            <div className="hidden md:flex space-x-6 items-center">
+              {navLinks.map((link) => (
                 <Link
-                  to="/login"
-                  className="text-sm font-medium px-4 py-2 border border-mixology-burgundy rounded-md hover:bg-mixology-burgundy hover:text-white transition-colors dark:text-white dark:hover:text-white dark:border-mixology-burgundy dark:hover:bg-mixology-burgundy"
+                  key={link.name}
+                  to={link.path}
+                  className={`text-sm font-medium transition-colors hover:text-mixology-burgundy ${location.pathname === link.path
+                    ? "text-mixology-burgundy"
+                    : "text-gray-700 dark:text-gray-300"
+                  }`}
                 >
-                  Sign In
+                  {link.name}
                 </Link>
-              </div>
-            )}
-
-            {isBartenderModeActive && (
-              <button
-                onClick={() => setIsSurpriseModalOpen(true)}
-                className="flex items-center text-sm font-medium px-4 py-2 border border-mixology-purple rounded-md bg-mixology-purple text-white hover:bg-mixology-purple/90 transition-colors dark:border-mixology-purple dark:bg-mixology-purple dark:hover:bg-mixology-purple/90"
-                aria-label="Surprise Me"
+              ))}
+              <Link
+                to="/login"
+                className="text-sm font-medium px-4 py-2 border border-mixology-burgundy rounded-md hover:bg-mixology-burgundy hover:text-white transition-colors dark:text-white dark:hover:text-white dark:border-mixology-burgundy dark:hover:bg-mixology-burgundy"
               >
-                <Shuffle size={16} className="mr-1" />
-                Surprise Me
-              </button>
-            )}
+                Sign In
+              </Link>
+            </div>
 
-            {!isBartenderModeActive && (
-              <div className="md:hidden flex items-center">
-                <button
-                  onClick={toggleMobileMenu}
-                  className="p-2 text-gray-700 dark:text-gray-300"
-                  aria-label="Open mobile menu"
-                >
-                  {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-                </button>
-              </div>
-            )}
+            <button
+              onClick={() => setIsSurpriseModalOpen(true)}
+              className="flex items-center text-sm font-medium px-4 py-2 border border-mixology-purple rounded-md bg-mixology-purple text-white hover:bg-mixology-purple/90 transition-colors dark:border-mixology-purple dark:bg-mixology-purple dark:hover:bg-mixology-purple/90"
+              aria-label="Surprise Me"
+            >
+              <Shuffle size={16} className="mr-1" />
+              Surprise Me
+            </button>
+
+            <div className="md:hidden flex items-center">
+              <button
+                onClick={toggleMobileMenu}
+                className="p-2 text-gray-700 dark:text-gray-300"
+                aria-label="Open mobile menu"
+              >
+                {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      {!isBartenderModeActive && mobileMenuOpen && (
+      {mobileMenuOpen && (
         <div className="md:hidden bg-white dark:bg-mixology-dark border-t border-gray-100 dark:border-gray-800">
           <div className="container mx-auto px-4 py-2 space-y-1">
-            {navLinks.filter(link => link.path !== '/bartender').map((link) => (
+            {navLinks.map((link) => (
               <Link
                 key={link.name}
                 to={link.path}
@@ -196,7 +178,6 @@ const Header = () => {
                 }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
-                {link.icon && <link.icon size={16} className="mr-2" />} 
                 {link.name}
               </Link>
             ))}

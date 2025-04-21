@@ -14,7 +14,6 @@ import Settings from "./pages/Settings";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
-import BartenderMode from "./pages/BartenderMode";
 import CocktailDetail from "./pages/CocktailDetail";
 
 // Settings Pages
@@ -59,10 +58,11 @@ const App = () => {
                       <Route path="/settings/contact" element={<ContactUs />} />
                       <Route path="/login" element={<Login />} />
                       <Route path="/register" element={<Register />} />
-                      <Route path="/bartender" element={<BartenderMode />} />
                       <Route path="/cocktail/:id" element={<CocktailDetail />} />
                       {/* Linked Accounts route is removed */}
                       <Route path="/settings/linked-accounts" element={<Navigate to="/settings" replace />} />
+                      {/* Redirect any attempts to access the removed bartender route */}
+                      <Route path="/bartender" element={<Navigate to="/" replace />} />
                       <Route path="*" element={<NotFound />} />
                     </Routes>
                   </main>
