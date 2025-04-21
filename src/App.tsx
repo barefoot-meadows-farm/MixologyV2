@@ -34,45 +34,47 @@ import { DeviceProvider } from "./contexts/DeviceContext";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <SettingsProvider>
-      <ShoppingProvider>
-        <DeviceProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <div className="min-h-screen flex flex-col">
-                <Header />
-                <main className="flex-1">
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/browse" element={<Browse />} />
-                    <Route path="/bar" element={<VirtualBar />} />
-                    <Route path="/favorites" element={<Favorites />} />
-                    <Route path="/settings" element={<Settings />} />
-                    <Route path="/settings/profile" element={<ProfileSettings />} />
-                    <Route path="/settings/security" element={<SecuritySettings />} />
-                    <Route path="/settings/delete-account" element={<DeleteAccount />} />
-                    <Route path="/settings/contact" element={<ContactUs />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/bartender" element={<BartenderMode />} />
-                    <Route path="/cocktail/:id" element={<CocktailDetail />} />
-                    {/* Linked Accounts route is removed */}
-                    <Route path="/settings/linked-accounts" element={<Navigate to="/settings" replace />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </main>
-                <MobileNavbar />
-              </div>
-            </BrowserRouter>
-          </TooltipProvider>
-        </DeviceProvider>
-      </ShoppingProvider>
-    </SettingsProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <SettingsProvider>
+        <ShoppingProvider>
+          <DeviceProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <div className="min-h-screen flex flex-col">
+                  <Header />
+                  <main className="flex-1">
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/browse" element={<Browse />} />
+                      <Route path="/bar" element={<VirtualBar />} />
+                      <Route path="/favorites" element={<Favorites />} />
+                      <Route path="/settings" element={<Settings />} />
+                      <Route path="/settings/profile" element={<ProfileSettings />} />
+                      <Route path="/settings/security" element={<SecuritySettings />} />
+                      <Route path="/settings/delete-account" element={<DeleteAccount />} />
+                      <Route path="/settings/contact" element={<ContactUs />} />
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/register" element={<Register />} />
+                      <Route path="/bartender" element={<BartenderMode />} />
+                      <Route path="/cocktail/:id" element={<CocktailDetail />} />
+                      {/* Linked Accounts route is removed */}
+                      <Route path="/settings/linked-accounts" element={<Navigate to="/settings" replace />} />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </main>
+                  <MobileNavbar />
+                </div>
+              </BrowserRouter>
+            </TooltipProvider>
+          </DeviceProvider>
+        </ShoppingProvider>
+      </SettingsProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;

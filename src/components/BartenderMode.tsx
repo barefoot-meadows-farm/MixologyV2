@@ -7,6 +7,7 @@ import { getIngredientName, formatIngredientForDisplay, ingredientNameIncludes }
 
 interface BartenderModeProps {
   onExit: () => void;
+  exitLabel?: string;
 }
 
 // Extend the Cocktail type with preparation steps
@@ -83,7 +84,7 @@ const enhancedCocktails: BartenderCocktail[] = cocktails.map(cocktail => {
   return cocktail;
 });
 
-const BartenderMode = ({ onExit }: BartenderModeProps) => {
+const BartenderMode = ({ onExit, exitLabel = "Exit" }: BartenderModeProps) => {
   const [selectedCocktail, setSelectedCocktail] = useState<BartenderCocktail | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
   const [viewMode, setViewMode] = useState<'selection' | 'preparation'>('selection');
@@ -176,10 +177,8 @@ const BartenderMode = ({ onExit }: BartenderModeProps) => {
     }
   };
 
-  const displayIngredient = (ingredient: string) => {
-    // In a real app, we would parse the ingredient string to extract the quantity and unit
-    // For this demo, we'll just return the ingredient as is
-    return ingredient;
+  const displayIngredient = (ingredient: string | { name: string; amount: string }) => {
+    return formatIngredientForDisplay(ingredient);
   };
 
   // Get cached recently viewed cocktails
@@ -202,11 +201,11 @@ const BartenderMode = ({ onExit }: BartenderModeProps) => {
         <button 
           onClick={onExit}
           className="touch-target p-2 text-white"
-          aria-label="Exit Bartender Mode"
+          aria-label={`Exit ${exitLabel}`}
         >
           <X size={24} />
         </button>
-        <h1 className="text-xl font-serif text-white font-bold">Bartender Mode</h1>
+        <h1 className="text-xl font-serif text-white font-bold">{exitLabel}</h1>
         <div className="w-10"></div> {/* Spacer for centering */}
       </header>
 
