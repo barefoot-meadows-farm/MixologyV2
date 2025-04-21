@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, User, Mail, Phone, AtSign } from 'lucide-react';
+import { ChevronLeft, User, Mail, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
@@ -16,14 +16,10 @@ const profileFormSchema = z.object({
   fullName: z.string().min(2, {
     message: "Full name must be at least 2 characters.",
   }),
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
   email: z.string().email({
     message: "Please enter a valid email address.",
   }),
   phoneNumber: z.string().optional(),
-  bio: z.string().max(160).optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
@@ -39,10 +35,8 @@ export default function ProfileSettings() {
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
       fullName: "",
-      username: "",
       email: "",
       phoneNumber: "",
-      bio: "",
     },
   });
 
@@ -61,10 +55,8 @@ export default function ProfileSettings() {
         // For now, we'll just use the session data as an example
         const userData = {
           fullName: session.user.user_metadata?.full_name || "",
-          username: session.user.user_metadata?.username || "",
           email: session.user.email || "",
           phoneNumber: session.user.phone || "",
-          bio: session.user.user_metadata?.bio || "",
         };
         
         setUserData(userData);
@@ -92,8 +84,6 @@ export default function ProfileSettings() {
         email: data.email,
         data: {
           full_name: data.fullName,
-          username: data.username,
-          bio: data.bio,
         }
       });
       
@@ -167,23 +157,6 @@ export default function ProfileSettings() {
               
               <FormField
                 control={form.control}
-                name="username"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Username</FormLabel>
-                    <FormControl>
-                      <div className="flex items-center">
-                        <AtSign className="mr-2 h-4 w-4 text-gray-500" />
-                        <Input placeholder="Enter your username" {...field} />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem>
@@ -210,20 +183,6 @@ export default function ProfileSettings() {
                         <Phone className="mr-2 h-4 w-4 text-gray-500" />
                         <Input placeholder="Enter your phone number" type="tel" {...field} />
                       </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="bio"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Bio (optional)</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Tell us a little about yourself" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
