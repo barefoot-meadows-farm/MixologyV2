@@ -10,7 +10,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Form,
   FormControl,
   FormField,
   FormItem,
@@ -61,144 +60,134 @@ const RecipeCategorization = ({ register, control }: Props) => {
       <h3 className="text-lg font-medium text-mixology-burgundy dark:text-mixology-cream">Categorization</h3>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Form control={control}>
-          <FormField
-            control={control}
-            name="spiritBase"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Spirit Base</FormLabel>
-                <Select 
-                  onValueChange={field.onChange} 
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select base spirit" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {spiritBaseOptions.map(option => (
-                      <SelectItem key={option} value={option}>{option}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            )}
-          />
-        </Form>
+        <FormField
+          control={control}
+          name="spiritBase"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Spirit Base</FormLabel>
+              <Select 
+                onValueChange={field.onChange} 
+                defaultValue={field.value}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select base spirit" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {spiritBaseOptions.map(option => (
+                    <SelectItem key={option} value={option}>{option}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormItem>
+          )}
+        />
 
-        <Form control={control}>
-          <FormField
-            control={control}
-            name="method"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Preparation Method</FormLabel>
-                <Select 
-                  onValueChange={field.onChange} 
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select method" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {methodOptions.map(option => (
-                      <SelectItem key={option} value={option}>{option}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            )}
-          />
-        </Form>
+        <FormField
+          control={control}
+          name="method"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Preparation Method</FormLabel>
+              <Select 
+                onValueChange={field.onChange} 
+                defaultValue={field.value}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select method" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {methodOptions.map(option => (
+                    <SelectItem key={option} value={option}>{option}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormItem>
+          )}
+        />
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Form control={control}>
-          <FormField
-            control={control}
-            name="glassType"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Glass Type</FormLabel>
-                <Select 
-                  onValueChange={field.onChange} 
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select glass type" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {glassTypeOptions.map(option => (
-                      <SelectItem key={option} value={option}>{option}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            )}
-          />
-        </Form>
+        <FormField
+          control={control}
+          name="glassType"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Glass Type</FormLabel>
+              <Select 
+                onValueChange={field.onChange} 
+                defaultValue={field.value}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select glass type" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {glassTypeOptions.map(option => (
+                    <SelectItem key={option} value={option}>{option}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormItem>
+          )}
+        />
 
-        <Form control={control}>
-          <FormField
-            control={control}
-            name="iceType"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Ice Type</FormLabel>
-                <Select 
-                  onValueChange={field.onChange} 
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select ice type" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {iceTypeOptions.map(option => (
-                      <SelectItem key={option} value={option}>{option}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            )}
-          />
-        </Form>
+        <FormField
+          control={control}
+          name="iceType"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Ice Type</FormLabel>
+              <Select 
+                onValueChange={field.onChange} 
+                defaultValue={field.value}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select ice type" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {iceTypeOptions.map(option => (
+                    <SelectItem key={option} value={option}>{option}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormItem>
+          )}
+        />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Form control={control}>
-          <FormField
-            control={control}
-            name="style"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Style (optional)</FormLabel>
-                <Select 
-                  onValueChange={field.onChange} 
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select style" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {styleOptions.map(option => (
-                      <SelectItem key={option} value={option}>{option}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            )}
-          />
-        </Form>
+        <FormField
+          control={control}
+          name="style"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Style (optional)</FormLabel>
+              <Select 
+                onValueChange={field.onChange} 
+                defaultValue={field.value}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select style" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {styleOptions.map(option => (
+                    <SelectItem key={option} value={option}>{option}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormItem>
+          )}
+        />
 
         <div>
           <Label htmlFor="garnish">Garnish (optional)</Label>
