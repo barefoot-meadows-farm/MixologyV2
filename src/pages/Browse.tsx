@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Search, Shuffle } from "lucide-react"; 
 import { useNavigate } from "react-router-dom"; 
@@ -6,19 +7,22 @@ import CocktailCard from "../components/CocktailCard";
 import FilterBar from "../components/FilterBar";
 import { fetchCocktails } from "../data/cocktails";
 import { ingredientNameIncludes } from "../lib/ingredientUtils";
-
-interface Filters {
-  spirit: string | undefined;
-  difficulty: string | undefined;
-  canMake: boolean | undefined;
-}
+import { CocktailFilters } from "@/types/filters";
 
 const Browse = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
-  const [filters, setFilters] = useState<Filters>({
+  const [filters, setFilters] = useState<CocktailFilters>({
     spirit: undefined,
-    difficulty: undefined,
+    secondarySpirits: [],
+    style: undefined,
+    method: undefined,
+    glassType: undefined,
+    garnish: undefined,
+    flavorProfiles: [],
+    strength: undefined,
+    color: undefined,
+    servingTemperature: undefined,
     canMake: false,
   });
 
@@ -27,7 +31,7 @@ const Browse = () => {
     queryFn: fetchCocktails
   });
 
-  const handleFilterChange = (newFilters: Filters) => {
+  const handleFilterChange = (newFilters: CocktailFilters) => {
     setFilters(newFilters);
   };
 
@@ -59,11 +63,57 @@ const Browse = () => {
       return false;
     }
 
-    // Difficulty filter
+    // Secondary Spirits filter
     if (
-      filters.difficulty &&
-      cocktail.difficulty !== filters.difficulty.toLowerCase()
+      filters.secondarySpirits &&
+      filters.secondarySpirits.length > 0 &&
+      !cocktail.ingredients.some((ing) =>
+        filters.secondarySpirits!.some(spirit => 
+          ingredientNameIncludes(ing, spirit)
+        )
+      )
     ) {
+      return false;
+    }
+
+    // Style filter
+    if (filters.style && cocktail.style !== filters.style) {
+      return false;
+    }
+
+    // Method filter
+    if (filters.method && cocktail.method !== filters.method) {
+      return false;
+    }
+
+    // Glass Type filter
+    if (filters.glassType && cocktail.glass_type !== filters.glassType) {
+      return false;
+    }
+
+    // Flavor Profiles filter
+    if (
+      filters.flavorProfiles &&
+      filters.flavorProfiles.length > 0 &&
+      !filters.flavorProfiles.some(flavor => 
+        cocktail.flavors?.includes(flavor)
+      )
+    ) {
+      return false;
+    }
+
+    // Strength filter
+    if (filters.strength && cocktail.strength !== filters.strength) {
+      return false;
+    }
+
+    // Color filter
+    if (filters.color && cocktail.color !== filters.color) {
+      return false;
+    }
+
+    // Serving Temperature filter
+    if (filters.servingTemperature && cocktail.serving_temperature !== filters.servingTemperature) {
       return false;
     }
 
