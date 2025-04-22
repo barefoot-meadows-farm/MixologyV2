@@ -16,7 +16,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { CocktailFilters, Season, Occasion, TimeOfDay, SugarLevel } from "@/types/filters";
+import { 
+  CocktailFilters,
+  CocktailStyle, 
+  CocktailMethod, 
+  GlassType, 
+  Strength, 
+  ServingTemperature, 
+  FlavorProfile, 
+  Color,
+  Season, 
+  Occasion, 
+  TimeOfDay, 
+  SugarLevel 
+} from "@/types/filters";
 
 const styles = ['Classic', 'Contemporary', 'Tiki', 'Tropical', 'Modern', 'Aperitif'];
 const methods = ['Shaken', 'Stirred', 'Built', 'Blended', 'Muddled'];

@@ -1,6 +1,18 @@
 import { supabase } from "@/integrations/supabase/client";
 import { Cocktail } from "../components/CocktailCard";
-import { CocktailStyle, CocktailMethod, GlassType, Strength, ServingTemperature, FlavorProfile, Color } from "@/types/filters";
+import { 
+  CocktailStyle, 
+  CocktailMethod, 
+  GlassType, 
+  Strength, 
+  ServingTemperature, 
+  FlavorProfile, 
+  Color,
+  Season,
+  Occasion,
+  TimeOfDay,
+  SugarLevel 
+} from "@/types/filters";
 
 export const cocktails: Cocktail[] = [];
 export const featuredCocktails: Cocktail[] = [];

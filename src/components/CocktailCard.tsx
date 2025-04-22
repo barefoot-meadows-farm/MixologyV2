@@ -1,6 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FlavorProfile, CocktailStyle, CocktailMethod, GlassType, Strength, ServingTemperature, Color, Season, Occasion, TimeOfDay, SugarLevel } from '@/types/filters';
+import { 
+  FlavorProfile, 
+  CocktailStyle, 
+  CocktailMethod, 
+  GlassType, 
+  Strength, 
+  ServingTemperature, 
+  Color, 
+  Season, 
+  Occasion, 
+  TimeOfDay, 
+  SugarLevel 
+} from '@/types/filters';
 
 export interface Cocktail {
   id: string;
