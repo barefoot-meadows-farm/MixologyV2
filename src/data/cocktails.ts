@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { Cocktail } from "../components/CocktailCard";
 
@@ -42,7 +41,14 @@ export async function fetchCocktails(): Promise<Cocktail[]> {
       name: ri.ingredient?.name || ''
     })),
     preparation: cocktail.instructions?.split('\n') || [],
+    style: cocktail.style,
+    method: cocktail.method,
+    glass_type: cocktail.glass_type,
+    garnish: cocktail.garnish,
     flavors: cocktail.flavor_profiles.map((fp: any) => fp.flavor),
+    strength: cocktail.strength,
+    color: cocktail.color,
+    serving_temperature: cocktail.serving_temperature,
     canMake: false, // This will be calculated based on user's inventory
     rating: cocktail.average_rating || 4.5,
     prepTime: '5 min'
@@ -89,7 +95,14 @@ export async function fetchFeaturedCocktails(): Promise<Cocktail[]> {
       name: ri.ingredient?.name || ''
     })),
     preparation: cocktail.instructions?.split('\n') || [],
+    style: cocktail.style,
+    method: cocktail.method,
+    glass_type: cocktail.glass_type,
+    garnish: cocktail.garnish,
     flavors: cocktail.flavor_profiles.map((fp: any) => fp.flavor),
+    strength: cocktail.strength,
+    color: cocktail.color,
+    serving_temperature: cocktail.serving_temperature,
     canMake: false,
     rating: cocktail.average_rating || 4.5,
     prepTime: '5 min'
@@ -134,7 +147,14 @@ export async function fetchPopularCocktails(): Promise<Cocktail[]> {
       name: ri.ingredient?.name || ''
     })),
     preparation: cocktail.instructions?.split('\n') || [],
+    style: cocktail.style,
+    method: cocktail.method,
+    glass_type: cocktail.glass_type,
+    garnish: cocktail.garnish,
     flavors: cocktail.flavor_profiles.map((fp: any) => fp.flavor),
+    strength: cocktail.strength,
+    color: cocktail.color,
+    serving_temperature: cocktail.serving_temperature,
     canMake: false,
     rating: cocktail.average_rating || 4.5,
     prepTime: '5 min'

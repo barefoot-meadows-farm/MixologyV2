@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { FlavorProfile, CocktailStyle, CocktailMethod, GlassType, Strength, ServingTemperature, Color } from '@/types/filters';
 
 export interface Cocktail {
   id: string;
@@ -16,6 +17,14 @@ export interface Cocktail {
   isPopular?: boolean;
   isFeatured?: boolean;
   canMake?: boolean;
+  style?: CocktailStyle;
+  method?: CocktailMethod;
+  glass_type?: GlassType;
+  flavors?: FlavorProfile[];
+  strength?: Strength;
+  color?: Color;
+  serving_temperature?: ServingTemperature;
+  garnish?: string;
 }
 
 interface CocktailCardProps {

@@ -18,7 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { CocktailFilters } from "@/types/filters";
+import { CocktailFilters, FlavorProfile, CocktailStyle, CocktailMethod, GlassType, Strength, ServingTemperature, Color } from "@/types/filters";
 
 const styles = ['Classic', 'Contemporary', 'Tiki', 'Tropical', 'Modern', 'Aperitif'];
 const methods = ['Shaken', 'Stirred', 'Built', 'Blended', 'Muddled'];
@@ -58,11 +58,11 @@ const FilterBar = ({ onFilterChange }: FilterBarProps) => {
     onFilterChange(newFilters);
   };
 
-  const handleFlavorToggle = (flavor: string) => {
+  const handleFlavorToggle = (flavor: FlavorProfile) => {
     const currentFlavors = filters.flavorProfiles || [];
     const newFlavors = currentFlavors.includes(flavor)
       ? currentFlavors.filter(f => f !== flavor)
-      : [...currentFlavors, flavor as any];
+      : [...currentFlavors, flavor];
     handleFilterChange('flavorProfiles', newFlavors);
   };
 
@@ -140,7 +140,7 @@ const FilterBar = ({ onFilterChange }: FilterBarProps) => {
               <Label>Style</Label>
               <Select
                 value={filters.style}
-                onValueChange={(value) => handleFilterChange('style', value as any)}
+                onValueChange={(value) => handleFilterChange('style', value as CocktailStyle)}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select style" />
@@ -159,7 +159,7 @@ const FilterBar = ({ onFilterChange }: FilterBarProps) => {
               <Label>Method</Label>
               <Select
                 value={filters.method}
-                onValueChange={(value) => handleFilterChange('method', value as any)}
+                onValueChange={(value) => handleFilterChange('method', value as CocktailMethod)}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select method" />
@@ -178,7 +178,7 @@ const FilterBar = ({ onFilterChange }: FilterBarProps) => {
               <Label>Glass Type</Label>
               <Select
                 value={filters.glassType}
-                onValueChange={(value) => handleFilterChange('glassType', value as any)}
+                onValueChange={(value) => handleFilterChange('glassType', value as GlassType)}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select glass" />
@@ -197,7 +197,7 @@ const FilterBar = ({ onFilterChange }: FilterBarProps) => {
               <Label>Strength</Label>
               <Select
                 value={filters.strength}
-                onValueChange={(value) => handleFilterChange('strength', value as any)}
+                onValueChange={(value) => handleFilterChange('strength', value as Strength)}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select strength" />
@@ -216,7 +216,7 @@ const FilterBar = ({ onFilterChange }: FilterBarProps) => {
               <Label>Serving Temperature</Label>
               <Select
                 value={filters.servingTemperature}
-                onValueChange={(value) => handleFilterChange('servingTemperature', value as any)}
+                onValueChange={(value) => handleFilterChange('servingTemperature', value as ServingTemperature)}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select temperature" />
@@ -235,7 +235,7 @@ const FilterBar = ({ onFilterChange }: FilterBarProps) => {
               <Label>Color</Label>
               <Select
                 value={filters.color}
-                onValueChange={(value) => handleFilterChange('color', value as any)}
+                onValueChange={(value) => handleFilterChange('color', value as Color)}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select color" />
@@ -264,10 +264,10 @@ const FilterBar = ({ onFilterChange }: FilterBarProps) => {
                   {flavors.map((flavor) => (
                     <DropdownMenuCheckboxItem
                       key={flavor}
-                      checked={filters.flavorProfiles?.includes(flavor as any)}
+                      checked={filters.flavorProfiles?.includes(flavor as FlavorProfile)}
                       onSelect={(e) => {
                         e.preventDefault();
-                        handleFlavorToggle(flavor);
+                        handleFlavorToggle(flavor as FlavorProfile);
                       }}
                     >
                       {flavor}
