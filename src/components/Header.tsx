@@ -1,104 +1,80 @@
 
-import React, { useState, useEffect } from 'react';
-import { Menu, X } from "lucide-react";
-import { useSettings } from "../contexts/SettingsContext";
-import { useIsMobile } from "../hooks/use-mobile";
-import { cocktails } from "../data/cocktails";
-import { ingredients } from "../data/ingredients";
-import SurpriseMeModal from './modals/SurpriseMeModal';
-import NavLinks from './NavLinks';
-import SurpriseMeButton from './SurpriseMeButton';
-import { useLocation, useNavigate } from "react-router-dom";
+import { Search, Menu } from "lucide-react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Header = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { themeMode } = useSettings();
-  const isMobile = useIsMobile();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [isSurpriseModalOpen, setIsSurpriseModalOpen] = useState(false);
-
-  // These aren't actually used since cocktails/ingredients are empty, but kept for consistency.
-  const barIngredients = [];
-  const cocktailsICanMake = [];
-
-  const handleSurpriseAll = () => {
-    // No cocktails to navigate to, so do nothing.
-    setIsSurpriseModalOpen(false);
-    setMobileMenuOpen(false);
-  };
-
-  const handleSurpriseAvailable = () => {
-    // No cocktails to navigate to, so do nothing.
-    setIsSurpriseModalOpen(false); 
-    setMobileMenuOpen(false);
-  };
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 10);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
-  const closeMobileMenu = () => setMobileMenuOpen(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header
-      className={`sticky top-0 z-50 w-full transition-all duration-200 ${
-        scrolled
-          ? "bg-white shadow-md dark:bg-mixology-dark dark:shadow-none dark:border-b dark:border-gray-800"
-          : "bg-white/80 backdrop-blur-md dark:bg-mixology-dark/90"
-      }`}
-    >
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo + Surprise Me - now on right */}
-          <div className="flex items-center space-x-4">
-            <a
-              href="/"
-              className="flex items-center space-x-2 text-mixology-purple dark:text-mixology-cream ml-2"
-            >
-              <span className="text-2xl font-serif font-medium">Mixology</span>
-              <span className="text-2xl font-serif text-mixology-burgundy dark:text-mixology-burgundy">
-                Master
-              </span>
-            </a>
+    <header className="bg-white shadow-sm sticky top-0 z-40">
+      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+        <div className="flex items-center">
+          <button 
+            className="touch-target mr-2 md:hidden" 
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            <Menu size={24} className="text-mixology-purple" />
+          </button>
+          <Link to="/" className="flex items-center">
+            <h1 className="text-xl font-serif font-bold text-mixology-burgundy">
+              Mixology<span className="text-mixology-purple">Master</span>
+            </h1>
+          </Link>
+        </div>
+        
+        <div className="flex items-center space-x-4">
+          <button 
+            className="touch-target" 
+            aria-label="Search"
+          >
+            <Search size={24} className="text-mixology-purple" />
+          </button>
+          
+          <div className="hidden md:flex space-x-6">
+            <Link to="/" className="font-medium hover:text-mixology-burgundy">Home</Link>
+            <Link to="/browse" className="font-medium hover:text-mixology-burgundy">Browse</Link>
+            <Link to="/bar" className="font-medium hover:text-mixology-burgundy">My Bar</Link>
+            <Link to="/favorites" className="font-medium hover:text-mixology-burgundy">Favorites</Link>
           </div>
-          <div className="flex items-center space-x-4">
-            {/* Move Surprise Me Button here */}
-            <SurpriseMeButton onClick={() => setIsSurpriseModalOpen(true)} />
-            <div className="hidden md:flex space-x-6 items-center">
-              <NavLinks />
-            </div>
-            <div className="md:hidden flex items-center">
-              <button
-                onClick={toggleMobileMenu}
-                className="p-2 text-gray-700 dark:text-gray-300"
-                aria-label="Open mobile menu"
-              >
-                {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
-            </div>
-          </div>
+          
+          <Link 
+            to="/login" 
+            className="hidden md:inline-flex px-4 py-2 text-sm font-medium text-white bg-mixology-burgundy rounded-md hover:bg-mixology-burgundy/90 transition-colors"
+          >
+            Sign In
+          </Link>
         </div>
       </div>
-
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-white dark:bg-mixology-dark border-t border-gray-100 dark:border-gray-800">
-          <div className="container mx-auto px-4 py-2 space-y-1">
-            <NavLinks isMobile onMobileNav={closeMobileMenu} />
-          </div>
+      
+      {isMenuOpen && (
+        <div className="absolute top-16 left-0 right-0 bg-white border-b border-gray-200 shadow-md md:hidden animate-fade-in">
+          <nav className="container mx-auto px-4 py-4 flex flex-col space-y-4">
+            <Link to="/" className="py-2 font-medium" onClick={() => setIsMenuOpen(false)}>Home</Link>
+            <Link to="/browse" className="py-2 font-medium" onClick={() => setIsMenuOpen(false)}>Browse</Link>
+            <Link to="/bar" className="py-2 font-medium" onClick={() => setIsMenuOpen(false)}>My Bar</Link>
+            <Link to="/favorites" className="py-2 font-medium" onClick={() => setIsMenuOpen(false)}>Favorites</Link>
+            <Link to="/account" className="py-2 font-medium" onClick={() => setIsMenuOpen(false)}>Account</Link>
+            <div className="border-t border-gray-200 pt-4 flex justify-between">
+              <Link 
+                to="/login" 
+                className="px-4 py-2 text-sm font-medium text-white bg-mixology-burgundy rounded-md"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Sign In
+              </Link>
+              <Link 
+                to="/register" 
+                className="px-4 py-2 text-sm font-medium text-mixology-burgundy border border-mixology-burgundy rounded-md"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Register
+              </Link>
+            </div>
+          </nav>
         </div>
       )}
-
-      <SurpriseMeModal 
-        isOpen={isSurpriseModalOpen}
-        onClose={() => setIsSurpriseModalOpen(false)}
-        onSelectAll={handleSurpriseAll}
-        onSelectAvailable={handleSurpriseAvailable}
-      />
     </header>
   );
 };

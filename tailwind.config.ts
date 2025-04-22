@@ -54,20 +54,14 @@ export default {
 					foreground: 'hsl(var(--card-foreground))'
 				},
 				mixology: {
-					purple: 'hsl(var(--mixology-purple))',
-					burgundy: 'hsl(var(--mixology-burgundy))',
-					navy: 'hsl(var(--mixology-navy))',
-					gold: 'hsl(var(--mixology-gold))',
-					cream: 'hsl(var(--mixology-cream))',
-					light: 'hsl(var(--mixology-light))',
-					dark: 'hsl(var(--mixology-dark))'
-				},
-				'inventory-green': '#2ECC71',
-				'missing-red': '#E74C3C',
-				// New colors for Bartender Mode
-				'bartender-black': '#000000e6',
-				'bartender-white': '#FFFFFF',
-				'bartender-accent': '#ea384c'
+					purple: '#4A235A',
+					burgundy: '#800020',
+					navy: '#2C3E50',
+					gold: '#D4AF37',
+					cream: '#F5F5F0',
+					light: '#E8E8E8',
+					dark: '#1A1A1A'
+				}
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

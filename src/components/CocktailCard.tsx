@@ -1,92 +1,66 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { 
-  FlavorProfile, 
-  CocktailStyle, 
-  CocktailMethod, 
-  GlassType, 
-  Strength, 
-  ServingTemperature, 
-  Color, 
-  Season, 
-  Occasion, 
-  TimeOfDay, 
-  SugarLevel 
-} from '@/types/filters';
+
+import { BookmarkIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export interface Cocktail {
   id: string;
   name: string;
-  description: string;
   image: string;
-  ingredients: Array<string | {name: string, amount: string}>;
-  preparation?: string | string[];
-  difficulty?: string;
-  prepTime?: string;
-  rating?: string | number;
-  category?: string;
-  isPopular?: boolean;
-  isFeatured?: boolean;
+  description: string;
+  ingredients: string[];
+  difficulty: "easy" | "medium" | "hard";
   canMake?: boolean;
-  style?: CocktailStyle;
-  method?: CocktailMethod;
-  glass_type?: GlassType;
-  flavors?: FlavorProfile[];
-  strength?: Strength;
-  color?: Color;
-  serving_temperature?: ServingTemperature;
-  season?: Season;
-  occasion?: Occasion;
-  time_of_day?: TimeOfDay;
-  contains_eggs?: boolean;
-  contains_dairy?: boolean;
-  contains_nuts?: boolean;
-  vegan?: boolean;
-  gluten_free?: boolean;
-  sugar_level?: SugarLevel;
-  garnish?: string;
 }
 
 interface CocktailCardProps {
   cocktail: Cocktail;
-  compact?: boolean;
-  size?: string;
+  size?: "small" | "medium" | "large";
 }
 
-const CocktailCard: React.FC<CocktailCardProps> = ({ cocktail, compact = false, size = 'medium' }) => {
-  // Make sure we're not rendering null or undefined data
-  if (!cocktail) {
-    return <div className="p-4 border rounded-lg shadow-sm bg-white dark:bg-gray-800">
-      <p className="text-gray-500 dark:text-gray-400">Cocktail data is missing</p>
-    </div>;
-  }
+const CocktailCard = ({ cocktail, size = "medium" }: CocktailCardProps) => {
+  const { id, name, image, description, difficulty, canMake } = cocktail;
+  
+  const sizeClasses = {
+    small: "w-40 h-56",
+    medium: "w-full sm:w-64 h-72",
+    large: "w-full h-96 md:h-80",
+  };
+  
+  const imageClasses = {
+    small: "h-28",
+    medium: "h-40",
+    large: "h-60 md:h-48",
+  };
 
   return (
-    <Link to={`/cocktail/${cocktail.id}`} className="block">
-      <div className="p-4 border rounded-lg shadow-sm hover:shadow-md transition-shadow bg-white dark:bg-gray-800">
-        <div className="aspect-w-1 aspect-h-1 overflow-hidden rounded-md mb-3">
-          <img 
-            src={cocktail.image || '/placeholder.svg'} 
-            alt={cocktail.name} 
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = '/placeholder.svg';
-            }}
-          />
-        </div>
-        <h3 className="font-medium text-lg mb-1 dark:text-white">{cocktail.name || 'Unnamed Cocktail'}</h3>
-        <p className="text-sm text-gray-500 line-clamp-2 dark:text-gray-400">
-          {cocktail.description || 'No description available'}
-        </p>
-        {!compact && (
-          <div className="mt-2 flex items-center text-xs text-gray-500 dark:text-gray-400">
-            <span className="mr-2">{cocktail.difficulty || 'Easy'}</span>
-            <span className="mr-2">•</span>
-            <span>{cocktail.prepTime || '5 min'}</span>
+    <div className={`cocktail-card ${sizeClasses[size]}`}>
+      <div className="relative">
+        <img 
+          src={image} 
+          alt={name} 
+          className={`w-full ${imageClasses[size]} object-cover`} 
+        />
+        <div className="gradient-overlay"></div>
+        <button className="absolute top-2 right-2 touch-target bg-white/20 rounded-full p-1.5">
+          <BookmarkIcon size={18} className="text-white" />
+        </button>
+        {canMake && (
+          <div className="absolute top-2 left-2 bg-green-500 text-white text-xs font-medium px-2 py-1 rounded-full">
+            Can Make
           </div>
         )}
+        <div className="absolute bottom-2 left-2 bg-mixology-purple/80 text-white text-xs px-2 py-1 rounded-full">
+          {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+        </div>
       </div>
-    </Link>
+      
+      <div className="p-3">
+        <Link to={`/cocktail/${id}`}>
+          <h3 className="font-serif font-medium text-lg text-mixology-purple mb-1 line-clamp-1">{name}</h3>
+        </Link>
+        <p className="text-sm text-gray-600 line-clamp-2">{description}</p>
+      </div>
+    </div>
   );
 };
 
