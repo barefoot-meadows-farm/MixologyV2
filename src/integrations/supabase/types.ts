@@ -75,11 +75,11 @@ export type Database = {
           ice_type: string | null
           id: string
           image_url: string | null
-          instructions: string
+          instructions: string | null
           last_updated: string | null
           make_count: number | null
           method: string | null
-          name: string
+          name: string | null
           occasion: string | null
           origin: string | null
           pack_id: string | null
@@ -88,7 +88,7 @@ export type Database = {
           save_count: number | null
           season: string | null
           serving_temperature: string | null
-          spirit_base: string
+          spirit_base: string | null
           stories: string | null
           strength: string | null
           style: string | null
@@ -116,11 +116,11 @@ export type Database = {
           ice_type?: string | null
           id?: string
           image_url?: string | null
-          instructions: string
+          instructions?: string | null
           last_updated?: string | null
           make_count?: number | null
           method?: string | null
-          name: string
+          name?: string | null
           occasion?: string | null
           origin?: string | null
           pack_id?: string | null
@@ -129,7 +129,7 @@ export type Database = {
           save_count?: number | null
           season?: string | null
           serving_temperature?: string | null
-          spirit_base: string
+          spirit_base?: string | null
           stories?: string | null
           strength?: string | null
           style?: string | null
@@ -157,11 +157,11 @@ export type Database = {
           ice_type?: string | null
           id?: string
           image_url?: string | null
-          instructions?: string
+          instructions?: string | null
           last_updated?: string | null
           make_count?: number | null
           method?: string | null
-          name?: string
+          name?: string | null
           occasion?: string | null
           origin?: string | null
           pack_id?: string | null
@@ -170,7 +170,7 @@ export type Database = {
           save_count?: number | null
           season?: string | null
           serving_temperature?: string | null
-          spirit_base?: string
+          spirit_base?: string | null
           stories?: string | null
           strength?: string | null
           style?: string | null
@@ -217,17 +217,17 @@ export type Database = {
       flavor_profiles: {
         Row: {
           cocktail_id: string | null
-          flavor: string
+          flavor: string | null
           id: string
         }
         Insert: {
           cocktail_id?: string | null
-          flavor: string
+          flavor?: string | null
           id?: string
         }
         Update: {
           cocktail_id?: string | null
-          flavor?: string
+          flavor?: string | null
           id?: string
         }
         Relationships: [
@@ -250,26 +250,26 @@ export type Database = {
       ingredients: {
         Row: {
           abv: number | null
-          category: string
+          category: string | null
           id: string
           is_common: boolean | null
-          name: string
+          name: string | null
           type: string | null
         }
         Insert: {
           abv?: number | null
-          category: string
+          category?: string | null
           id?: string
           is_common?: boolean | null
-          name: string
+          name?: string | null
           type?: string | null
         }
         Update: {
           abv?: number | null
-          category?: string
+          category?: string | null
           id?: string
           is_common?: boolean | null
-          name?: string
+          name?: string | null
           type?: string | null
         }
         Relationships: []
@@ -349,27 +349,27 @@ export type Database = {
       }
       required_ingredients: {
         Row: {
-          amount: string
+          amount: string | null
           cocktail_id: string | null
           id: string
           ingredient_id: string | null
-          order_index: number
+          order_index: number | null
           unit: string | null
         }
         Insert: {
-          amount: string
+          amount?: string | null
           cocktail_id?: string | null
           id?: string
           ingredient_id?: string | null
-          order_index: number
+          order_index?: number | null
           unit?: string | null
         }
         Update: {
-          amount?: string
+          amount?: string | null
           cocktail_id?: string | null
           id?: string
           ingredient_id?: string | null
-          order_index?: number
+          order_index?: number | null
           unit?: string | null
         }
         Relationships: [
@@ -400,17 +400,17 @@ export type Database = {
         Row: {
           cocktail_id: string | null
           id: string
-          spirit: string
+          spirit: string | null
         }
         Insert: {
           cocktail_id?: string | null
           id?: string
-          spirit: string
+          spirit?: string | null
         }
         Update: {
           cocktail_id?: string | null
           id?: string
-          spirit?: string
+          spirit?: string | null
         }
         Relationships: [
           {
@@ -432,17 +432,17 @@ export type Database = {
       special_equipment: {
         Row: {
           cocktail_id: string | null
-          equipment: string
+          equipment: string | null
           id: string
         }
         Insert: {
           cocktail_id?: string | null
-          equipment: string
+          equipment?: string | null
           id?: string
         }
         Update: {
           cocktail_id?: string | null
-          equipment?: string
+          equipment?: string | null
           id?: string
         }
         Relationships: [
@@ -468,33 +468,33 @@ export type Database = {
           description: string | null
           id: string
           image_url: string | null
-          ingredients: Json
-          instructions: string
-          name: string
+          ingredients: Json | null
+          instructions: string | null
+          name: string | null
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
           description?: string | null
           id?: string
           image_url?: string | null
-          ingredients: Json
-          instructions: string
-          name: string
+          ingredients?: Json | null
+          instructions?: string | null
+          name?: string | null
           updated_at?: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
           description?: string | null
           id?: string
           image_url?: string | null
-          ingredients?: Json
-          instructions?: string
-          name?: string
+          ingredients?: Json | null
+          instructions?: string | null
+          name?: string | null
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -508,25 +508,25 @@ export type Database = {
       }
       user_drink_history: {
         Row: {
-          created_at: string
+          created_at: string | null
           id: string
-          is_custom: boolean
+          is_custom: boolean | null
           recipe_id: string | null
-          user_id: string
+          user_id: string | null
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
           id?: string
-          is_custom?: boolean
+          is_custom?: boolean | null
           recipe_id?: string | null
-          user_id: string
+          user_id?: string | null
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
           id?: string
-          is_custom?: boolean
+          is_custom?: boolean | null
           recipe_id?: string | null
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -542,26 +542,26 @@ export type Database = {
         Row: {
           date_added: string | null
           id: string
-          ingredient_id: string
+          ingredient_id: string | null
           quantity: number | null
           unit: string | null
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           date_added?: string | null
           id?: string
-          ingredient_id: string
+          ingredient_id?: string | null
           quantity?: number | null
           unit?: string | null
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           date_added?: string | null
           id?: string
-          ingredient_id?: string
+          ingredient_id?: string | null
           quantity?: number | null
           unit?: string | null
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {

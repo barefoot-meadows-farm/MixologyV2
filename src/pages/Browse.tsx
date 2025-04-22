@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Search, Shuffle } from "lucide-react"; 
 import { useNavigate } from "react-router-dom"; 
-import CocktailCard, { Cocktail } from "../components/CocktailCard";
+import { useQuery } from "@tanstack/react-query";
+import CocktailCard from "../components/CocktailCard";
 import FilterBar from "../components/FilterBar";
-import { cocktails } from "../data/cocktails";
+import { fetchCocktails } from "../data/cocktails";
 import { ingredientNameIncludes } from "../lib/ingredientUtils";
 
 interface Filters {
@@ -19,6 +20,11 @@ const Browse = () => {
     spirit: undefined,
     difficulty: undefined,
     canMake: false,
+  });
+
+  const { data: cocktails = [], isLoading } = useQuery({
+    queryKey: ['cocktails'],
+    queryFn: fetchCocktails
   });
 
   const handleFilterChange = (newFilters: Filters) => {
@@ -68,6 +74,22 @@ const Browse = () => {
 
     return true;
   });
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 py-10">
+        <div className="animate-pulse space-y-4">
+          <div className="h-8 bg-gray-200 rounded w-1/4"></div>
+          <div className="h-12 bg-gray-200 rounded"></div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map((n) => (
+              <div key={n} className="h-64 bg-gray-200 rounded"></div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 pb-20 md:pb-10">
