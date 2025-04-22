@@ -1,5 +1,7 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { Cocktail } from "../components/CocktailCard";
+import { CocktailStyle, CocktailMethod, GlassType, Strength, ServingTemperature, FlavorProfile, Color } from "@/types/filters";
 
 export const cocktails: Cocktail[] = [];
 export const featuredCocktails: Cocktail[] = [];
@@ -41,14 +43,14 @@ export async function fetchCocktails(): Promise<Cocktail[]> {
       name: ri.ingredient?.name || ''
     })),
     preparation: cocktail.instructions?.split('\n') || [],
-    style: cocktail.style,
-    method: cocktail.method,
-    glass_type: cocktail.glass_type,
+    style: cocktail.style as CocktailStyle,
+    method: cocktail.method as CocktailMethod,
+    glass_type: cocktail.glass_type as GlassType,
     garnish: cocktail.garnish,
-    flavors: cocktail.flavor_profiles.map((fp: any) => fp.flavor),
-    strength: cocktail.strength,
-    color: cocktail.color,
-    serving_temperature: cocktail.serving_temperature,
+    flavors: cocktail.flavor_profiles.map((fp: any) => fp.flavor as FlavorProfile),
+    strength: cocktail.strength as Strength,
+    color: cocktail.color as Color,
+    serving_temperature: cocktail.serving_temperature as ServingTemperature,
     canMake: false, // This will be calculated based on user's inventory
     rating: cocktail.average_rating || 4.5,
     prepTime: '5 min'
@@ -95,14 +97,14 @@ export async function fetchFeaturedCocktails(): Promise<Cocktail[]> {
       name: ri.ingredient?.name || ''
     })),
     preparation: cocktail.instructions?.split('\n') || [],
-    style: cocktail.style,
-    method: cocktail.method,
-    glass_type: cocktail.glass_type,
+    style: cocktail.style as CocktailStyle,
+    method: cocktail.method as CocktailMethod,
+    glass_type: cocktail.glass_type as GlassType,
     garnish: cocktail.garnish,
-    flavors: cocktail.flavor_profiles.map((fp: any) => fp.flavor),
-    strength: cocktail.strength,
-    color: cocktail.color,
-    serving_temperature: cocktail.serving_temperature,
+    flavors: cocktail.flavor_profiles.map((fp: any) => fp.flavor as FlavorProfile),
+    strength: cocktail.strength as Strength,
+    color: cocktail.color as Color,
+    serving_temperature: cocktail.serving_temperature as ServingTemperature,
     canMake: false,
     rating: cocktail.average_rating || 4.5,
     prepTime: '5 min'
@@ -147,14 +149,14 @@ export async function fetchPopularCocktails(): Promise<Cocktail[]> {
       name: ri.ingredient?.name || ''
     })),
     preparation: cocktail.instructions?.split('\n') || [],
-    style: cocktail.style,
-    method: cocktail.method,
-    glass_type: cocktail.glass_type,
+    style: cocktail.style as CocktailStyle,
+    method: cocktail.method as CocktailMethod,
+    glass_type: cocktail.glass_type as GlassType,
     garnish: cocktail.garnish,
-    flavors: cocktail.flavor_profiles.map((fp: any) => fp.flavor),
-    strength: cocktail.strength,
-    color: cocktail.color,
-    serving_temperature: cocktail.serving_temperature,
+    flavors: cocktail.flavor_profiles.map((fp: any) => fp.flavor as FlavorProfile),
+    strength: cocktail.strength as Strength,
+    color: cocktail.color as Color,
+    serving_temperature: cocktail.serving_temperature as ServingTemperature,
     canMake: false,
     rating: cocktail.average_rating || 4.5,
     prepTime: '5 min'
