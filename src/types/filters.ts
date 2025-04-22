@@ -6,6 +6,10 @@ export type Strength = 'Low' | 'Medium' | 'High';
 export type ServingTemperature = 'Cold' | 'Room Temperature' | 'Hot';
 export type FlavorProfile = 'Sweet' | 'Sour' | 'Bitter' | 'Herbal' | 'Spicy' | 'Fruity' | 'Citrusy' | 'Floral';
 export type Color = 'Red' | 'Blue' | 'Green' | 'Clear' | 'Yellow' | 'Orange' | 'Purple' | 'Pink' | 'Brown' | 'Black';
+export type Season = 'Summer' | 'Winter' | 'Fall' | 'Spring' | 'Year-round';
+export type Occasion = 'Casual' | 'Dinner Party' | 'Holiday' | 'Brunch' | 'Special';
+export type TimeOfDay = 'Morning' | 'Afternoon' | 'Evening' | 'Late Night';
+export type SugarLevel = 'Low' | 'Medium' | 'High';
 
 export interface CocktailFilters {
   spirit?: string;
@@ -20,4 +24,13 @@ export interface CocktailFilters {
   servingTemperature?: ServingTemperature;
   difficulty?: string;
   canMake?: boolean;
+  season?: Season;
+  occasion?: Occasion;
+  timeOfDay?: TimeOfDay;
+  containsEggs?: boolean;
+  containsDairy?: boolean;
+  containsNuts?: boolean;
+  vegan?: boolean;
+  glutenFree?: boolean;
+  sugarLevel?: SugarLevel;
 }

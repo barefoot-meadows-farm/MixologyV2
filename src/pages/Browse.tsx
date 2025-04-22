@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Search, Shuffle } from "lucide-react"; 
 import { useNavigate } from "react-router-dom"; 
@@ -44,7 +43,6 @@ const Browse = () => {
   };
 
   const filteredCocktails = cocktails.filter((cocktail) => {
-    // Search filter
     if (
       searchTerm &&
       !cocktail.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
@@ -53,7 +51,6 @@ const Browse = () => {
       return false;
     }
 
-    // Spirit filter
     if (
       filters.spirit &&
       !cocktail.ingredients.some((ing) =>
@@ -63,7 +60,6 @@ const Browse = () => {
       return false;
     }
 
-    // Secondary Spirits filter
     if (
       filters.secondarySpirits &&
       filters.secondarySpirits.length > 0 &&
@@ -76,22 +72,18 @@ const Browse = () => {
       return false;
     }
 
-    // Style filter
     if (filters.style && cocktail.style !== filters.style) {
       return false;
     }
 
-    // Method filter
     if (filters.method && cocktail.method !== filters.method) {
       return false;
     }
 
-    // Glass Type filter
     if (filters.glassType && cocktail.glass_type !== filters.glassType) {
       return false;
     }
 
-    // Flavor Profiles filter
     if (
       filters.flavorProfiles &&
       filters.flavorProfiles.length > 0 &&
@@ -102,23 +94,55 @@ const Browse = () => {
       return false;
     }
 
-    // Strength filter
     if (filters.strength && cocktail.strength !== filters.strength) {
       return false;
     }
 
-    // Color filter
     if (filters.color && cocktail.color !== filters.color) {
       return false;
     }
 
-    // Serving Temperature filter
     if (filters.servingTemperature && cocktail.serving_temperature !== filters.servingTemperature) {
       return false;
     }
 
-    // Can make filter
     if (filters.canMake && !cocktail.canMake) {
+      return false;
+    }
+
+    if (filters.season && cocktail.season !== filters.season) {
+      return false;
+    }
+
+    if (filters.occasion && cocktail.occasion !== filters.occasion) {
+      return false;
+    }
+
+    if (filters.timeOfDay && cocktail.time_of_day !== filters.timeOfDay) {
+      return false;
+    }
+
+    if (filters.containsEggs !== undefined && cocktail.contains_eggs !== filters.containsEggs) {
+      return false;
+    }
+
+    if (filters.containsDairy !== undefined && cocktail.contains_dairy !== filters.containsDairy) {
+      return false;
+    }
+
+    if (filters.containsNuts !== undefined && cocktail.contains_nuts !== filters.containsNuts) {
+      return false;
+    }
+
+    if (filters.vegan !== undefined && cocktail.vegan !== filters.vegan) {
+      return false;
+    }
+
+    if (filters.glutenFree !== undefined && cocktail.gluten_free !== filters.glutenFree) {
+      return false;
+    }
+
+    if (filters.sugarLevel && cocktail.sugar_level !== filters.sugarLevel) {
       return false;
     }
 
@@ -147,7 +171,6 @@ const Browse = () => {
         Browse Cocktails
       </h1>
 
-      {/* Add Surprise Me button */}
       <button 
         onClick={handleSurpriseMe}
         className="mb-6 flex items-center justify-center w-full px-4 py-3 bg-mixology-burgundy text-white rounded-lg hover:bg-mixology-burgundy/90 transition-colors text-sm font-medium"

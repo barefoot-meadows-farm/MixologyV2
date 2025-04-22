@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { Cocktail } from "../components/CocktailCard";
 import { CocktailStyle, CocktailMethod, GlassType, Strength, ServingTemperature, FlavorProfile, Color } from "@/types/filters";
@@ -51,9 +50,18 @@ export async function fetchCocktails(): Promise<Cocktail[]> {
     strength: cocktail.strength as Strength,
     color: cocktail.color as Color,
     serving_temperature: cocktail.serving_temperature as ServingTemperature,
-    canMake: false, // This will be calculated based on user's inventory
+    canMake: false,
     rating: cocktail.average_rating || 4.5,
-    prepTime: '5 min'
+    prepTime: '5 min',
+    season: cocktail.season as Season,
+    occasion: cocktail.occasion as Occasion,
+    time_of_day: cocktail.time_of_day as TimeOfDay,
+    contains_eggs: cocktail.contains_eggs || false,
+    contains_dairy: cocktail.contains_dairy || false,
+    contains_nuts: cocktail.contains_nuts || false,
+    vegan: cocktail.vegan || false,
+    gluten_free: cocktail.gluten_free || true,
+    sugar_level: cocktail.sugar_level as SugarLevel,
   }));
 
   return transformedCocktails;
@@ -107,7 +115,16 @@ export async function fetchFeaturedCocktails(): Promise<Cocktail[]> {
     serving_temperature: cocktail.serving_temperature as ServingTemperature,
     canMake: false,
     rating: cocktail.average_rating || 4.5,
-    prepTime: '5 min'
+    prepTime: '5 min',
+    season: cocktail.season as Season,
+    occasion: cocktail.occasion as Occasion,
+    time_of_day: cocktail.time_of_day as TimeOfDay,
+    contains_eggs: cocktail.contains_eggs || false,
+    contains_dairy: cocktail.contains_dairy || false,
+    contains_nuts: cocktail.contains_nuts || false,
+    vegan: cocktail.vegan || false,
+    gluten_free: cocktail.gluten_free || true,
+    sugar_level: cocktail.sugar_level as SugarLevel,
   }));
 }
 
@@ -159,6 +176,15 @@ export async function fetchPopularCocktails(): Promise<Cocktail[]> {
     serving_temperature: cocktail.serving_temperature as ServingTemperature,
     canMake: false,
     rating: cocktail.average_rating || 4.5,
-    prepTime: '5 min'
+    prepTime: '5 min',
+    season: cocktail.season as Season,
+    occasion: cocktail.occasion as Occasion,
+    time_of_day: cocktail.time_of_day as TimeOfDay,
+    contains_eggs: cocktail.contains_eggs || false,
+    contains_dairy: cocktail.contains_dairy || false,
+    contains_nuts: cocktail.contains_nuts || false,
+    vegan: cocktail.vegan || false,
+    gluten_free: cocktail.gluten_free || true,
+    sugar_level: cocktail.sugar_level as SugarLevel,
   }));
 }

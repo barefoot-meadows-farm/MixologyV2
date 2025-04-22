@@ -1,5 +1,6 @@
-
 import { useState } from "react";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { Filter } from "lucide-react";
 import {
   Select,
@@ -8,17 +9,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuCheckboxItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { CocktailFilters, FlavorProfile, CocktailStyle, CocktailMethod, GlassType, Strength, ServingTemperature, Color } from "@/types/filters";
+import { CocktailFilters, Season, Occasion, TimeOfDay, SugarLevel } from "@/types/filters";
 
 const styles = ['Classic', 'Contemporary', 'Tiki', 'Tropical', 'Modern', 'Aperitif'];
 const methods = ['Shaken', 'Stirred', 'Built', 'Blended', 'Muddled'];
@@ -28,6 +26,11 @@ const temperatures = ['Cold', 'Room Temperature', 'Hot'];
 const flavors = ['Sweet', 'Sour', 'Bitter', 'Herbal', 'Spicy', 'Fruity', 'Citrusy', 'Floral'];
 const colors = ['Red', 'Blue', 'Green', 'Clear', 'Yellow', 'Orange', 'Purple', 'Pink', 'Brown', 'Black'];
 const spirits = ['Vodka', 'Gin', 'Rum', 'Tequila', 'Whiskey', 'Bourbon'];
+
+const seasons: Season[] = ['Summer', 'Winter', 'Fall', 'Spring', 'Year-round'];
+const occasions: Occasion[] = ['Casual', 'Dinner Party', 'Holiday', 'Brunch', 'Special'];
+const timesOfDay: TimeOfDay[] = ['Morning', 'Afternoon', 'Evening', 'Late Night'];
+const sugarLevels: SugarLevel[] = ['Low', 'Medium', 'High'];
 
 interface FilterBarProps {
   onFilterChange: (filters: CocktailFilters) => void;
@@ -47,6 +50,15 @@ const FilterBar = ({ onFilterChange }: FilterBarProps) => {
     color: undefined,
     servingTemperature: undefined,
     canMake: false,
+    season: undefined,
+    occasion: undefined,
+    timeOfDay: undefined,
+    containsEggs: false,
+    containsDairy: false,
+    containsNuts: false,
+    vegan: false,
+    glutenFree: false,
+    sugarLevel: undefined,
   });
 
   const handleFilterChange = <K extends keyof CocktailFilters>(
@@ -275,6 +287,126 @@ const FilterBar = ({ onFilterChange }: FilterBarProps) => {
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Season</Label>
+              <Select
+                value={filters.season}
+                onValueChange={(value) => handleFilterChange('season', value as Season)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select season" />
+                </SelectTrigger>
+                <SelectContent>
+                  {seasons.map((season) => (
+                    <SelectItem key={season} value={season}>
+                      {season}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Occasion</Label>
+              <Select
+                value={filters.occasion}
+                onValueChange={(value) => handleFilterChange('occasion', value as Occasion)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select occasion" />
+                </SelectTrigger>
+                <SelectContent>
+                  {occasions.map((occasion) => (
+                    <SelectItem key={occasion} value={occasion}>
+                      {occasion}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Time of Day</Label>
+              <Select
+                value={filters.timeOfDay}
+                onValueChange={(value) => handleFilterChange('timeOfDay', value as TimeOfDay)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select time" />
+                </SelectTrigger>
+                <SelectContent>
+                  {timesOfDay.map((time) => (
+                    <SelectItem key={time} value={time}>
+                      {time}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Sugar Level</Label>
+              <Select
+                value={filters.sugarLevel}
+                onValueChange={(value) => handleFilterChange('sugarLevel', value as SugarLevel)}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select sugar level" />
+                </SelectTrigger>
+                <SelectContent>
+                  {sugarLevels.map((level) => (
+                    <SelectItem key={level} value={level}>
+                      {level}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="col-span-full">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    checked={filters.containsEggs}
+                    onCheckedChange={(checked) => handleFilterChange('containsEggs', checked)}
+                  />
+                  <Label>Contains Eggs</Label>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    checked={filters.containsDairy}
+                    onCheckedChange={(checked) => handleFilterChange('containsDairy', checked)}
+                  />
+                  <Label>Contains Dairy</Label>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    checked={filters.containsNuts}
+                    onCheckedChange={(checked) => handleFilterChange('containsNuts', checked)}
+                  />
+                  <Label>Contains Nuts</Label>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    checked={filters.vegan}
+                    onCheckedChange={(checked) => handleFilterChange('vegan', checked)}
+                  />
+                  <Label>Vegan</Label>
+                </div>
+
+                <div className="flex items-center space-x-2">
+                  <Switch
+                    checked={filters.glutenFree}
+                    onCheckedChange={(checked) => handleFilterChange('glutenFree', checked)}
+                  />
+                  <Label>Gluten Free</Label>
+                </div>
+              </div>
             </div>
           </div>
 
